@@ -56,7 +56,7 @@ export default class AuthService {
 
     async verifyUser(token: string) {
         try {
-            const payload: any = this.helper.decodeToken(token);            
+            const payload: any = this.helper.decodeToken(token);                        
             const user = await this.userRepository.findById(payload.id);
             if (!user) {
                 throw new HttpException(404, 'User not found!');
