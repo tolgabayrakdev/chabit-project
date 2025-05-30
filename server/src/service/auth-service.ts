@@ -51,4 +51,24 @@ export default class AuthService {
         }
     }
 
+    async verifyUser(token: string) {
+        try {
+            const payload: any = this.helper.decodeToken(token);
+            const user = await this.userRepository.findById(payload.id);
+            if (!user) {
+                throw new HttpException(404, 'User not found!');
+            }
+            return {
+                username: user.username,
+                email: user.email,
+                role_id: user.role_id,
+            };
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException(500, (error as Error).message);
+        }
+    }
+
 }
