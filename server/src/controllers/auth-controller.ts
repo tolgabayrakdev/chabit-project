@@ -31,8 +31,11 @@ class AuthController {
         try {
             const { name, email, password } = req.body;
             const result = await this.authService.register({ name, email, password });
-            res.status(201).json(result);
-        } catch (error) {
+            res.status(201).json({
+                message: "User registered successfully",
+                user: result
+            });
+        } catch (error) {                        
             if (error instanceof HttpException) {
                 res.status(error.status).json({ message: error.message });
             } else {
