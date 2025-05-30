@@ -35,7 +35,7 @@ class AuthController {
                 message: "User registered successfully",
                 user: result
             });
-        } catch (error) {                        
+        } catch (error) {
             if (error instanceof HttpException) {
                 res.status(error.status).json({ message: error.message });
             } else {
@@ -59,6 +59,10 @@ class AuthController {
                 res.status(500).json({ error: 'Internal server error' });
             }
         }
+    }
+
+    async adminAccessDemo(_req: Request, res: Response) {
+        res.status(200).json({ message: 'Admin access granted' });
     }
 
     async logout(_req: Request, res: Response) {

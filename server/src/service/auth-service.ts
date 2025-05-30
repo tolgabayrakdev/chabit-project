@@ -22,8 +22,8 @@ export default class AuthService {
         if (user.password !== hashedPassword) {
             throw new HttpException(401, "Invalid password");
         }
-        const accessToken = this.helper.generateAccessToken({ id: user.id });
-        const refreshToken = this.helper.generateRefreshToken({ id: user.id });
+        const accessToken = this.helper.generateAccessToken({ id: user.id, role: "user" });
+        const refreshToken = this.helper.generateRefreshToken({ id: user.id, role: "user" });
         return { accessToken, refreshToken };
     }
 
