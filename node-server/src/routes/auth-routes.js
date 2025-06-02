@@ -13,6 +13,8 @@ router.post(
     schemaValidation(userSchema),
     authController.register.bind(authController
     ));
+router.post("/logout", authController.logout.bind(authController));
+router.get("/me", authController.verifyUser.bind(authController));
 
 
 export default router;

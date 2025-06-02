@@ -30,4 +30,22 @@ export default class AuthController {
             next(error);
         }
     }
+    async logout(_req, res, next) {
+        try {
+            res.clearCookie('access_token');
+            res.clearCookie('refresh_token');
+            res.status(200).json({ message: 'Logout successful' });
+        } catch (error) {
+            next(error);
+        }
+    }
+    async verifyUser(req, res, next) {
+        try {
+            const token = req.cookies.access_token;
+            const user = await this.authService.verifyUser(token);
+            res.status(200).json({message: "User verified successfully", user: user});
+        } catch (error) {
+            next(error);
+        }
+    }
 }
