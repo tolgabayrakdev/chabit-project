@@ -36,7 +36,7 @@ export default class AuthService {
             }
 
             const hashedPassword = await hashPassword(user.password);
-            const newUser = await client.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *", [user.name, user.email, hashedPassword]);
+            const newUser = await client.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email", [user.name, user.email, hashedPassword]);
             await client.query("COMMIT");
             return newUser.rows[0];
         } catch (error) {
