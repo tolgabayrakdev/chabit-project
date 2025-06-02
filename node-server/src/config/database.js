@@ -1,15 +1,16 @@
-import pg from "pg";
+import pkg from 'pg';
+const { Pool } = pkg;
 
-const client = new pg.Client({
-    user: "root",
-    host: "localhost",
-    database: "postgres",
-    password: "root",
+const pool = new Pool({
+    user: 'root',
+    host: 'localhost',
+    database: 'postgres',
+    password: 'root',
     port: 5432,
 });
 
-client.connect(() => {
-    console.log("Database connected");
-});
+pool.connect()
+    .then(() => console.log('✅ Database connected successfully'))
+    .catch(err => console.error('❌ Database connection error:', err.stack));
 
-export default client;
+export default pool;
