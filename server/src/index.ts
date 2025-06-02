@@ -5,6 +5,7 @@ import morgan from "morgan";
 import "dotenv/config";
 
 import authRoutes from './routes/auth-routes';
+import decisionRoutes from './routes/decision-routes';
 
 const app = express();
 const port = process.env.PORT || 1234;
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/decisions', decisionRoutes);
 
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);

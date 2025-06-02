@@ -1,5 +1,6 @@
 import pool from "../config/database";
 import { PoolClient } from "pg";
+
 export default class UserRepository {
 
     async beginTransaction() {
