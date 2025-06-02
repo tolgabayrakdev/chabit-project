@@ -1,5 +1,5 @@
 import AuthService from "../service/auth-service";
-
+import HttpException from "../exceptions/http-exception";
 
 export default class AuthController {
 
