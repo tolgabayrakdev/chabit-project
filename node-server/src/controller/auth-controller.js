@@ -1,5 +1,4 @@
 import AuthService from "../service/auth-service";
-import HttpException from "../exceptions/http-exception";
 
 export default class AuthController {
 
@@ -8,7 +7,7 @@ export default class AuthController {
     }
 
 
-    async login(req, res) {
+    async login(req, res, next) {
         try {
             const { email, password } = req.body;
             const result = await this.authService.login(email, password);
@@ -16,11 +15,19 @@ export default class AuthController {
             res.cookie('refresh_token', result.refreshToken, { httpOnly: true });
             res.status(200).json(result);
         } catch (error) {
-            if (error instanceof HttpException) {
-                res.status(error.status).json({ message: error.message });
-            } else {
-                res.status(500).json({ message: "Internal server error" });
-            }
+            next(error);
+        }
+    }
+    async register(req, res, next) {
+        try {
+            const { name, email, password } = req.body;
+            const result = await this.authService.register({ name, email, password });
+            res.status(201).json({
+                message: "User registered successfully",
+                user: result
+            });
+        } catch (error) {
+            next(error);
         }
     }
 }

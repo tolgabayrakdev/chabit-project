@@ -20,6 +20,7 @@ export const verifyToken = (req, res, next) => {
             res.status(401).json({ message: 'You are not authenticated!' });
         }
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
