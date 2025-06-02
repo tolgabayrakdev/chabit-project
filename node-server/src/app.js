@@ -3,9 +3,9 @@ import cors from "cors";
 import morgan from "morgan";
 import "dotenv/config";
 
-import authRoutes from './routes/auth-routes';
+import authRoutes from './routes/auth-routes.js';
 
-import errorHandler from "./middlewares/error-handler";
+import errorHandler from "./middlewares/error-handler.js";
 
 
 const app = express();
