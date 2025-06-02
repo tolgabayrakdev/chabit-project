@@ -1,5 +1,5 @@
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
-import { hashPassword } from "../utils/password.js";
+import { hashPassword, comparePassword } from "../utils/password.js";
 import pool from "../config/database.js";
 import HttpException from "../exceptions/http-exception.js";
 
@@ -13,8 +13,8 @@ export default class AuthService {
             throw new HttpException(404, "User not found");
         }
 
-        const hashedPassword = hashPassword(password);
-        if (user.password !== hashedPassword) {
+        const isPasswordValid = await comparePassword(password, user.password);
+        if (!isPasswordValid) {
             throw new HttpException(401, "Invalid password");
         }
 
