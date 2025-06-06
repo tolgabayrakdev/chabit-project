@@ -36,7 +36,7 @@ export default class AuthService {
             }
 
             const hashedPassword = await hashPassword(user.password);
-            const newUser = await client.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email", [user.name, user.email, hashedPassword]);
+            const newUser = await client.query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING email", [user.email, hashedPassword]);
             await client.query("COMMIT");
             return newUser.rows[0];
         } catch (error) {
@@ -54,9 +54,8 @@ export default class AuthService {
                 throw new HttpException(401, "Unauthorized");
             }
             const payload = verifyToken(token);
-            const user = await pool.query("SELECT name, email FROM users WHERE id = $1", [payload.id]);
+            const user = await pool.query("SELECT email FROM users WHERE id = $1", [payload.id]);
             return {
-                name: user.rows[0].name,
                 email: user.rows[0].email
             };
         } catch (error) {

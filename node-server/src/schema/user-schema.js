@@ -1,16 +1,7 @@
 import Joi from "joi";
 
 export const userSchema = Joi.object({
-    name: Joi.string()
-        .min(3)
-        .max(50)
-        .required()
-        .messages({
-            'string.empty': 'İsim boş bırakılamaz.',
-            'string.min': 'İsim en az {#limit} karakter olmalı.',
-            'string.max': 'İsim en fazla {#limit} karakter olabilir.',
-            'any.required': 'İsim zorunludur.',
-        }),
+
     email: Joi.string()
         .email()
         .required()

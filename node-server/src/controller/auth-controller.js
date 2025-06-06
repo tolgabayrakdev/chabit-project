@@ -20,8 +20,8 @@ export default class AuthController {
     }
     async register(req, res, next) {
         try {
-            const { name, email, password } = req.body;
-            const result = await this.authService.register({ name, email, password });
+            const { email, password } = req.body;
+            const result = await this.authService.register({ email, password });
             res.status(201).json({
                 message: "User registered successfully",
                 user: result
@@ -43,7 +43,7 @@ export default class AuthController {
         try {
             const token = req.cookies.access_token;
             const user = await this.authService.verifyUser(token);
-            res.status(200).json({message: "User verified successfully", user: user});
+            res.status(200).json({ message: "User verified successfully", user: user });
         } catch (error) {
             next(error);
         }
