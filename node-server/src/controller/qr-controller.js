@@ -37,4 +37,16 @@ export default class QRController {
             next(error);
         }
     }
+
+    async generateVCardQrCode(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { label, ...vcardData } = req.body;
+            const qrCode = await this.qrService.generateVCardQrCode(userId, vcardData, label);
+            res.status(200).json(qrCode);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
