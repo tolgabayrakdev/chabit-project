@@ -24,12 +24,15 @@ export default class QrService {
     return `/uploads/qr-codes/${filename}`;
   }
 
-  async saveQrCodeDb(userId, type, data, generatedContent, qrCodeImagePath, label = null) {
+  async saveQrCodeDb(userId, type, data, generatedContent, qrCodeImagePathObj, label = null) {
     const client = await pool.connect();
+    const { relativePath, absolutePath } = typeof qrCodeImagePathObj === "string"
+      ? { relativePath: qrCodeImagePathObj, absolutePath: path.join(rootDir, qrCodeImagePathObj) }
+      : qrCodeImagePathObj;
+
     try {
       await client.query("BEGIN");
 
-      // 1. Kullanıcının planı
       const userResult = await client.query(
         `SELECT plan FROM users WHERE id = $1`,
         [userId]
@@ -41,10 +44,9 @@ export default class QrService {
 
       const userPlan = userResult.rows[0].plan;
 
-      // 2. Plan "free" ise bugünkü QR kayıtlarını say
       if (userPlan === "free") {
         const today = new Date();
-        today.setUTCHours(0, 0, 0, 0); // UTC başlangıcı
+        today.setUTCHours(0, 0, 0, 0);
 
         const qrCountResult = await client.query(
           `SELECT COUNT(*) FROM qr_codes 
@@ -53,22 +55,19 @@ export default class QrService {
         );
 
         const todayQrCount = parseInt(qrCountResult.rows[0].count);
-
         if (todayQrCount >= 3) {
           throw new HttpException(429, "Free kullanıcılar günde en fazla 3 QR kodu oluşturabilir.");
         }
       }
 
-      // 3. QR oluştur
       const qrResult = await client.query(
         `INSERT INTO qr_codes (user_id, type, data, generated_content, qr_code_image, label) 
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-        [userId, type, data, generatedContent, qrCodeImagePath, label]
+        [userId, type, data, generatedContent, relativePath, label]
       );
 
       const qrCode = qrResult.rows[0];
 
-      // 4. Log kaydı oluştur
       await client.query(
         `INSERT INTO qr_generation_logs (user_id, qr_code_id) VALUES ($1, $2)`,
         [userId, qrCode.id]
@@ -76,13 +75,25 @@ export default class QrService {
 
       await client.query("COMMIT");
       return qrCode;
+
     } catch (err) {
       await client.query("ROLLBACK");
+
+      // Dosya silme işlemi
+      try {
+        if (fs.existsSync(absolutePath)) {
+          await fs.promises.unlink(absolutePath);
+        }
+      } catch (deleteErr) {
+        console.error("QR dosyası silinemedi:", deleteErr.message);
+      }
+
       throw err;
     } finally {
       client.release();
     }
   }
+
 
 
 
