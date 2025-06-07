@@ -27,4 +27,14 @@ export default class QRController {
             next(error);
         }
     }
+    async generateWifiQrCode(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { ssid, password, encryption = "WPA", hidden = false, label } = req.body;
+            const qrCode = await this.qrService.generateWifiQrCode(userId, ssid, password, encryption, hidden, label);
+            res.status(200).json(qrCode);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

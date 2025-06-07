@@ -103,4 +103,14 @@ export default class QrService {
     const qrCodeImagePath = await this.generateQrCodeImage(generatedContent, filename);
     return await this.saveQrCodeDb(userId, "mail", data, generatedContent, qrCodeImagePath, label);
   }
+
+  async generateWifiQrCode(userId, ssid, password, encryption = "WPA", hidden = false, label = null) {
+    const hiddenFlag = hidden ? "true" : "false";
+    const generatedContent = `WIFI:T:${encryption};S:${ssid};P:${password};H:${hiddenFlag};;`;
+    const data = { ssid, password, encryption, hidden };
+    const filename = `qr_${crypto.randomUUID()}.png`;
+
+    const qrCodeImagePath = await this.generateQrCodeImage(generatedContent, filename);
+    return await this.saveQrCodeDb(userId, "wifi", data, generatedContent, qrCodeImagePath, label);
+  }
 }
