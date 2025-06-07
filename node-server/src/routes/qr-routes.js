@@ -11,5 +11,6 @@ router.post("/generate-sms-qr", verifyToken, qrController.generateSmsQrCode.bind
 router.post("/generate-mail-qr", verifyToken, qrController.generateMailQrCode.bind(qrController));
 router.post("/generate-wifi-qr", verifyToken, qrController.generateWifiQrCode.bind(qrController));
 router.post("/generate-vcard-qr", verifyToken, qrController.generateVCardQrCode.bind(qrController));
+router.post("/generate-url-qr", verifyToken, qrController.generateUrlQrCode.bind(qrController));
 
 export default router;

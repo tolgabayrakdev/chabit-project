@@ -49,4 +49,15 @@ export default class QRController {
         }
     }
 
+    async generateUrlQrCode(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const { url, label } = req.body;
+            const qrCode = await this.qrService.generateUrlQrCode(userId, url, label);
+            res.status(200).json(qrCode);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }

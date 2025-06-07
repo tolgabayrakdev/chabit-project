@@ -114,39 +114,49 @@ export default class QrService {
     return await this.saveQrCodeDb(userId, "wifi", data, generatedContent, qrCodeImagePath, label);
   }
 
- async generateVCardQrCode(userId, vcardData, label = null) {
-  const {
-    firstName,
-    lastName,
-    phone,
-    email,
-    company,
-    title,
-    website,
-    address
-  } = vcardData;
+  async generateVCardQrCode(userId, vcardData, label = null) {
+    const {
+      firstName,
+      lastName,
+      phone,
+      email,
+      company,
+      title,
+      website,
+      address
+    } = vcardData;
 
-  const lines = [
-    "BEGIN:VCARD",
-    "VERSION:3.0",
-    `N:${lastName};${firstName};;;`,
-    `FN:${firstName} ${lastName}`,
-    company && `ORG:${company}`,
-    title && `TITLE:${title}`,
-    phone && `TEL:${phone}`,
-    email && `EMAIL:${email}`,
-    website && `URL:${website}`,
-    address && `ADR:;;${address};;;;`,
-    "END:VCARD"
-  ].filter(Boolean); // boş satırları çıkarır
+    const lines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `N:${lastName};${firstName};;;`,
+      `FN:${firstName} ${lastName}`,
+      company && `ORG:${company}`,
+      title && `TITLE:${title}`,
+      phone && `TEL:${phone}`,
+      email && `EMAIL:${email}`,
+      website && `URL:${website}`,
+      address && `ADR:;;${address};;;;`,
+      "END:VCARD"
+    ].filter(Boolean); // boş satırları çıkarır
 
-  const generatedContent = lines.join("\n");
+    const generatedContent = lines.join("\n");
 
-  const data = { ...vcardData };
-  const filename = `qr_${crypto.randomUUID()}.png`;
-  const qrCodeImagePath = await this.generateQrCodeImage(generatedContent, filename, label);
+    const data = { ...vcardData };
+    const filename = `qr_${crypto.randomUUID()}.png`;
+    const qrCodeImagePath = await this.generateQrCodeImage(generatedContent, filename, label);
 
-  return await this.saveQrCodeDb(userId, "vcard", data, generatedContent, qrCodeImagePath, label);
-}
+    return await this.saveQrCodeDb(userId, "vcard", data, generatedContent, qrCodeImagePath, label);
+  }
+
+  async generateUrlQrCode(userId, url, label = null) {
+    const data = { url };
+    const generatedContent = url;
+    const filename = `qr_${crypto.randomUUID()}.png`;
+
+    const qrCodeImagePath = await this.generateQrCodeImage(generatedContent, filename, label);
+    return await this.saveQrCodeDb(userId, "url", data, generatedContent, qrCodeImagePath, label);
+  }
+
 
 }
