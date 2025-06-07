@@ -60,4 +60,36 @@ export default class QRController {
         }
     }
 
+    async listQrCodes(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const qrCodes = await this.qrService.listQrCodes(userId);
+            res.status(200).json(qrCodes);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getQrCode(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const qrCodeId = req.params.id;
+            const qrCode = await this.qrService.getQrCode(qrCodeId, userId);
+            res.status(200).json(qrCode);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteQrCode(req, res, next) {
+        try {
+            const userId = req.user.id;
+            const qrCodeId = req.params.id;
+            await this.qrService.deleteQrCode(qrCodeId, userId);
+            res.status(204).send();
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }

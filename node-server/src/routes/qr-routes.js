@@ -12,5 +12,8 @@ router.post("/generate-mail-qr", verifyToken, qrController.generateMailQrCode.bi
 router.post("/generate-wifi-qr", verifyToken, qrController.generateWifiQrCode.bind(qrController));
 router.post("/generate-vcard-qr", verifyToken, qrController.generateVCardQrCode.bind(qrController));
 router.post("/generate-url-qr", verifyToken, qrController.generateUrlQrCode.bind(qrController));
+router.get("/:id", verifyToken, qrController.getQrCode.bind(qrController));
+router.get("/", verifyToken, qrController.listQrCodes.bind(qrController));
+router.delete("/:id", verifyToken, qrController.deleteQrCode.bind(qrController));
 
 export default router;

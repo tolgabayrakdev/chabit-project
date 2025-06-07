@@ -170,4 +170,75 @@ export default class QrService {
   }
 
 
+  async listQrCodes(userId) {
+    const result = await pool.query(
+      `SELECT id, type, label, created_at, qr_code_image 
+     FROM qr_codes 
+     WHERE user_id = $1 
+     ORDER BY created_at DESC`,
+      [userId]
+    );
+    return result.rows;
+  }
+
+  async getQrCode(id, userId) {
+    const result = await pool.query(
+      "SELECT * FROM qr_codes WHERE id = $1 AND user_id = $2",
+      [id, userId]
+    );
+
+    if (result.rowCount === 0) {
+      throw new HttpException(404, "QR kodu bulunamadı.");
+    }
+
+    return result.rows[0];
+  }
+
+
+  async deleteQrCode(id, userId) {
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      // QR kodu var mı kontrol et
+      const result = await client.query(
+        "SELECT * FROM qr_codes WHERE id = $1 AND user_id = $2",
+        [id, userId]
+      );
+
+      if (result.rowCount === 0) {
+        throw new HttpException(404, "QR kodu bulunamadı.");
+      }
+
+      const qrCode = result.rows[0];
+
+      // Önce qr_generation_logs içindeki ilgili kayıtları sil
+      await client.query(
+        "DELETE FROM qr_generation_logs WHERE qr_code_id = $1",
+        [id]
+      );
+
+      // Sonra qr_codes tablosundaki QR kodunu sil
+      await client.query(
+        "DELETE FROM qr_codes WHERE id = $1 AND user_id = $2",
+        [id, userId]
+      );
+
+      await client.query("COMMIT");
+
+      // Dosya sisteminden görseli sil
+      const imagePath = path.join(rootDir, qrCode.qr_code_image);
+      if (fs.existsSync(imagePath)) {
+        await fs.promises.unlink(imagePath);
+      }
+
+      return qrCode;
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
+  }
+
 }
