@@ -2,8 +2,6 @@ import express from "express";
 import QRController from "../controller/qr-controller.js";
 import { verifyToken } from "../middlewares/verify-token.js";
 
-
-
 const router = express.Router();
 const qrController = new QRController();
 
