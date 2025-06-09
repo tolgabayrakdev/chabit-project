@@ -1,10 +1,13 @@
 "use client";
-import React from 'react';
-import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Anchor } from '@mantine/core';
+import React, { useState } from 'react';
+import { TextInput, PasswordInput, Button, Paper, Title, Container, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const form = useForm({
     initialValues: {
       name: '',
@@ -21,9 +24,29 @@ export default function RegisterPage() {
     },
   });
 
-  const handleSubmit = (values: typeof form.values) => {
+  const handleSubmit = async (values: typeof form.values) => {
+    setLoading(true);
     console.log(values);
-    // Burada kayıt işlemlerini gerçekleştirebilirsiniz
+    try {
+      const response = await fetch('http://localhost:1234/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+
+      if (response.status === 201) {
+        setTimeout(() => {
+          setLoading(false);
+          router.push('/login');
+        }, 1000);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,8 +56,8 @@ export default function RegisterPage() {
       </Title>
       <Text c="dimmed" size="sm" ta="center" mt={5}>
         Zaten hesabınız var mı?{' '}
-        <Link href="/login" passHref>
-          <Anchor size="sm">Giriş Yap</Anchor>
+        <Link className='text-blue-500 hover:underline' href="/login" passHref>
+          Giriş Yap
         </Link>
       </Text>
 
