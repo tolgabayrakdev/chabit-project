@@ -1,47 +1,30 @@
 'use client';
 
-import React from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 
-// Örnek QR kod verileri (daha sonra veritabanından gelecek)
-const sampleQRCodes = [
-    {
-        id: 1,
-        type: 'wifi',
-        title: 'Ev WiFi',
-        data: { ssid: 'Ev_WiFi', encryption: 'WPA' },
-        createdAt: '2024-03-20',
-        qrCodeUrl: '/sample-qr.png', // Örnek QR kod görseli
-    },
-    {
-        id: 2,
-        type: 'email',
-        title: 'İş E-postası',
-        data: { email: 'is@email.com', subject: 'İş Görüşmesi' },
-        createdAt: '2024-03-19',
-        qrCodeUrl: '/sample-qr.png',
-    },
-    {
-        id: 3,
-        type: 'vcard',
-        title: 'Kişisel Kartvizit',
-        data: { name: 'Ahmet Yılmaz', company: 'ABC Ltd.' },
-        createdAt: '2024-03-18',
-        qrCodeUrl: '/sample-qr.png',
-    },
-];
+interface QRCode {
+    id: string;
+    type: string;
+    label: string | null;
+    created_at: string;
+    qr_code_image: string;
+}
 
 const getTypeColor = (type: string) => {
     switch (type) {
         case 'wifi':
             return 'blue';
-        case 'email':
+        case 'mail':
             return 'green';
         case 'sms':
             return 'orange';
         case 'vcard':
             return 'violet';
+        case 'url':
+            return 'cyan';
         default:
             return 'gray';
     }
@@ -51,35 +34,131 @@ const getTypeLabel = (type: string) => {
     switch (type) {
         case 'wifi':
             return 'WiFi';
-        case 'email':
+        case 'mail':
             return 'E-posta';
         case 'sms':
             return 'SMS';
         case 'vcard':
             return 'vCard';
+        case 'url':
+            return 'URL';
         default:
             return type;
     }
 };
 
 export default function DashboardPage() {
-    const handleDownload = (qrCode: typeof sampleQRCodes[0]) => {
-        // QR kodu indirme işlemi
-        console.log('İndiriliyor:', qrCode.title);
+    const [qrCodes, setQRCodes] = useState<QRCode[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
+    const [opened, { open, close }] = useDisclosure(false);
+
+    useEffect(() => {
+        const fetchQRCodes = async () => {
+            try {
+                const response = await fetch('http://localhost:1234/api/qr', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setQRCodes(data);
+                }
+            } catch (error) {
+                console.error('Error fetching QR codes:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQRCodes();
+    }, []);
+
+    const handleDownload = async (qrCode: QRCode) => {
+        try {
+            // QR kod görselini indir
+            const response = await fetch(`http://localhost:1234${qrCode.qr_code_image}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'image/png',
+                },
+            });
+            const blob = await response.blob();
+            
+            // İndirme bağlantısı oluştur
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            
+            // Dosya adını oluştur
+            const fileName = `${qrCode.label || qrCode.type}_${new Date().getTime()}.png`;
+            link.download = fileName;
+            
+            // İndirmeyi başlat
+            document.body.appendChild(link);
+            link.click();
+            
+            // Temizlik
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('QR kod indirme hatası:', error);
+        }
     };
 
-    const handleDelete = (qrCode: typeof sampleQRCodes[0]) => {
-        // QR kodu silme işlemi
-        console.log('Siliniyor:', qrCode.title);
+    const handleDelete = async (qrCode: QRCode) => {
+        setSelectedQR(qrCode);
+        open();
+    };
+
+    const confirmDelete = async () => {
+        if (!selectedQR) return;
+
+        try {
+            const response = await fetch(`http://localhost:1234/api/qr/${selectedQR.id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                setQRCodes(qrCodes.filter(qr => qr.id !== selectedQR.id));
+                close();
+            } else {
+                console.error('QR kod silme hatası:', await response.text());
+            }
+        } catch (error) {
+            console.error('QR kod silme hatası:', error);
+        }
     };
 
     return (
         <Container size="lg">
             <Title order={2} mb="xl">QR Kodlarım</Title>
 
-            {sampleQRCodes.length > 0 ? (
+            <Modal opened={opened} onClose={close} title="QR Kodu Sil" centered>
+                <Text>Bu QR kodu silmek istediğinizden emin misiniz?</Text>
+                <Text size="sm" c="dimmed" mt="xs">
+                    {selectedQR?.label || getTypeLabel(selectedQR?.type || '')}
+                </Text>
+                <Group justify="flex-end" mt="xl">
+                    <Button variant="default" onClick={close}>İptal</Button>
+                    <Button color="red" onClick={confirmDelete}>Sil</Button>
+                </Group>
+            </Modal>
+
+            {loading ? (
+                <Text>Yükleniyor...</Text>
+            ) : qrCodes.length > 0 ? (
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
-                    {sampleQRCodes.map((qr) => (
+                    {qrCodes.map((qr) => (
                         <Card key={qr.id} padding="lg" radius="md" withBorder>
                             <Card.Section p="md">
                                 <Group justify="space-between">
@@ -87,26 +166,21 @@ export default function DashboardPage() {
                                         {getTypeLabel(qr.type)}
                                     </Badge>
                                     <Text size="sm" c="dimmed">
-                                        {qr.createdAt}
+                                        {new Date(qr.created_at).toLocaleDateString('tr-TR')}
                                     </Text>
                                 </Group>
                             </Card.Section>
 
                             <Stack align="center" mt="md">
                                 <Image
-                                    src={qr.qrCodeUrl}
-                                    alt={qr.title}
+                                    src={`http://localhost:1234${qr.qr_code_image}`}
+                                    alt={qr.label || qr.type}
                                     width={200}
                                     height={200}
                                     fit="contain"
                                 />
                                 <Text fw={500} size="lg">
-                                    {qr.title}
-                                </Text>
-                                <Text size="sm" c="dimmed">
-                                    {qr.type === 'wifi' && `SSID: ${qr.data.ssid}`}
-                                    {qr.type === 'email' && `E-posta: ${qr.data.email}`}
-                                    {qr.type === 'vcard' && `${qr.data.name} - ${qr.data.company}`}
+                                    {qr.label || getTypeLabel(qr.type)}
                                 </Text>
                                 <Group mt="md" w="100%">
                                     <Button
