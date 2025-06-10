@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -13,11 +13,32 @@ export default function DashboardLayout({
     children: React.ReactNode
 }) {
     const [opened, setOpened] = useState(false);
+    const [userEmail, setUserEmail] = useState<string>('');
     const pathname = usePathname();
     const router = useRouter();
 
-    // Bu kısmı daha sonra gerçek kullanıcı bilgisiyle değiştireceğiz
-    const userEmail = "kullanici@email.com";
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('http://localhost:1234/api/auth/me', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserEmail(data.user.email);
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const navItems = [
         { icon: IconQrcode, label: 'QR Kodlarım', href: '/dashboard' },

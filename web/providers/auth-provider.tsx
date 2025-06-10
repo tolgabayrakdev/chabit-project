@@ -14,8 +14,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const verifyAuthToken = async () => {
             try {
-                const res = await fetch("http://localhost:8000/api/auth/me", {
-                    method: 'POST',
+                const res = await fetch("http://localhost:1234/api/auth/me", {
+                    method: 'GET',
                     credentials: 'include',
                 });
                 if (res.status === 200) {
