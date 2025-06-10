@@ -46,7 +46,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     } else if (accessDenied) {
         setLoading(true);
         setTimeout(() => {
-            router.push('/sign-in');
+            router.push('/login');
         }, 1000);
     }
 

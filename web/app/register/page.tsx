@@ -10,13 +10,11 @@ export default function RegisterPage() {
   const router = useRouter();
   const form = useForm({
     initialValues: {
-      name: '',
       email: '',
       password: '',
       confirmPassword: '',
     },
     validate: {
-      name: (value) => (value.length < 2 ? 'İsim en az 2 karakter olmalıdır' : null),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Geçerli bir email adresi giriniz'),
       password: (value) => (value.length < 6 ? 'Şifre en az 6 karakter olmalıdır' : null),
       confirmPassword: (value, values) =>
@@ -26,15 +24,17 @@ export default function RegisterPage() {
 
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
-    console.log(values);
     try {
       const response = await fetch('http://localhost:1234/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
-      })
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
 
       if (response.status === 201) {
         setTimeout(() => {
@@ -64,12 +64,6 @@ export default function RegisterPage() {
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
-            label="İsim"
-            placeholder="İsminizi giriniz"
-            required
-            {...form.getInputProps('name')}
-          />
-          <TextInput
             label="Email"
             placeholder="ornek@email.com"
             required
@@ -90,7 +84,7 @@ export default function RegisterPage() {
             mt="md"
             {...form.getInputProps('confirmPassword')}
           />
-          <Button fullWidth mt="xl" type="submit">
+          <Button loading={loading} fullWidth mt="xl" type="submit">
             Kayıt Ol
           </Button>
         </form>

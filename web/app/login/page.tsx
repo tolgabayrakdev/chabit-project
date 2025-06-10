@@ -71,7 +71,7 @@ export default function LoginPage() {
             mt="md"
             {...form.getInputProps('password')}
           />
-          <Button fullWidth mt="xl" type="submit">
+          <Button loading={loading} fullWidth mt="xl" type="submit">
             Giriş Yap
           </Button>
         </form>
