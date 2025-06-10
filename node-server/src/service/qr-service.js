@@ -178,6 +178,10 @@ export default class QrService {
      ORDER BY created_at DESC`,
       [userId]
     );
+    if (result.rowCount === 0) {
+      throw new HttpException(404, "Henüz QR kodu yok.");
+      
+    }
     return result.rows;
   }
 
