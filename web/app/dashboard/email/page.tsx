@@ -3,22 +3,71 @@
 import React from 'react';
 import { Container, Title, Paper, TextInput, Textarea, Button, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 export default function EmailQRPage() {
     const form = useForm({
         initialValues: {
+            label: '',
             email: '',
             subject: '',
             body: '',
         },
         validate: {
+            label: (value) => (value.length < 1 ? 'QR kod ismi gerekli' : null),
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Geçerli bir email adresi giriniz'),
+            subject: (value) => (value.length > 100 ? 'Konu 100 karakterden uzun olamaz' : null),
         },
     });
 
-    const handleSubmit = (values: typeof form.values) => {
-        console.log(values);
-        // Burada QR kod oluşturma işlemi yapılacak
+    const handleSubmit = async (values: typeof form.values) => {
+        try {
+            const response = await fetch('http://localhost:1234/api/qr/email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    label: values.label,
+                    email: values.email,
+                    subject: values.subject,
+                    body: values.body,
+                }),
+            });
+
+            if (response.ok) {
+                await response.json();
+                notifications.show({
+                    title: 'Başarılı',
+                    message: 'QR kodunuz başarıyla oluşturuldu',
+                    color: 'green',
+                });
+                form.reset();
+            } else {
+                const errorData = await response.json();
+                if (response.status === 429) {
+                    notifications.show({
+                        title: 'Limit Aşıldı',
+                        message: 'Free kullanıcılar günde en fazla 3 QR kodu oluşturabilir.',
+                        color: 'yellow',
+                    });
+                } else {
+                    notifications.show({
+                        title: 'Hata',
+                        message: errorData.message || 'QR kod oluşturulurken bir hata oluştu',
+                        color: 'red',
+                    });
+                }
+            }
+        } catch (error) {
+            notifications.show({
+                title: 'Hata',
+                message: 'QR kod oluşturulurken bir hata oluştu',
+                color: 'red',
+            });
+            console.error('QR kod oluşturma hatası:', error);
+        }
     };
 
     return (
@@ -28,6 +77,12 @@ export default function EmailQRPage() {
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Stack>
                         <TextInput
+                            label="QR Kod İsmi"
+                            placeholder="QR kodunuz için bir isim girin"
+                            required
+                            {...form.getInputProps('label')}
+                        />
+                        <TextInput
                             label="E-posta Adresi"
                             placeholder="ornek@email.com"
                             required
@@ -36,6 +91,8 @@ export default function EmailQRPage() {
                         <TextInput
                             label="Konu"
                             placeholder="E-posta konusu"
+                            maxLength={100}
+                            description="Maksimum 100 karakter"
                             {...form.getInputProps('subject')}
                         />
                         <Textarea

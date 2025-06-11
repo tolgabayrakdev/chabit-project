@@ -115,7 +115,7 @@ export default class QrService {
     return await this.saveQrCodeDb(userId, "mail", data, generatedContent, qrCodeImagePath, label);
   }
 
-  async generateWifiQrCode(userId, ssid, password, encryption = "WPA", hidden = false, label = null) {
+  async generateWifiQrCode(userId, ssid, password, encryption, hidden = false, label = null) {
     const hiddenFlag = hidden ? "true" : "false";
     const generatedContent = `WIFI:T:${encryption};S:${ssid};P:${password};H:${hiddenFlag};;`;
     const data = { ssid, password, encryption, hidden };
