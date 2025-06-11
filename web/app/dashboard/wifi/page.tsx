@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
-import { Container, Title, Paper, TextInput, PasswordInput, Button, Select, Stack, Checkbox } from '@mantine/core';
+import React, { useState } from 'react';
+import { Container, Title, Paper, TextInput, PasswordInput, Button, Select, Stack, Checkbox, LoadingOverlay } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
 export default function WifiQRPage() {
+    const [loading, setLoading] = useState(false);
     const form = useForm({
         initialValues: {
             ssid: '',
@@ -22,6 +23,7 @@ export default function WifiQRPage() {
     });
 
     const handleSubmit = async (values: typeof form.values) => {
+        setLoading(true);
         try {
             const response = await fetch('http://localhost:1234/api/qr/wifi', {
                 method: 'POST',
@@ -62,14 +64,21 @@ export default function WifiQRPage() {
                 message: 'QR kod oluşturulurken bir hata oluştu',
                 color: 'red',
             });
-            console.error('QR kod oluşturma hatası:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <Container size="sm">
             <Title order={2} mb="xl">WiFi QR Kod Oluştur</Title>
-            <Paper withBorder shadow="md" p={30} radius="md">
+            <Paper withBorder shadow="md" p={30} radius="md" pos="relative">
+                <LoadingOverlay
+                    visible={loading}
+                    zIndex={1000}
+                    overlayProps={{ radius: "sm", blur: 2 }}
+                    loaderProps={{ type: 'dots' }}
+                />
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Stack>
                         <TextInput

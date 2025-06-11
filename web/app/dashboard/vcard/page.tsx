@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Title, Paper, TextInput, Button, Stack, Grid, LoadingOverlay } from '@mantine/core';
+import { Container, Title, Paper, TextInput, Button, Stack, Grid, LoadingOverlay, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
@@ -106,7 +106,11 @@ export default function VCardQRPage() {
                     zIndex={1000}
                     overlayProps={{ radius: "sm", blur: 2 }}
                     loaderProps={{ type: 'dots' }}
-                />
+                >
+                    <Text ta="center" size="lg" fw={500} mt="md">
+                        QR kodunuz oluşturuluyor...
+                    </Text>
+                </LoadingOverlay>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                     <Stack>
                         <TextInput

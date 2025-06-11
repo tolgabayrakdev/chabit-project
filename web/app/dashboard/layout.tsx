@@ -79,7 +79,7 @@ export default function DashboardLayout({
             >
                 <AppShell.Header>
                     <Group h="100%" px="md">
-                        logo
+                        BncQrApp
                         <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" />
                     </Group>
                 </AppShell.Header>
