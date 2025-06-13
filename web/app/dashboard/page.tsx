@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash } from '@tabler/icons-react';
+import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu } from '@mantine/core';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -16,15 +16,15 @@ interface QRCode {
 const getTypeColor = (type: string) => {
     switch (type) {
         case 'wifi':
-            return 'blue';
+            return '#40c057'; // Yeşil
         case 'mail':
-            return 'green';
+            return '#fd7e14'; // Turuncu
         case 'sms':
-            return 'orange';
+            return '#fa5252'; // Kırmızı
         case 'vcard':
-            return 'violet';
+            return '#7950f2'; // Mor
         case 'url':
-            return 'cyan';
+            return '#228be6'; // Mavi
         default:
             return 'gray';
     }
@@ -78,14 +78,14 @@ export default function DashboardPage() {
         fetchQRCodes();
     }, []);
 
-    const handleDownload = async (qrCode: QRCode) => {
+    const handleDownload = async (qrCode: QRCode, format: 'png' | 'jpg' | 'svg') => {
         try {
             // QR kod görselini indir
-            const response = await fetch(`http://localhost:1234${qrCode.qr_code_image}`, {
+            const response = await fetch(`http://localhost:1234${qrCode.qr_code_image}?format=${format}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'image/png',
+                    'Content-Type': `image/${format}`,
                 },
             });
             const blob = await response.blob();
@@ -96,7 +96,7 @@ export default function DashboardPage() {
             link.href = url;
             
             // Dosya adını oluştur
-            const fileName = `${qrCode.label || qrCode.type}_${new Date().getTime()}.png`;
+            const fileName = `${qrCode.label || qrCode.type}_${new Date().getTime()}.${format}`;
             link.download = fileName;
             
             // İndirmeyi başlat
@@ -162,7 +162,13 @@ export default function DashboardPage() {
                         <Card key={qr.id} padding="lg" radius="md" withBorder>
                             <Card.Section p="md">
                                 <Group justify="space-between">
-                                    <Badge color={getTypeColor(qr.type)}>
+                                    <Badge 
+                                        color={getTypeColor(qr.type)}
+                                        style={{ 
+                                            backgroundColor: getTypeColor(qr.type),
+                                            color: 'white'
+                                        }}
+                                    >
                                         {getTypeLabel(qr.type)}
                                     </Badge>
                                     <Text size="sm" c="dimmed">
@@ -183,14 +189,37 @@ export default function DashboardPage() {
                                     {qr.label || getTypeLabel(qr.type)}
                                 </Text>
                                 <Group mt="md" w="100%">
-                                    <Button
-                                        variant="light"
-                                        leftSection={<IconDownload size={20} />}
-                                        onClick={() => handleDownload(qr)}
-                                        fullWidth
-                                    >
-                                        İndir
-                                    </Button>
+                                    <Menu shadow="md" width={200}>
+                                        <Menu.Target>
+                                            <Button
+                                                variant="light"
+                                                leftSection={<IconDownload size={20} />}
+                                                fullWidth
+                                            >
+                                                İndir
+                                            </Button>
+                                        </Menu.Target>
+                                        <Menu.Dropdown>
+                                            <Menu.Item
+                                                leftSection={<IconFileTypePng size={20} />}
+                                                onClick={() => handleDownload(qr, 'png')}
+                                            >
+                                                PNG olarak indir
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                leftSection={<IconFileTypeJpg size={20} />}
+                                                onClick={() => handleDownload(qr, 'jpg')}
+                                            >
+                                                JPG olarak indir
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                leftSection={<IconFileTypeSvg size={20} />}
+                                                onClick={() => handleDownload(qr, 'svg')}
+                                            >
+                                                SVG olarak indir
+                                            </Menu.Item>
+                                        </Menu.Dropdown>
+                                    </Menu>
                                     <Button
                                         variant="light"
                                         color="red"

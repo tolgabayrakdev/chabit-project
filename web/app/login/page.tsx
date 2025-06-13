@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { TextInput, PasswordInput, Button, Paper, Title, Container, Text } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Box, Stack, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,6 @@ export default function LoginPage() {
 
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
-    console.log(values);
     try {
       const response = await fetch('http://localhost:1234/api/auth/login', {
         method: 'POST',
@@ -46,37 +45,95 @@ export default function LoginPage() {
   };
 
   return (
-    <Container size={420} my={40}>
-      <Title ta="center" order={2}>
-        Hoş Geldiniz!
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Hesabınız yok mu?{' '}
-        <Link className='text-blue-500 hover:underline' href="/register" passHref>
-          Kayıt Ol
-        </Link>
-      </Text>
+    <Box 
+      style={{ 
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: rem(20)
+      }}
+    >
+      <Container size={420} style={{ width: '100%' }}>
+        <Stack align="center" gap="xs">
+          <Title 
+            order={2} 
+            style={{ 
+              color: 'white',
+              fontSize: rem(36),
+              fontWeight: 900,
+              textAlign: 'center'
+            }}
+          >
+            Hoş Geldiniz!
+          </Title>
+          <Text 
+            size="sm" 
+            style={{ 
+              color: 'white',
+              textAlign: 'center',
+              opacity: 0.9
+            }}
+          >
+            Hesabınız yok mu?{' '}
+            <Anchor component={Link} href="/register" style={{ color: 'white', textDecoration: 'underline' }}>
+              Kayıt Ol
+            </Anchor>
+          </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <TextInput
-            label="Email"
-            placeholder="ornek@email.com"
-            required
-            {...form.getInputProps('email')}
-          />
-          <PasswordInput
-            label="Şifre"
-            placeholder="Şifrenizi giriniz"
-            required
-            mt="md"
-            {...form.getInputProps('password')}
-          />
-          <Button loading={loading} fullWidth mt="xl" type="submit">
-            Giriş Yap
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+          <Paper 
+            withBorder 
+            shadow="md" 
+            p={30} 
+            mt={30} 
+            radius="lg" 
+            style={{ 
+              width: '100%',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              <Stack gap="md">
+                <TextInput
+                  label="Email"
+                  placeholder="ornek@email.com"
+                  required
+                  radius="md"
+                  size="md"
+                  {...form.getInputProps('email')}
+                />
+                <PasswordInput
+                  label="Şifre"
+                  placeholder="Şifrenizi giriniz"
+                  required
+                  radius="md"
+                  size="md"
+                  {...form.getInputProps('password')}
+                />
+                <Button 
+                  loading={loading} 
+                  fullWidth 
+                  mt="xl" 
+                  type="submit"
+                  radius="xl"
+                  size="md"
+                  style={{
+                    background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
+                    transition: 'transform 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
+                  Giriş Yap
+                </Button>
+              </Stack>
+            </form>
+          </Paper>
+        </Stack>
+      </Container>
+    </Box>
   );
 }

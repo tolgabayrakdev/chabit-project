@@ -1,24 +1,27 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Title, Paper, TextInput, PasswordInput, Button, Select, Stack, Checkbox, LoadingOverlay } from '@mantine/core';
+import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, ThemeIcon, SimpleGrid, Select, Checkbox } from '@mantine/core';
+import { IconWifi, IconDownload, IconQrcode } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
-export default function WifiQRPage() {
+export default function WifiPage() {
     const [loading, setLoading] = useState(false);
+    const [qrCode, setQrCode] = useState<string | null>(null);
+
     const form = useForm({
         initialValues: {
+            label: '',
             ssid: '',
             password: '',
             encryption: 'WPA',
             hidden: false,
-            label: '',
         },
         validate: {
+            label: (value) => (value.length < 1 ? 'QR kod ismi gerekli' : null),
             ssid: (value) => (value.length < 1 ? 'SSID gerekli' : null),
             password: (value) => (value.length < 8 ? 'Şifre en az 8 karakter olmalıdır' : null),
-            label: (value) => (value.length < 1 ? 'QR kod ismi gerekli' : null),
         },
     });
 
@@ -35,7 +38,8 @@ export default function WifiQRPage() {
             });
 
             if (response.ok) {
-                await response.json();
+                const data = await response.json();
+                setQrCode(data.qrCode);
                 notifications.show({
                     title: 'Başarılı',
                     message: 'QR kodunuz başarıyla oluşturuldu',
@@ -70,55 +74,137 @@ export default function WifiQRPage() {
     };
 
     return (
-        <Container size="sm">
-            <Title order={2} mb="xl">WiFi QR Kod Oluştur</Title>
-            <Paper withBorder shadow="md" p={30} radius="md" pos="relative">
-                <LoadingOverlay
-                    visible={loading}
-                    zIndex={1000}
-                    overlayProps={{ radius: "sm", blur: 2 }}
-                    loaderProps={{ type: 'dots' }}
-                />
-                <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <Stack>
-                        <TextInput
-                            label="QR Kod İsmi"
-                            placeholder="QR kodunuz için bir isim girin"
-                            required
-                            {...form.getInputProps('label')}
-                        />
-                        <TextInput
-                            label="SSID (Ağ Adı)"
-                            placeholder="WiFi ağınızın adını girin"
-                            required
-                            {...form.getInputProps('ssid')}
-                        />
-                        <PasswordInput
-                            label="Şifre"
-                            placeholder="WiFi şifrenizi girin"
-                            required
-                            {...form.getInputProps('password')}
-                        />
-                        <Select
-                            label="Şifreleme Türü"
-                            placeholder="Şifreleme türünü seçin"
-                            data={[
-                                { value: 'WPA', label: 'WPA/WPA2' },
-                                { value: 'WEP', label: 'WEP' },
-                                { value: 'nopass', label: 'Şifresiz' },
-                            ]}
-                            {...form.getInputProps('encryption')}
-                        />
-                        <Checkbox
-                            label="Gizli Ağ"
-                            {...form.getInputProps('hidden', { type: 'checkbox' })}
-                        />
-                        <Button type="submit" fullWidth mt="xl">
-                            QR Kod Oluştur
-                        </Button>
-                    </Stack>
-                </form>
-            </Paper>
+        <Container size="lg">
+            <Stack gap="xl">
+                <div>
+                    <Title order={2} mb="md">WiFi QR Kod Oluştur</Title>
+                    <Text c="dimmed">WiFi ağınızı QR kod ile kolayca paylaşın.</Text>
+                </div>
+
+                <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
+                    <Paper 
+                        p="xl" 
+                        radius="lg" 
+                        withBorder
+                        style={{
+                            background: 'white',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                                boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+                            }
+                        }}
+                    >
+                        <form onSubmit={form.onSubmit(handleSubmit)}>
+                            <Stack gap="md">
+                                <TextInput
+                                    label="QR Kod İsmi"
+                                    placeholder="QR kodunuz için bir isim girin"
+                                    required
+                                    radius="md"
+                                    size="md"
+                                    {...form.getInputProps('label')}
+                                />
+                                <TextInput
+                                    label="SSID (Ağ Adı)"
+                                    placeholder="WiFi ağınızın adını girin"
+                                    required
+                                    radius="md"
+                                    size="md"
+                                    {...form.getInputProps('ssid')}
+                                />
+                                <PasswordInput
+                                    label="Şifre"
+                                    placeholder="WiFi şifrenizi girin"
+                                    required
+                                    radius="md"
+                                    size="md"
+                                    {...form.getInputProps('password')}
+                                />
+                                <Select
+                                    label="Şifreleme Türü"
+                                    placeholder="Şifreleme türünü seçin"
+                                    data={[
+                                        { value: 'WPA', label: 'WPA/WPA2' },
+                                        { value: 'WEP', label: 'WEP' },
+                                        { value: 'nopass', label: 'Şifresiz' },
+                                    ]}
+                                    radius="md"
+                                    size="md"
+                                    {...form.getInputProps('encryption')}
+                                />
+                                <Checkbox
+                                    label="Gizli Ağ"
+                                    {...form.getInputProps('hidden', { type: 'checkbox' })}
+                                />
+                                <Button 
+                                    type="submit" 
+                                    loading={loading}
+                                    radius="xl"
+                                    size="md"
+                                    leftSection={<IconQrcode size={20} />}
+                                    style={{
+                                        background: 'linear-gradient(45deg, #40c057 0%, #69db7c 100%)',
+                                        transition: 'transform 0.2s',
+                                        '&:hover': {
+                                            transform: 'translateY(-2px)'
+                                        }
+                                    }}
+                                >
+                                    QR Kod Oluştur
+                                </Button>
+                            </Stack>
+                        </form>
+                    </Paper>
+
+                    <Paper 
+                        p="xl" 
+                        radius="lg" 
+                        withBorder
+                        style={{
+                            background: 'white',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            minHeight: '300px',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                                boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+                            }
+                        }}
+                    >
+                        {qrCode ? (
+                            <Stack align="center" gap="md">
+                                <img src={qrCode} alt="WiFi QR Code" style={{ maxWidth: '200px' }} />
+                                <Button
+                                    variant="light"
+                                    color="green"
+                                    leftSection={<IconDownload size={20} />}
+                                    radius="xl"
+                                    size="md"
+                                    style={{
+                                        transition: 'transform 0.2s',
+                                        '&:hover': {
+                                            transform: 'translateY(-2px)'
+                                        }
+                                    }}
+                                >
+                                    İndir
+                                </Button>
+                            </Stack>
+                        ) : (
+                            <Stack align="center" gap="md">
+                                <ThemeIcon size={80} radius="lg" color="green" variant="light">
+                                    <IconWifi style={{ width: rem(40), height: rem(40) }} stroke={1.5} />
+                                </ThemeIcon>
+                                <Text c="dimmed" ta="center">
+                                    QR kod oluşturmak için formu doldurun
+                                </Text>
+                            </Stack>
+                        )}
+                    </Paper>
+                </SimpleGrid>
+            </Stack>
         </Container>
     );
 } 

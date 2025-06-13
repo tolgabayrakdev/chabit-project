@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider } from '@mantine/core';
+import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -41,11 +41,11 @@ export default function DashboardLayout({
     }, []);
 
     const navItems = [
-        { icon: IconQrcode, label: 'QR Kodlarım', href: '/dashboard' },
-        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi' },
-        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email' },
-        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms' },
-        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard' },
+        { icon: IconQrcode, label: 'QR Kodlarım', href: '/dashboard', color: '#228be6' },
+        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi', color: '#40c057' },
+        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14' },
+        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
+        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
     ];
 
     const handleLogout = async () => {
@@ -61,7 +61,7 @@ export default function DashboardLayout({
                 router.push('/login');
             }
         } catch (error) {
-
+            console.error('Logout error:', error);
         }
         router.push('/login');
     };
@@ -77,20 +77,20 @@ export default function DashboardLayout({
                 }}
                 padding="md"
             >
-                <AppShell.Header>
-                    <Group h="100%" px="md">
-                        Tagz App
-                        <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" />
+                <AppShell.Header style={{ background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)' }}>
+                    <Group h="100%" px="md" justify="space-between">
+                        <Text fw={700} size="lg" c="white">Tagz App</Text>
+                        <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" color="white" />
                     </Group>
                 </AppShell.Header>
 
-                <AppShell.Navbar p="md">
+                <AppShell.Navbar p="md" style={{ background: 'white' }}>
                     <Stack h="100%" justify="space-between">
                         <div>
                             <Text size="sm" c="dimmed" mb="md">
                                 Hoş Geldiniz
                             </Text>
-                            <Text fw={500} mb="xl">
+                            <Text fw={500} mb="xl" size="lg">
                                 {userEmail}
                             </Text>
                             {navItems.map((item) => (
@@ -99,8 +99,20 @@ export default function DashboardLayout({
                                     component={Link}
                                     href={item.href}
                                     label={item.label}
-                                    leftSection={<item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />}
+                                    leftSection={
+                                        <ThemeIcon size={34} radius="md" color={item.color}>
+                                            <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                        </ThemeIcon>
+                                    }
                                     active={pathname === item.href}
+                                    style={{
+                                        borderRadius: 'md',
+                                        marginBottom: '0.5rem',
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(34, 139, 230, 0.1)',
+                                        }
+                                    }}
                                 />
                             ))}
                         </div>
@@ -112,6 +124,13 @@ export default function DashboardLayout({
                                 leftSection={<IconLogout style={{ width: rem(20), height: rem(20) }} stroke={1.5} />}
                                 onClick={handleLogout}
                                 fullWidth
+                                style={{
+                                    borderRadius: 'md',
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(250, 82, 82, 0.1)',
+                                    }
+                                }}
                             >
                                 Çıkış Yap
                             </Button>
@@ -119,8 +138,10 @@ export default function DashboardLayout({
                     </Stack>
                 </AppShell.Navbar>
 
-                <AppShell.Main>
-                    {children}
+                <AppShell.Main style={{ background: '#f8f9fa' }}>
+                    <Box p="md">
+                        {children}
+                    </Box>
                 </AppShell.Main>
             </AppShell>
         </AuthProvider>
