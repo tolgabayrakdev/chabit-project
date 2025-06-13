@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthProvider from '@/providers/auth-provider';
@@ -46,6 +46,7 @@ export default function DashboardLayout({
         { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14' },
         { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
         { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
+        { icon: IconSettings, label: 'Ayarlar', href: '/dashboard/settings', color: '#868e96' },
     ];
 
     const handleLogout = async () => {
@@ -109,8 +110,11 @@ export default function DashboardLayout({
                                         borderRadius: 'md',
                                         marginBottom: '0.5rem',
                                         transition: 'all 0.2s ease',
+                                        backgroundColor: pathname === item.href ? `${item.color}15` : 'transparent',
+                                        color: pathname === item.href ? item.color : 'inherit',
                                         '&:hover': {
-                                            backgroundColor: 'rgba(34, 139, 230, 0.1)',
+                                            backgroundColor: `${item.color}15`,
+                                            color: item.color,
                                         }
                                     }}
                                 />
