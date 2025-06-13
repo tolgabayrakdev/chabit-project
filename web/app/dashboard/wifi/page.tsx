@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, ThemeIcon, SimpleGrid, Select, Checkbox } from '@mantine/core';
-import { IconWifi, IconDownload, IconQrcode } from '@tabler/icons-react';
+import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, ThemeIcon, SimpleGrid, Select, Checkbox, Loader } from '@mantine/core';
+import { IconWifi, IconQrcode } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+import { useRouter } from 'next/navigation';
 
 export default function WifiPage() {
     const [loading, setLoading] = useState(false);
-    const [qrCode, setQrCode] = useState<string | null>(null);
+    const [showAnimation, setShowAnimation] = useState(false);
+    const router = useRouter();
 
     const form = useForm({
         initialValues: {
@@ -19,7 +21,7 @@ export default function WifiPage() {
             hidden: false,
         },
         validate: {
-            label: (value) => (value.length < 1 ? 'QR kod ismi gerekli' : null),
+            label: (value) => (value.length < 3 ? 'QR kod ismi en az 3 karakter olmalıdır' : null),
             ssid: (value) => (value.length < 1 ? 'SSID gerekli' : null),
             password: (value) => (value.length < 8 ? 'Şifre en az 8 karakter olmalıdır' : null),
         },
@@ -27,6 +29,7 @@ export default function WifiPage() {
 
     const handleSubmit = async (values: typeof form.values) => {
         setLoading(true);
+        setShowAnimation(true);
         try {
             const response = await fetch('http://localhost:1234/api/qr/wifi', {
                 method: 'POST',
@@ -38,31 +41,21 @@ export default function WifiPage() {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                setQrCode(data.qrCode);
-                notifications.show({
-                    title: 'Başarılı',
-                    message: 'QR kodunuz başarıyla oluşturuldu',
-                    color: 'green',
-                });
-                form.reset();
+                setTimeout(() => {
+                    setShowAnimation(false);
+                    router.push('/dashboard');
+                }, 5000);
             } else {
+                setShowAnimation(false);
                 const errorData = await response.json();
-                if (response.status === 429) {
-                    notifications.show({
-                        title: 'Limit Aşıldı',
-                        message: 'Free kullanıcılar günde en fazla 3 QR kodu oluşturabilir.',
-                        color: 'yellow',
-                    });
-                } else {
-                    notifications.show({
-                        title: 'Hata',
-                        message: errorData.message || 'QR kod oluşturulurken bir hata oluştu',
-                        color: 'red',
-                    });
-                }
+                notifications.show({
+                    title: 'Hata',
+                    message: errorData.message || 'QR kod oluşturulurken bir hata oluştu',
+                    color: 'red',
+                });
             }
         } catch (error) {
+            setShowAnimation(false);
             notifications.show({
                 title: 'Hata',
                 message: 'QR kod oluşturulurken bir hata oluştu',
@@ -75,13 +68,9 @@ export default function WifiPage() {
 
     return (
         <Container size="lg">
-            <Stack gap="xl">
+            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                 <div>
-                    <Title order={2} mb="md">WiFi QR Kod Oluştur</Title>
-                    <Text c="dimmed">WiFi ağınızı QR kod ile kolayca paylaşın.</Text>
-                </div>
-
-                <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
+                    <Title order={2} mb="xl">WiFi QR Kod Oluştur</Title>
                     <Paper 
                         p="xl" 
                         radius="lg" 
@@ -98,15 +87,15 @@ export default function WifiPage() {
                             <Stack gap="md">
                                 <TextInput
                                     label="QR Kod İsmi"
-                                    placeholder="QR kodunuz için bir isim girin"
+                                    placeholder="Örn: Ev WiFi"
                                     required
                                     radius="md"
                                     size="md"
                                     {...form.getInputProps('label')}
                                 />
                                 <TextInput
-                                    label="SSID (Ağ Adı)"
-                                    placeholder="WiFi ağınızın adını girin"
+                                    label="SSID"
+                                    placeholder="WiFi ağ adı"
                                     required
                                     radius="md"
                                     size="md"
@@ -114,7 +103,7 @@ export default function WifiPage() {
                                 />
                                 <PasswordInput
                                     label="Şifre"
-                                    placeholder="WiFi şifrenizi girin"
+                                    placeholder="WiFi şifresi"
                                     required
                                     radius="md"
                                     size="md"
@@ -155,56 +144,74 @@ export default function WifiPage() {
                             </Stack>
                         </form>
                     </Paper>
+                </div>
 
-                    <Paper 
-                        p="xl" 
-                        radius="lg" 
-                        withBorder
-                        style={{
-                            background: 'white',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            minHeight: '300px',
-                            transition: 'all 0.2s ease',
-                            '&:hover': {
-                                boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-                            }
-                        }}
-                    >
-                        {qrCode ? (
-                            <Stack align="center" gap="md">
-                                <img src={qrCode} alt="WiFi QR Code" style={{ maxWidth: '200px' }} />
-                                <Button
-                                    variant="light"
-                                    color="green"
-                                    leftSection={<IconDownload size={20} />}
-                                    radius="xl"
-                                    size="md"
-                                    style={{
-                                        transition: 'transform 0.2s',
-                                        '&:hover': {
-                                            transform: 'translateY(-2px)'
-                                        }
-                                    }}
-                                >
-                                    İndir
-                                </Button>
-                            </Stack>
-                        ) : (
-                            <Stack align="center" gap="md">
-                                <ThemeIcon size={80} radius="lg" color="green" variant="light">
-                                    <IconWifi style={{ width: rem(40), height: rem(40) }} stroke={1.5} />
-                                </ThemeIcon>
-                                <Text c="dimmed" ta="center">
-                                    QR kod oluşturmak için formu doldurun
+                <Paper 
+                    p="xl" 
+                    radius="lg" 
+                    withBorder
+                    style={{
+                        background: 'white',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '2rem'
+                    }}
+                >
+                    {showAnimation ? (
+                        <Stack align="center" gap="xl">
+                            <ThemeIcon 
+                                size={120} 
+                                radius="xl" 
+                                color="green"
+                                style={{
+                                    animation: 'pulse 2s infinite',
+                                }}
+                            >
+                                <IconQrcode size={60} />
+                            </ThemeIcon>
+                            <Stack align="center" gap="xs">
+                                <Title order={3} ta="center">QR Kodunuz Oluşturuluyor</Title>
+                                <Text c="dimmed" ta="center" size="lg">
+                                    WiFi QR kodunuz hazırlanıyor...
                                 </Text>
                             </Stack>
-                        )}
-                    </Paper>
-                </SimpleGrid>
-            </Stack>
+                            <Loader size="lg" color="green" />
+                        </Stack>
+                    ) : (
+                        <Stack align="center" gap="xl">
+                            <ThemeIcon size={120} radius="xl" color="green">
+                                <IconWifi size={60} />
+                            </ThemeIcon>
+                            <Stack align="center" gap="xs">
+                                <Title order={3} ta="center">WiFi QR Kod Oluştur</Title>
+                                <Text c="dimmed" ta="center" size="lg">
+                                    WiFi ağınızı QR kod ile paylaşmak için formu doldurun
+                                </Text>
+                            </Stack>
+                        </Stack>
+                    )}
+                </Paper>
+            </SimpleGrid>
+
+            <style jsx global>{`
+                @keyframes pulse {
+                    0% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: scale(1.1);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                }
+            `}</style>
         </Container>
     );
 } 
