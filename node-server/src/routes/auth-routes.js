@@ -14,6 +14,8 @@ router.post(
     authController.register.bind(authController
     ));
 router.post("/logout", authController.logout.bind(authController));
+router.get("/verify-email", authController.verifyEmail.bind(authController));
+router.get("/resend-verification-email", authController.resendVerificationEmail.bind(authController));
 router.get("/me", authController.verifyUser.bind(authController));
 
 
