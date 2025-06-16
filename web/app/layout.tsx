@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   viewport: "width=device-width, initial-scale=1",
   verification: {
-    google: "google-site-verification-code", // Google Search Console doğrulama kodunuzu buraya ekleyin
+    google: "yvbf8qdokpIVSyJ4Z5zIs5zHWr136R8yD7z8_UMPGlk", // Google Search Console doğrulama kodunuzu buraya ekleyin
   },
 };
 
