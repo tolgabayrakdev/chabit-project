@@ -38,10 +38,7 @@ export const metadata: Metadata = {
     title: "VunQR - Dijital İletişim Çözümleri",
     description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
   },
-  viewport: "width=device-width, initial-scale=1",
-  verification: {
-    google: "yvbf8qdokpIVSyJ4Z5zIs5zHWr136R8yD7z8_UMPGlk", // Google Search Console doğrulama kodunuzu buraya ekleyin
-  },
+  viewport: "width=device-width, initial-scale=1"
 };
 
 export default function RootLayout({
@@ -52,6 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" {...mantineHtmlProps}>
       <head>
+        <meta name="google-site-verification" content="yvbf8qdokpIVSyJ4Z5zIs5zHWr136R8yD7z8_UMPGlk" />
         <ColorSchemeScript />
       </head>
       <body
