@@ -33,7 +33,6 @@ export default function DashboardLayout({
                     setUserEmail(data.user.email);
                 }
             } catch (error) {
-                console.error('Error fetching user data:', error);
             }
         };
 
