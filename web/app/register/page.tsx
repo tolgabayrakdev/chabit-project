@@ -25,7 +25,7 @@ export default function RegisterPage() {
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:1234/api/auth/register', {
+      const response = await fetch('https://chabit-project.onrender.com/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

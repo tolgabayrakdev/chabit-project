@@ -14,7 +14,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const verifyAuthToken = async () => {
             try {
-                const res = await fetch("http://localhost:1234/api/auth/me", {
+                const res = await fetch("https://chabit-project.onrender.com/api/auth/me", {
                     method: 'GET',
                     credentials: 'include',
                 });
