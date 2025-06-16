@@ -25,7 +25,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/uploads', express.static('uploads', {
     setHeaders: (res) => {
-        res.set('Access-Control-Allow-Origin', 'http://www.vunqr.com');
+        res.set('Access-Control-Allow-Origin', 'https://www.vunqr.com');
         res.set('Access-Control-Allow-Credentials', 'true');
     }
 }));
