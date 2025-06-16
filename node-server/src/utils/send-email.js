@@ -19,6 +19,9 @@ export async function sendEmail(to, subject, html) {
     html,
   };
 
+  console.log(process.env.EMAIL_USER);
+  
+
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log("📩 Email sent:", info.response);
