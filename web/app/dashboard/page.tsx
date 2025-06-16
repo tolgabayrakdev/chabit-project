@@ -56,7 +56,7 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchQRCodes = async () => {
             try {
-                const response = await fetch('http://localhost:1234/api/qr', {
+                const response = await fetch('https://chabit-project.onrender.com/api/qr', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ export default function DashboardPage() {
     const handleDownload = async (qrCode: QRCode, format: 'png' | 'jpg' | 'svg') => {
         try {
             // QR kod görselini indir
-            const response = await fetch(`http://localhost:1234${qrCode.qr_code_image}?format=${format}`, {
+            const response = await fetch(`https://chabit-project.onrender.com${qrCode.qr_code_image}?format=${format}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -120,7 +120,7 @@ export default function DashboardPage() {
         if (!selectedQR) return;
 
         try {
-            const response = await fetch(`http://localhost:1234/api/qr/${selectedQR.id}`, {
+            const response = await fetch(`https://chabit-project.onrender.com/api/qr/${selectedQR.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -179,7 +179,7 @@ export default function DashboardPage() {
 
                             <Stack align="center" mt="md">
                                 <Image
-                                    src={`http://localhost:1234${qr.qr_code_image}`}
+                                    src={`https://chabit-project.onrender.com${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
                                     width={200}
                                     height={200}

@@ -32,7 +32,7 @@ export default function SettingsPage() {
   const handlePasswordChange = async (values: typeof form.values) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:1234/api/auth/change-password', {
+      const response = await fetch('https://chabit-project.onrender.com/api/auth/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function SettingsPage() {
 
     setDeleteLoading(true);
     try {
-      const response = await fetch('http://localhost:1234/api/auth/delete-account', {
+      const response = await fetch('https://chabit-project.onrender.com/api/auth/delete-account', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

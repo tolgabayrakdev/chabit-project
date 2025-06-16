@@ -31,7 +31,7 @@ export default function WifiPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
-            const response = await fetch('http://localhost:1234/api/qr/wifi', {
+            const response = await fetch('https://chabit-project.onrender.com/api/qr/wifi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

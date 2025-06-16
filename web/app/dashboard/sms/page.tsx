@@ -29,7 +29,7 @@ export default function SMSPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
-            const response = await fetch('http://localhost:1234/api/qr/sms', {
+            const response = await fetch('https://chabit-project.onrender.com/api/qr/sms', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
