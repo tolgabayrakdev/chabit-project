@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
   const router = useRouter();
   const form = useForm({
     initialValues: {
@@ -37,14 +39,16 @@ export default function RegisterPage() {
       });
 
       if (response.status === 201) {
-        setTimeout(() => {
-          setLoading(false);
-          router.push(`/email-verified?email=${encodeURIComponent(values.email)}`);
-        }, 1000);
+        setSuccess(true);
+        setRegisteredEmail(values.email);
+        form.reset();
       } else {
-        setLoading(false);
+        const data = await response.json();
+        form.setErrors({ email: data.message || 'Kayıt işlemi başarısız oldu' });
       }
     } catch (error) {
+      form.setErrors({ email: 'Bir hata oluştu' });
+    } finally {
       setLoading(false);
     }
   };
@@ -99,37 +103,17 @@ export default function RegisterPage() {
               backdropFilter: 'blur(10px)'
             }}
           >
-            <form onSubmit={form.onSubmit(handleSubmit)}>
+            {success ? (
               <Stack gap="md">
-                <TextInput
-                  label="Email"
-                  placeholder="ornek@email.com"
-                  required
-                  radius="md"
-                  size="md"
-                  {...form.getInputProps('email')}
-                />
-                <PasswordInput
-                  label="Şifre"
-                  placeholder="Şifrenizi giriniz"
-                  required
-                  radius="md"
-                  size="md"
-                  {...form.getInputProps('password')}
-                />
-                <PasswordInput
-                  label="Şifre Tekrar"
-                  placeholder="Şifrenizi tekrar giriniz"
-                  required
-                  radius="md"
-                  size="md"
-                  {...form.getInputProps('confirmPassword')}
-                />
-                <Button 
-                  loading={loading} 
-                  fullWidth 
-                  mt="xl" 
-                  type="submit"
+                <Text size="lg" ta="center" c="green">
+                  Kayıt işlemi başarılı!
+                </Text>
+                <Text size="sm" ta="center">
+                  {registeredEmail} adresine bir doğrulama emaili gönderdik. Lütfen emailinizi kontrol edin ve hesabınızı doğrulamak için emaildeki linke tıklayın.
+                </Text>
+                <Button
+                  onClick={() => router.push('/login')}
+                  fullWidth
                   radius="xl"
                   size="md"
                   style={{
@@ -140,10 +124,56 @@ export default function RegisterPage() {
                     }
                   }}
                 >
-                  Kayıt Ol
+                  Giriş Sayfasına Dön
                 </Button>
               </Stack>
-            </form>
+            ) : (
+              <form onSubmit={form.onSubmit(handleSubmit)}>
+                <Stack gap="md">
+                  <TextInput
+                    label="Email"
+                    placeholder="ornek@email.com"
+                    required
+                    radius="md"
+                    size="md"
+                    {...form.getInputProps('email')}
+                  />
+                  <PasswordInput
+                    label="Şifre"
+                    placeholder="Şifrenizi giriniz"
+                    required
+                    radius="md"
+                    size="md"
+                    {...form.getInputProps('password')}
+                  />
+                  <PasswordInput
+                    label="Şifre Tekrar"
+                    placeholder="Şifrenizi tekrar giriniz"
+                    required
+                    radius="md"
+                    size="md"
+                    {...form.getInputProps('confirmPassword')}
+                  />
+                  <Button 
+                    loading={loading} 
+                    fullWidth 
+                    mt="xl" 
+                    type="submit"
+                    radius="xl"
+                    size="md"
+                    style={{
+                      background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
+                      transition: 'transform 0.2s',
+                      '&:hover': {
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
+                  >
+                    Kayıt Ol
+                  </Button>
+                </Stack>
+              </form>
+            )}
           </Paper>
         </Stack>
       </Container>

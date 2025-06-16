@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Title, Container, Text, Box, Stack, Button, rem } from '@mantine/core';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
@@ -7,7 +7,42 @@ import { Suspense } from 'react';
 function EmailVerificationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get('email');
+  const token = searchParams.get('token');
+  const [verificationStatus, setVerificationStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const verifyEmail = async () => {
+      if (!token) {
+        setVerificationStatus('error');
+        setMessage('Geçersiz doğrulama linki');
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://chabit-project.onrender.com/api/auth/verify-email?token=${token}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          setVerificationStatus('success');
+          setMessage('Email adresiniz başarıyla doğrulandı! Giriş yapabilirsiniz.');
+        } else {
+          const data = await response.json();
+          setVerificationStatus('error');
+          setMessage(data.message || 'Doğrulama başarısız oldu');
+        }
+      } catch (error) {
+        setVerificationStatus('error');
+        setMessage('Bir hata oluştu');
+      }
+    };
+
+    verifyEmail();
+  }, [token]);
 
   return (
     <Box 
@@ -41,22 +76,26 @@ function EmailVerificationContent() {
               opacity: 0.9
             }}
           >
-            {email} adresine bir doğrulama emaili gönderdik. Lütfen emailinizi kontrol edin ve hesabınızı doğrulamak için emaildeki linke tıklayın.
+            {verificationStatus === 'loading' && 'Email doğrulanıyor...'}
+            {verificationStatus === 'success' && message}
+            {verificationStatus === 'error' && message}
           </Text>
-          <Button
-            onClick={() => router.push('/login')}
-            radius="xl"
-            size="md"
-            style={{
-              background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
-              transition: 'transform 0.2s',
-              '&:hover': {
-                transform: 'translateY(-2px)'
-              }
-            }}
-          >
-            Giriş Sayfasına Dön
-          </Button>
+          {verificationStatus !== 'loading' && (
+            <Button
+              onClick={() => router.push('/login')}
+              radius="xl"
+              size="md"
+              style={{
+                background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'translateY(-2px)'
+                }
+              }}
+            >
+              Giriş Sayfasına Dön
+            </Button>
+          )}
         </Stack>
       </Container>
     </Box>
