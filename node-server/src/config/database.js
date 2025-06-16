@@ -8,7 +8,10 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     ssl: {
         rejectUnauthorized: false
-    }
+    },
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+    max: 30
 });
 
 pool.connect()
