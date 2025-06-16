@@ -20,6 +20,28 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "VunQR - Dijital İletişim Çözümleri",
   description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
+  keywords: "QR kod, WiFi paylaşımı, dijital iletişim, vCard, SMS gönderimi, e-posta gönderimi",
+  authors: [{ name: "VunQR" }],
+  creator: "VunQR",
+  publisher: "VunQR",
+  robots: "index, follow",
+  openGraph: {
+    type: "website",
+    locale: "tr_TR",
+    url: "https://vunqr.com",
+    title: "VunQR - Dijital İletişim Çözümleri",
+    description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
+    siteName: "VunQR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VunQR - Dijital İletişim Çözümleri",
+    description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
+  },
+  viewport: "width=device-width, initial-scale=1",
+  verification: {
+    google: "google-site-verification-code", // Google Search Console doğrulama kodunuzu buraya ekleyin
+  },
 };
 
 export default function RootLayout({
