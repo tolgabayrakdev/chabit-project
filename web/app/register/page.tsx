@@ -39,7 +39,7 @@ export default function RegisterPage() {
       if (response.status === 201) {
         setTimeout(() => {
           setLoading(false);
-          router.push('/login');
+          router.push(`/email-verified?email=${encodeURIComponent(values.email)}`);
         }, 1000);
       } else {
         setLoading(false);

@@ -1,51 +1,78 @@
 'use client';
 import React, { useState } from 'react';
-import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Box, Stack, Anchor, rem } from '@mantine/core';
+import { TextInput, Button, Paper, Title, Container, Text, Box, Stack, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+export default function EmailVerificationPage() {
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email');
+
   const form = useForm({
     initialValues: {
-      email: '',
-      password: '',
+      verificationCode: '',
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Geçerli bir email adresi giriniz'),
-      password: (value) => (value.length < 6 ? 'Şifre en az 6 karakter olmalıdır' : null),
+      verificationCode: (value) => (value.length !== 6 ? 'Doğrulama kodu 6 haneli olmalıdır' : null),
     },
   });
 
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
     setError('');
+    setSuccess('');
     try {
-      const response = await fetch('https://chabit-project.onrender.com/api/auth/login', {
-        method: 'POST',
+      const response = await fetch(`https://chabit-project.onrender.com/api/auth/verify-email?email=${encodeURIComponent(email || '')}&code=${values.verificationCode}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
-        body: JSON.stringify(values),
-      })
+      });
 
       if (response.ok) {
+        setSuccess('Email adresiniz başarıyla doğrulandı! Giriş yapabilirsiniz.');
         setTimeout(() => {
           setLoading(false);
-          router.push('/dashboard');
-        }, 1000);
+          router.push('/login');
+        }, 2000);
       } else {
         const data = await response.json();
-        setError(data.message || 'Giriş yapılamadı');
+        setError(data.message || 'Doğrulama başarısız oldu');
         setLoading(false);
       }
     } catch (error) {
       setError('Bir hata oluştu');
       setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setResendLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+      const response = await fetch(`https://chabit-project.onrender.com/api/auth/resend-verification-email?email=${encodeURIComponent(email || '')}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setSuccess('Yeni doğrulama kodu email adresinize gönderildi!');
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Kod gönderilemedi');
+      }
+    } catch (error) {
+      setError('Bir hata oluştu');
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -71,7 +98,7 @@ export default function LoginPage() {
               textAlign: 'center'
             }}
           >
-            Hoş Geldiniz!
+            Email Doğrulama
           </Title>
           <Text 
             size="sm" 
@@ -81,10 +108,7 @@ export default function LoginPage() {
               opacity: 0.9
             }}
           >
-            Hesabınız yok mu?{' '}
-            <Anchor component={Link} href="/register" style={{ color: 'white', textDecoration: 'underline' }}>
-              Kayıt Ol
-            </Anchor>
+            {email} adresine gönderilen 6 haneli doğrulama kodunu giriniz
           </Text>
 
           <Paper 
@@ -104,23 +128,21 @@ export default function LoginPage() {
                 {error}
               </Text>
             )}
+            {success && (
+              <Text color="green" size="sm" mb="md" style={{ textAlign: 'center' }}>
+                {success}
+              </Text>
+            )}
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Stack gap="md">
                 <TextInput
-                  label="Email"
-                  placeholder="ornek@email.com"
+                  label="Doğrulama Kodu"
+                  placeholder="6 haneli kodu giriniz"
                   required
                   radius="md"
                   size="md"
-                  {...form.getInputProps('email')}
-                />
-                <PasswordInput
-                  label="Şifre"
-                  placeholder="Şifrenizi giriniz"
-                  required
-                  radius="md"
-                  size="md"
-                  {...form.getInputProps('password')}
+                  maxLength={6}
+                  {...form.getInputProps('verificationCode')}
                 />
                 <Button 
                   loading={loading} 
@@ -137,7 +159,17 @@ export default function LoginPage() {
                     }
                   }}
                 >
-                  Giriş Yap
+                  Doğrula
+                </Button>
+                <Button
+                  variant="subtle"
+                  loading={resendLoading}
+                  onClick={handleResendCode}
+                  fullWidth
+                  radius="xl"
+                  size="md"
+                >
+                  Yeni Kod Gönder
                 </Button>
               </Stack>
             </form>
