@@ -1,6 +1,7 @@
 import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/jwt.js";
 import { hashPassword, comparePassword } from "../utils/password.js";
 import { sendEmail } from "../utils/send-email.js";
+import crypto from "crypto";
 import pool from "../config/database.js";
 import HttpException from "../exceptions/http-exception.js";
 
