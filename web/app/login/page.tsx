@@ -24,7 +24,7 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('https://chabit-project.onrender.com/api/auth/login', {
+      const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

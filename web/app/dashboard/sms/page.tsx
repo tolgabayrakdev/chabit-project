@@ -29,7 +29,7 @@ export default function SMSPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
-            const response = await fetch('https://chabit-project.onrender.com/api/qr/sms', {
+            const response = await fetch('https://vunqr-backend-production.up.railway.app/api/qr/sms', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
