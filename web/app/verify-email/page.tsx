@@ -20,7 +20,7 @@ function EmailVerificationContent() {
       }
 
       try {
-        const response = await fetch(`https://chabit-project.onrender.com/api/auth/verify-email?token=${token}`, {
+        const response = await fetch(`https://vunqr-backend-production.up.railway.app/api/auth/verify-email?token=${token}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
