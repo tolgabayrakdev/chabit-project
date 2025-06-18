@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 
 export default function SettingsPage() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_KEY;
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
@@ -32,7 +33,7 @@ export default function SettingsPage() {
   const handlePasswordChange = async (values: typeof form.values) => {
     setLoading(true);
     try {
-      const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/change-password', {
+      const response = await fetch(`${apiUrl}/api/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ export default function SettingsPage() {
 
     setDeleteLoading(true);
     try {
-      const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/delete-account', {
+      const response = await fetch(`${apiUrl}/api/auth/delete-account`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -125,9 +126,9 @@ export default function SettingsPage() {
           <Text c="dimmed">Hesap ayarlarınızı buradan yönetebilirsiniz.</Text>
         </div>
 
-        <Paper 
-          p="xl" 
-          radius="lg" 
+        <Paper
+          p="xl"
+          radius="lg"
           withBorder
           style={{
             background: 'white',
@@ -164,8 +165,8 @@ export default function SettingsPage() {
                 size="md"
                 {...form.getInputProps('confirmPassword')}
               />
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 loading={loading}
                 radius="xl"
                 size="md"
@@ -184,9 +185,9 @@ export default function SettingsPage() {
           </form>
         </Paper>
 
-        <Paper 
-          p="xl" 
-          radius="lg" 
+        <Paper
+          p="xl"
+          radius="lg"
           withBorder
           style={{
             background: 'white',
@@ -201,7 +202,7 @@ export default function SettingsPage() {
             <Text c="dimmed" size="sm">
               Hesabınızı sildiğinizde tüm verileriniz kalıcı olarak silinecektir. Bu işlem geri alınamaz.
             </Text>
-            <Button 
+            <Button
               variant="light"
               color="red"
               leftSection={<IconTrash size={20} />}
@@ -223,9 +224,9 @@ export default function SettingsPage() {
 
       <Modal opened={opened} onClose={close} title="Hesabı Sil" centered size="lg">
         <Stack>
-          <Alert 
-            icon={<IconAlertTriangle size={24} />} 
-            title="Dikkat!" 
+          <Alert
+            icon={<IconAlertTriangle size={24} />}
+            title="Dikkat!"
             color="red"
             variant="filled"
           >
@@ -239,9 +240,9 @@ export default function SettingsPage() {
             <Text size="sm">• Bu işlem geri alınamaz</Text>
           </Stack>
 
-          <Alert 
-            icon={<IconAlertCircle size={24} />} 
-            title="Onay" 
+          <Alert
+            icon={<IconAlertCircle size={24} />}
+            title="Onay"
             color="yellow"
             variant="light"
           >
@@ -258,8 +259,8 @@ export default function SettingsPage() {
 
           <Group justify="flex-end" mt="xl">
             <Button variant="default" onClick={close}>İptal</Button>
-            <Button 
-              color="red" 
+            <Button
+              color="red"
               loading={deleteLoading}
               onClick={handleDeleteAccount}
               disabled={confirmText !== 'HESABIMI SİL'}

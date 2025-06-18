@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 function EmailVerificationContent() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -20,7 +21,7 @@ function EmailVerificationContent() {
       }
 
       try {
-        const response = await fetch(`https://vunqr-backend-production.up.railway.app/api/auth/verify-email?token=${token}`, {
+        const response = await fetch(`${apiUrl}/api/auth/verify-email?token=${token}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

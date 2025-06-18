@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/login', {
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,10 +35,8 @@ export default function LoginPage() {
       })
 
       if (response.ok) {
-        setTimeout(() => {
-          setLoading(false);
-          router.push('/dashboard');
-        }, 1000);
+        setLoading(false);
+        router.push('/dashboard');
       } else {
         const data = await response.json();
         setError(data.message || 'Giriş yapılamadı');
@@ -50,8 +49,8 @@ export default function LoginPage() {
   };
 
   return (
-    <Box 
-      style={{ 
+    <Box
+      style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)',
         display: 'flex',
@@ -62,9 +61,9 @@ export default function LoginPage() {
     >
       <Container size={420} style={{ width: '100%' }}>
         <Stack align="center" gap="xs">
-          <Title 
-            order={2} 
-            style={{ 
+          <Title
+            order={2}
+            style={{
               color: 'white',
               fontSize: rem(36),
               fontWeight: 900,
@@ -73,9 +72,9 @@ export default function LoginPage() {
           >
             Hoş Geldiniz!
           </Title>
-          <Text 
-            size="sm" 
-            style={{ 
+          <Text
+            size="sm"
+            style={{
               color: 'white',
               textAlign: 'center',
               opacity: 0.9
@@ -87,13 +86,13 @@ export default function LoginPage() {
             </Anchor>
           </Text>
 
-          <Paper 
-            withBorder 
-            shadow="md" 
-            p={30} 
-            mt={30} 
-            radius="lg" 
-            style={{ 
+          <Paper
+            withBorder
+            shadow="md"
+            p={30}
+            mt={30}
+            radius="lg"
+            style={{
               width: '100%',
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(10px)'
@@ -122,10 +121,10 @@ export default function LoginPage() {
                   size="md"
                   {...form.getInputProps('password')}
                 />
-                <Button 
-                  loading={loading} 
-                  fullWidth 
-                  mt="xl" 
+                <Button
+                  loading={loading}
+                  fullWidth
+                  mt="xl"
                   type="submit"
                   radius="xl"
                   size="md"

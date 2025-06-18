@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
@@ -27,7 +28,7 @@ export default function RegisterPage() {
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
     try {
-      const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/register', {
+      const response = await fetch(`${apiUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,8 +55,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <Box 
-      style={{ 
+    <Box
+      style={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)',
         display: 'flex',
@@ -66,9 +67,9 @@ export default function RegisterPage() {
     >
       <Container size={420} style={{ width: '100%' }}>
         <Stack align="center" gap="xs">
-          <Title 
-            order={2} 
-            style={{ 
+          <Title
+            order={2}
+            style={{
               color: 'white',
               fontSize: rem(36),
               fontWeight: 900,
@@ -77,9 +78,9 @@ export default function RegisterPage() {
           >
             Hesap Oluştur
           </Title>
-          <Text 
-            size="sm" 
-            style={{ 
+          <Text
+            size="sm"
+            style={{
               color: 'white',
               textAlign: 'center',
               opacity: 0.9
@@ -91,13 +92,13 @@ export default function RegisterPage() {
             </Anchor>
           </Text>
 
-          <Paper 
-            withBorder 
-            shadow="md" 
-            p={30} 
-            mt={30} 
-            radius="lg" 
-            style={{ 
+          <Paper
+            withBorder
+            shadow="md"
+            p={30}
+            mt={30}
+            radius="lg"
+            style={{
               width: '100%',
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               backdropFilter: 'blur(10px)'
@@ -154,10 +155,10 @@ export default function RegisterPage() {
                     size="md"
                     {...form.getInputProps('confirmPassword')}
                   />
-                  <Button 
-                    loading={loading} 
-                    fullWidth 
-                    mt="xl" 
+                  <Button
+                    loading={loading}
+                    fullWidth
+                    mt="xl"
                     type="submit"
                     radius="xl"
                     size="md"

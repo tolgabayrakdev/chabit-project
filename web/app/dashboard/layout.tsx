@@ -12,22 +12,24 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode
 }) {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [opened, setOpened] = useState(false);
     const [userEmail, setUserEmail] = useState<string>('');
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/me', {
+                const response = await fetch(`${apiUrl}/api/auth/me`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
                 });
-                
+
                 if (response.ok) {
                     const data = await response.json();
                     setUserEmail(data.user.email);
@@ -50,7 +52,8 @@ export default function DashboardLayout({
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('https://vunqr-backend-production.up.railway.app/api/auth/logout', {
+            setIsLoggingOut(true);
+            const response = await fetch(`${apiUrl}/api/auth/logout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,6 +65,8 @@ export default function DashboardLayout({
             }
         } catch (error) {
             console.error('Logout error:', error);
+        } finally {
+            setIsLoggingOut(false);
         }
         router.push('/login');
     };
@@ -126,6 +131,7 @@ export default function DashboardLayout({
                                 color="red"
                                 leftSection={<IconLogout style={{ width: rem(20), height: rem(20) }} stroke={1.5} />}
                                 onClick={handleLogout}
+                                loading={isLoggingOut}
                                 fullWidth
                                 style={{
                                     borderRadius: 'md',

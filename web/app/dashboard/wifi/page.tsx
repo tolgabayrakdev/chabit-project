@@ -8,6 +8,7 @@ import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 
 export default function WifiPage() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const router = useRouter();
@@ -31,7 +32,7 @@ export default function WifiPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
-            const response = await fetch('https://vunqr-backend-production.up.railway.app/api/qr/wifi', {
+            const response = await fetch(`${apiUrl}/api/qr/wifi`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,9 +72,9 @@ export default function WifiPage() {
             <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                 <div>
                     <Title order={2} mb="xl">WiFi QR Kod Oluştur</Title>
-                    <Paper 
-                        p="xl" 
-                        radius="lg" 
+                    <Paper
+                        p="xl"
+                        radius="lg"
                         withBorder
                         style={{
                             background: 'white',
@@ -125,8 +126,8 @@ export default function WifiPage() {
                                     label="Gizli Ağ"
                                     {...form.getInputProps('hidden', { type: 'checkbox' })}
                                 />
-                                <Button 
-                                    type="submit" 
+                                <Button
+                                    type="submit"
                                     loading={loading}
                                     radius="xl"
                                     size="md"
@@ -146,9 +147,9 @@ export default function WifiPage() {
                     </Paper>
                 </div>
 
-                <Paper 
-                    p="xl" 
-                    radius="lg" 
+                <Paper
+                    p="xl"
+                    radius="lg"
                     withBorder
                     style={{
                         background: 'white',
@@ -162,9 +163,9 @@ export default function WifiPage() {
                 >
                     {showAnimation ? (
                         <Stack align="center" gap="xl">
-                            <ThemeIcon 
-                                size={120} 
-                                radius="xl" 
+                            <ThemeIcon
+                                size={120}
+                                radius="xl"
                                 color="green"
                                 style={{
                                     animation: 'pulse 2s infinite',

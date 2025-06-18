@@ -48,6 +48,7 @@ const getTypeLabel = (type: string) => {
 };
 
 export default function DashboardPage() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [qrCodes, setQRCodes] = useState<QRCode[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
@@ -56,7 +57,7 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchQRCodes = async () => {
             try {
-                const response = await fetch('https://vunqr-backend-production.up.railway.app/api/qr', {
+                const response = await fetch(`${apiUrl}/api/qr`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ export default function DashboardPage() {
     const handleDownload = async (qrCode: QRCode, format: 'png' | 'jpg' | 'svg') => {
         try {
             // QR kod görselini indir
-            const response = await fetch(`https://vunqr-backend-production.up.railway.app${qrCode.qr_code_image}?format=${format}`, {
+            const response = await fetch(`${apiUrl}${qrCode.qr_code_image}?format=${format}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -89,20 +90,20 @@ export default function DashboardPage() {
                 },
             });
             const blob = await response.blob();
-            
+
             // İndirme bağlantısı oluştur
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            
+
             // Dosya adını oluştur
             const fileName = `${qrCode.label || qrCode.type}_${new Date().getTime()}.${format}`;
             link.download = fileName;
-            
+
             // İndirmeyi başlat
             document.body.appendChild(link);
             link.click();
-            
+
             // Temizlik
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
@@ -120,7 +121,7 @@ export default function DashboardPage() {
         if (!selectedQR) return;
 
         try {
-            const response = await fetch(`https://vunqr-backend-production.up.railway.app/api/qr/${selectedQR.id}`, {
+            const response = await fetch(`${apiUrl}/api/qr/${selectedQR.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -162,9 +163,9 @@ export default function DashboardPage() {
                         <Card key={qr.id} padding="lg" radius="md" withBorder>
                             <Card.Section p="md">
                                 <Group justify="space-between">
-                                    <Badge 
+                                    <Badge
                                         color={getTypeColor(qr.type)}
-                                        style={{ 
+                                        style={{
                                             backgroundColor: getTypeColor(qr.type),
                                             color: 'white'
                                         }}
@@ -179,7 +180,7 @@ export default function DashboardPage() {
 
                             <Stack align="center" mt="md">
                                 <Image
-                                    src={`https://vunqr-backend-production.up.railway.app${qr.qr_code_image}`}
+                                    src={`${apiUrl}${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
                                     width={200}
                                     height={200}

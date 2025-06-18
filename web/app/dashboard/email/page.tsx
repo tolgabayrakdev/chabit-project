@@ -8,6 +8,7 @@ import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 
 export default function EmailPage() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const router = useRouter();
@@ -31,7 +32,7 @@ export default function EmailPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
-            const response = await fetch('https://vunqr-backend-production.up.railway.app/api/qr/mail', {
+            const response = await fetch(`${apiUrl}/api/qr/mail}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,9 +72,9 @@ export default function EmailPage() {
             <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                 <div>
                     <Title order={2} mb="xl">E-posta QR Kod Oluştur</Title>
-                    <Paper 
-                        p="xl" 
-                        radius="lg" 
+                    <Paper
+                        p="xl"
+                        radius="lg"
                         withBorder
                         style={{
                             background: 'white',
@@ -118,8 +119,8 @@ export default function EmailPage() {
                                     minRows={4}
                                     {...form.getInputProps('body')}
                                 />
-                                <Button 
-                                    type="submit" 
+                                <Button
+                                    type="submit"
                                     loading={loading}
                                     radius="xl"
                                     size="md"
@@ -139,9 +140,9 @@ export default function EmailPage() {
                     </Paper>
                 </div>
 
-                <Paper 
-                    p="xl" 
-                    radius="lg" 
+                <Paper
+                    p="xl"
+                    radius="lg"
                     withBorder
                     style={{
                         background: 'white',
@@ -155,9 +156,9 @@ export default function EmailPage() {
                 >
                     {showAnimation ? (
                         <Stack align="center" gap="xl">
-                            <ThemeIcon 
-                                size={120} 
-                                radius="xl" 
+                            <ThemeIcon
+                                size={120}
+                                radius="xl"
                                 color="orange"
                                 style={{
                                     animation: 'pulse 2s infinite',
