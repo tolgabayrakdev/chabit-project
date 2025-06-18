@@ -68,7 +68,6 @@ export default function DashboardLayout({
         } finally {
             setIsLoggingOut(false);
         }
-        router.push('/login');
     };
 
     return (
