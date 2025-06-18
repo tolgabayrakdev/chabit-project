@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 
 export default function SettingsPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_KEY;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
