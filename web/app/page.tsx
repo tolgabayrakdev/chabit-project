@@ -316,6 +316,7 @@ export default function Home() {
               <Anchor component={Link} href="/login" c="white" opacity={0.8}>Giriş Yap</Anchor>
               <Anchor component={Link} href="/register" c="white" opacity={0.8}>Kayıt Ol</Anchor>
               <Anchor component={Link} href="/dashboard" c="white" opacity={0.8}>Dashboard</Anchor>
+              <Anchor component={Link} href="/examples" c="white" opacity={0.8}>Tasarımlar</Anchor>
             </Stack>
             <Stack gap="xs">
               <Text fw={700} size="lg">Özellikler</Text>
@@ -341,7 +342,7 @@ export default function Home() {
           </SimpleGrid>
           <Divider my="xl" color="white" opacity={0.2} />
           <Text ta="center" size="sm" c="white" opacity={0.8}>
-            © 2024 Dijital İletişim Çözümleri. Tüm hakları saklıdır.
+            © 2025 Dijital İletişim Çözümleri. Tüm hakları saklıdır.
           </Text>
         </Container>
       </Box>
