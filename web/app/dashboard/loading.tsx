@@ -1,11 +1,13 @@
 import React from 'react'
+import { Loader, Stack, Text, Center } from '@mantine/core';
 
-export default function loading() {
+export default function Loading() {
     return (
-        <div className="flex h-screen items-center justify-center">
-            <div className="relative">
-                <div className="animate-spin rounded-full h-6 w-6 border-2 border-t-transparent border-black"></div>
-            </div>
-        </div>
-    )
+        <Center py="xl" style={{ minHeight: '100vh' }}>
+            <Stack align="center" gap="xs">
+                <Loader size="lg" color="blue" />
+                <Text c="dimmed" size="md">Yükleniyor...</Text>
+            </Stack>
+        </Center>
+    );
 }
