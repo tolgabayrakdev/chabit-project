@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu } from '@mantine/core';
+import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -156,7 +156,12 @@ export default function DashboardPage() {
             </Modal>
 
             {loading ? (
-                <Text>Yükleniyor...</Text>
+                <Center py="xl">
+                  <Stack align="center" gap="xs">
+                    <Loader size="lg" color="blue" />
+                    <Text c="dimmed" size="md">Yükleniyor...</Text>
+                  </Stack>
+                </Center>
             ) : qrCodes.length > 0 ? (
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
                     {qrCodes.map((qr) => (
