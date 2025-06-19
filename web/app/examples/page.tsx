@@ -18,13 +18,13 @@ const examples: ExampleCard[] = [
     title: 'VCard QR Kodu',
     description: 'Dijital kartvizitinizi QR kod ile paylaşın, iletişim bilgileriniz anında karşı tarafın rehberine eklensin.',
     useCase: 'Profesyoneller, işletmeler ve networking etkinlikleri için mükemmel çözüm.',
-    image: '/examples/ornek-2.png',
+    image: '/examples/ornek-3.png',
   },
   {
     title: 'E-posta QR Kodu',
     description: 'Hazır e-posta şablonu ile müşterilerinizin size kolayca ulaşmasını sağlayın.',
     useCase: 'Müşteri hizmetleri, geri bildirim ve iletişim noktaları için pratik çözüm.',
-    image: '/examples/ornek-3.png',
+    image: '/examples/ornek-2.png',
   },
   {
     title: 'SMS QR Kodu',
