@@ -82,67 +82,162 @@ export default function Home() {
         }}
       >
         <Container size="lg">
-          <Stack align="center" gap="xl">
-            <Title 
-              order={1} 
-              size={rem(48)} 
-              style={{ 
-                fontWeight: 900,
-                textAlign: 'center',
-                lineHeight: 1.2
-              }}
-            >
-              Dijital İletişim Çözümleri
-            </Title>
-            <Text 
-              size="xl" 
-              maw={rem(680)} 
-              style={{ 
-                textAlign: 'center',
-                opacity: 0.9
-              }}
-            >
-              QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle
-              işletmenizin dijital varlığını güçlendirin.
-            </Text>
-            <Group justify="center" mt="xl" gap="xl">
-              <Button 
-                size="lg" 
-                radius="xl"
-                component={Link} 
-                href="/register"
-                style={{
-                  backgroundColor: 'white',
-                  color: '#228be6',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.2s ease'
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            {/* Sol: Başlık ve Açıklama */}
+            <Box style={{ flex: 1, minWidth: 280, maxWidth: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', zIndex: 2 }}>
+              <Title 
+                order={1} 
+                size={rem(48)} 
+                style={{ 
+                  fontWeight: 900,
+                  textAlign: 'left',
+                  lineHeight: 1.2
                 }}
               >
-                Hemen Başla
-              </Button>
-              <Button 
-                size="lg" 
-                radius="xl"
-                variant="outline" 
-                component={Link} 
-                href="/login"
-                style={{
-                  borderColor: 'white',
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.2s ease'
+                Dijital İletişim Çözümleri
+              </Title>
+              <Text 
+                size="xl" 
+                maw={rem(680)} 
+                style={{ 
+                  textAlign: 'left',
+                  opacity: 0.9,
+                  marginTop: rem(16)
                 }}
               >
-                Giriş Yap
-              </Button>
-            </Group>
-          </Stack>
+                QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle
+                işletmenizin dijital varlığını güçlendirin.
+              </Text>
+              <Group justify="flex-start" mt="xl" gap="xl">
+                <Button 
+                  size="lg" 
+                  radius="xl"
+                  component={Link} 
+                  href="/register"
+                  style={{
+                    backgroundColor: 'white',
+                    color: '#228be6',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      transform: 'translateY(-2px)',
+                    },
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  Hemen Başla
+                </Button>
+                <Button 
+                  size="lg" 
+                  radius="xl"
+                  variant="outline" 
+                  component={Link} 
+                  href="/login"
+                  style={{
+                    borderColor: 'white',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      transform: 'translateY(-2px)',
+                    },
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  Giriş Yap
+                </Button>
+              </Group>
+            </Box>
+            {/* Sağ: Dashboard Preview (Overlapping Devices) */}
+            <Box style={{ flex: 1, minWidth: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', height: 320, marginTop: 24, marginBottom: 24 }}>
+              {/* Desktop */}
+              <Box style={{
+                width: 320,
+                height: 200,
+                borderRadius: 18,
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+                background: 'white',
+                position: 'absolute',
+                left: '50%',
+                top: 40,
+                transform: 'translateX(-50%)',
+                border: '1.5px solid #e9ecef',
+                zIndex: 1
+              }}>
+                {/* Header */}
+                <Box style={{ height: 32, background: 'linear-gradient(90deg, #228be6 60%, #4dabf7 100%)', borderTopLeftRadius: 18, borderTopRightRadius: 18 }} />
+                {/* Sidebar */}
+                <Box style={{ position: 'absolute', left: 0, top: 32, width: 56, height: 168, background: '#f1f3f5', borderBottomLeftRadius: 18, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 16, gap: 12 }}>
+                  <Box style={{ width: 28, height: 6, borderRadius: 3, background: '#228be6', marginBottom: 8 }} />
+                  <Box style={{ width: 24, height: 6, borderRadius: 3, background: '#adb5bd' }} />
+                  <Box style={{ width: 24, height: 6, borderRadius: 3, background: '#adb5bd' }} />
+                  <Box style={{ width: 24, height: 6, borderRadius: 3, background: '#adb5bd' }} />
+                </Box>
+                {/* Content */}
+                <Box style={{ position: 'absolute', left: 56, top: 40, width: 264, height: 152, background: '#f8f9fa', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Box style={{ width: 120, height: 24, background: '#e7f5ff', borderRadius: 8 }} />
+                </Box>
+              </Box>
+              {/* Tablet */}
+              <Box style={{
+                width: 170,
+                height: 120,
+                borderRadius: 14,
+                boxShadow: '0 2px 12px rgba(0,0,0,0.10)',
+                background: 'white',
+                position: 'absolute',
+                left: '50%',
+                top: 100,
+                transform: 'translateX(-50%)',
+                border: '1.5px solid #e9ecef',
+                zIndex: 2
+              }}>
+                {/* Header */}
+                <Box style={{ height: 20, background: 'linear-gradient(90deg, #228be6 60%, #4dabf7 100%)', borderTopLeftRadius: 14, borderTopRightRadius: 14 }} />
+                {/* Sidebar */}
+                <Box style={{ position: 'absolute', left: 0, top: 20, width: 28, height: 100, background: '#f1f3f5', borderBottomLeftRadius: 14, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 8, gap: 7 }}>
+                  <Box style={{ width: 12, height: 5, borderRadius: 2, background: '#228be6', marginBottom: 5 }} />
+                  <Box style={{ width: 10, height: 5, borderRadius: 2, background: '#adb5bd' }} />
+                  <Box style={{ width: 10, height: 5, borderRadius: 2, background: '#adb5bd' }} />
+                  <Box style={{ width: 10, height: 5, borderRadius: 2, background: '#adb5bd' }} />
+                </Box>
+                {/* Content */}
+                <Box style={{ position: 'absolute', left: 28, top: 28, width: 120, height: 80, background: '#f8f9fa', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Box style={{ width: 50, height: 14, background: '#e7f5ff', borderRadius: 6 }} />
+                </Box>
+              </Box>
+              {/* Mobile */}
+              <Box style={{
+                width: 60,
+                height: 110,
+                borderRadius: 10,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+                background: 'white',
+                position: 'absolute',
+                left: '50%',
+                top: 170,
+                transform: 'translateX(-50%)',
+                border: '1.5px solid #e9ecef',
+                zIndex: 3
+              }}>
+                {/* Header */}
+                <Box style={{ height: 12, background: 'linear-gradient(90deg, #228be6 60%, #4dabf7 100%)', borderTopLeftRadius: 10, borderTopRightRadius: 10 }} />
+                {/* Sidebar */}
+                <Box style={{ position: 'absolute', left: 0, top: 12, width: 7, height: 98, background: '#f1f3f5', borderBottomLeftRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 3, gap: 3 }}>
+                  <Box style={{ width: 4, height: 4, borderRadius: 2, background: '#228be6', marginBottom: 2 }} />
+                  <Box style={{ width: 3, height: 4, borderRadius: 2, background: '#adb5bd' }} />
+                  <Box style={{ width: 3, height: 4, borderRadius: 2, background: '#adb5bd' }} />
+                  <Box style={{ width: 3, height: 4, borderRadius: 2, background: '#adb5bd' }} />
+                </Box>
+                {/* Content */}
+                <Box style={{ position: 'absolute', left: 7, top: 18, width: 45, height: 80, background: '#f8f9fa', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Box style={{ width: 18, height: 7, background: '#e7f5ff', borderRadius: 3 }} />
+                </Box>
+              </Box>
+              {/* Overlay Text */}
+              <Box style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 10, background: 'rgba(34,139,230,0.92)', color: 'white', padding: '8px 28px', borderRadius: 16, fontWeight: 700, fontSize: 22, letterSpacing: 1, boxShadow: '0 2px 12px rgba(34,139,230,0.10)', textAlign: 'center' }}>
+                VunQR
+              </Box>
+            </Box>
+          </div>
         </Container>
       </Box>
 
