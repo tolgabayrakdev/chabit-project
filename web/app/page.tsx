@@ -449,6 +449,9 @@ export default function Home() {
               <Text size="sm" c="white" opacity={0.8}>
                 Dijital iletişim çözümleri sunan modern ve kullanıcı dostu bir platform.
               </Text>
+              <Text size="sm" c="white" opacity={0.8}>
+                İletişim: <a href="mailto:vunqrdotcom@gmail.com" style={{ color: 'white', textDecoration: 'underline' }}>vunqrdotcom@gmail.com</a>
+              </Text>
             </Stack>
             <Stack gap="xs">
               <Text fw={700} size="lg">Hızlı Bağlantılar</Text>
