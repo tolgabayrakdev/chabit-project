@@ -268,6 +268,50 @@ export default function Home() {
         </Container>
       </Box>
 
+      {/* Tasarımlar Section */}
+      <Box style={{ background: '#f3f7fa', padding: `${rem(80)} 0` }}>
+        <Container size="lg">
+          <Title 
+            order={2} 
+            ta="center" 
+            mb={30}
+            style={{ fontSize: rem(36), fontWeight: 800 }}
+          >
+            İlham Veren Tasarımlar
+          </Title>
+          <Text ta="center" size="lg" mb={40} c="dimmed">
+            Markanıza veya işletmenize özel QR kod tasarımlarını keşfedin. Fikir almak ve ilham bulmak için örneklerimize göz atın.
+          </Text>
+          <Box ta="center" mb={24}>
+            <Text size="md" c="dimmed" style={{ maxWidth: 600, margin: '0 auto' }}>
+              Buradaki örnek QR kodları <b>vunqr</b> ile oluşturulmuş gerçek ve işlevsel kodlardır. Siz de kendi QR kodunuzu oluşturup, tasarımlarınızda kullanabilir ve markanıza özel hale getirebilirsiniz.
+            </Text>
+          </Box>
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl" mb={40}>
+            <Box style={{ borderRadius: 16, overflow: 'hidden', background: 'white', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+              <img src="/examples/ornek-1.png" alt="WiFi QR Tasarımı" style={{ width: '100%', height: 320, objectFit: 'cover' }} />
+            </Box>
+            <Box style={{ borderRadius: 16, overflow: 'hidden', background: 'white', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+              <img src="/examples/ornek-2.png" alt="VCard QR Tasarımı" style={{ width: '100%', height: 320, objectFit: 'cover' }} />
+            </Box>
+            <Box style={{ borderRadius: 16, overflow: 'hidden', background: 'white', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+              <img src="/examples/ornek-3.png" alt="E-posta QR Tasarımı" style={{ width: '100%', height: 320, objectFit: 'cover' }} />
+            </Box>
+          </SimpleGrid>
+          <Box ta="center">
+            <Button
+              size="lg"
+              radius="xl"
+              component={Link}
+              href="/examples"
+              style={{ background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', color: 'white', fontWeight: 600 }}
+            >
+              Tüm Tasarımları Gör
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
       {/* FAQ Section */}
       <Container size="lg" py={80}>
         <Title 
@@ -317,6 +361,8 @@ export default function Home() {
               <Anchor component={Link} href="/register" c="white" opacity={0.8}>Kayıt Ol</Anchor>
               <Anchor component={Link} href="/dashboard" c="white" opacity={0.8}>Dashboard</Anchor>
               <Anchor component={Link} href="/examples" c="white" opacity={0.8}>Tasarımlar</Anchor>
+              <Anchor component={Link} href="/terms" c="white" opacity={0.8}>Kullanım Şartları</Anchor>
+              <Anchor component={Link} href="/privacy" c="white" opacity={0.8}>Gizlilik Politikası</Anchor>
             </Stack>
             <Stack gap="xs">
               <Text fw={700} size="lg">Özellikler</Text>

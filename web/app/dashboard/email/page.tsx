@@ -69,6 +69,28 @@ export default function EmailPage() {
 
     return (
         <Container size="lg">
+            <Paper
+                p="md"
+                radius="md"
+                withBorder
+                style={{
+                    background: 'linear-gradient(90deg, #fff3e6 0%, #f8f9fa 100%)',
+                    marginBottom: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                }}
+            >
+                <ThemeIcon color="orange" size={40} radius="xl" variant="light">
+                    <IconMail size={24} />
+                </ThemeIcon>
+                <div>
+                    <Text size="lg" fw={600} c="orange.8">E-posta QR kodu nedir?</Text>
+                    <Text size="sm" c="orange.8">
+                        Oluşturduğunuz bu QR kodunu okutan kişi, otomatik olarak belirttiğiniz e-posta adresine, konu ve mesaj ile yeni bir e-posta göndermek üzere yönlendirilir. Hızlı iletişim ve kolay geri bildirim sağlar.
+                    </Text>
+                </div>
+            </Paper>
             <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                 <div>
                     <Title order={2} mb="xl">E-posta QR Kod Oluştur</Title>

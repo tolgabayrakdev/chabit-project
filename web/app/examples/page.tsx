@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 interface ExampleCard {
@@ -47,8 +45,11 @@ export default function Examples() {
           <p className="text-xl text-gray-600 mb-4">
             Özel Tasarlanmış QR Kod Örnekleri
           </p>
-          <p className="text-md text-gray-500 mb-12">
+          <p className="text-md text-gray-500 mb-4">
             Markanıza özel QR kod tasarım örnekleri
+          </p>
+          <p className="text-md text-blue-700 mb-12 max-w-2xl mx-auto">
+            Buradaki örnek QR kodları <b>vunqr</b> ile oluşturulmuş gerçek ve işlevsel kodlardır. Siz de kendi QR kodunuzu oluşturup, tasarımlarınızda kullanabilir ve markanıza özel hale getirebilirsiniz.
           </p>
         </div>
 

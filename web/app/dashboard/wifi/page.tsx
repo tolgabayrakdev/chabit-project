@@ -69,6 +69,28 @@ export default function WifiPage() {
 
     return (
         <Container size="lg">
+            <Paper
+                p="md"
+                radius="md"
+                withBorder
+                style={{
+                    background: 'linear-gradient(90deg, #e6fcf5 0%, #f8f9fa 100%)',
+                    marginBottom: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                }}
+            >
+                <ThemeIcon color="green" size={40} radius="xl" variant="light">
+                    <IconWifi size={24} />
+                </ThemeIcon>
+                <div>
+                    <Text size="lg" fw={600} c="green.8">WiFi QR kodu nedir?</Text>
+                    <Text size="sm" c="green.8">
+                        Oluşturduğunuz bu QR kodunu müşterileriniz veya misafirleriniz telefonlarının kamerasıyla okuttuğunda, WiFi ağına otomatik olarak bağlanabilirler. Şifre girmeye gerek kalmaz, hızlı ve güvenli bağlantı sağlar.
+                    </Text>
+                </div>
+            </Paper>
             <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                 <div>
                     <Title order={2} mb="xl">WiFi QR Kod Oluştur</Title>

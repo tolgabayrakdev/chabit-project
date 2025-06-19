@@ -84,6 +84,28 @@ export default function VCardPage() {
 
     return (
         <Container size="lg">
+            <Paper
+                p="md"
+                radius="md"
+                withBorder
+                style={{
+                    background: 'linear-gradient(90deg, #f3f0ff 0%, #f8f9fa 100%)',
+                    marginBottom: 32,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                }}
+            >
+                <ThemeIcon color="violet" size={40} radius="xl" variant="light">
+                    <IconAddressBook size={24} />
+                </ThemeIcon>
+                <div>
+                    <Text size="lg" fw={600} c="violet.8">vCard QR kodu nedir?</Text>
+                    <Text size="sm" c="violet.8">
+                        Oluşturduğunuz bu QR kodunu okutan kişi, iletişim bilgilerinizi (isim, telefon, e-posta, adres vb.) tek tıkla rehberine kaydedebilir. Dijital kartvizit paylaşımı için en pratik yoldur.
+                    </Text>
+                </div>
+            </Paper>
             <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                 <div>
                     <Title order={2} mb="xl">vCard QR Kod Oluştur</Title>
