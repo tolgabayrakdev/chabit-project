@@ -8,7 +8,7 @@ import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 
 export default function VCardPage() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_KEY
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const router = useRouter();
