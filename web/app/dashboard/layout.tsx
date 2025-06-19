@@ -83,7 +83,7 @@ export default function DashboardLayout({
             >
                 <AppShell.Header style={{ background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)' }}>
                     <Group h="100%" px="md" justify="space-between">
-                        <img src="/icon.png" alt="Tagz Logo" style={{ height: 36, width: 'auto', display: 'block' }} />
+                        <Text fw={700} size="lg" c="white">VunQR</Text>
                         <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" color="white" />
                     </Group>
                 </AppShell.Header>
