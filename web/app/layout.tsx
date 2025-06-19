@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VunQR - Dijital İletişim Çözümleri",
+  title: "Dijital İletişim Çözümleri | VunQR",
   description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
   keywords: "QR kod, WiFi paylaşımı, dijital iletişim, vCard, SMS gönderimi, e-posta gönderimi",
   authors: [{ name: "VunQR" }],
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "tr_TR",
     url: "https://vunqr.com",
-    title: "VunQR - Dijital İletişim Çözümleri",
+    title: "Dijital İletişim Çözümleri | VunQR",
     description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
     siteName: "VunQR",
   },
   twitter: {
     card: "summary_large_image",
-    title: "VunQR - Dijital İletişim Çözümleri",
+    title: "Dijital İletişim Çözümleri | VunQR",
     description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
   },
   viewport: "width=device-width, initial-scale=1"
