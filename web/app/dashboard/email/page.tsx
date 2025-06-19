@@ -32,7 +32,7 @@ export default function EmailPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
-            const response = await fetch(`${apiUrl}/api/qr/mail}`, {
+            const response = await fetch(`${apiUrl}/api/qr/mail`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
