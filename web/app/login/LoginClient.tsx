@@ -134,10 +134,12 @@ export default function LoginClient() {
                   size="md"
                   {...form.getInputProps('password')}
                 />
+                <Anchor component={Link} href="/forgot-password" style={{ color: '#228be6', textAlign: 'right', display: 'block', marginBottom: 4, fontSize: 14, textDecoration: 'underline' }}>
+                  Şifremi Unuttum?
+                </Anchor>
                 <Button
                   loading={loading}
                   fullWidth
-                  mt="xl"
                   type="submit"
                   radius="xl"
                   size="md"
