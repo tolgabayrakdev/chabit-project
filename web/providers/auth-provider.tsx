@@ -1,6 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
+import Loading from '../app/dashboard/loading';
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -38,11 +39,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center">
-                <div className="relative">
-                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-t-transparent border-black"></div>
-                </div>
-            </div>
+            <Loading />
         )
     } else if (accessDenied) {
         setLoading(true);
