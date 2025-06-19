@@ -483,7 +483,7 @@ export default function Home() {
           </SimpleGrid>
           <Divider my="xl" color="white" opacity={0.2} />
           <Text ta="center" size="sm" c="white" opacity={0.8}>
-            © 2025 Dijital İletişim Çözümleri. Tüm hakları saklıdır.
+            © 2025 VunQR - Dijital İletişim Çözümleri. Tüm hakları saklıdır.
           </Text>
         </Container>
       </Box>
