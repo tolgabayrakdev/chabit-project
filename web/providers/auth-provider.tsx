@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
-import Loading from '../app/dashboard/loading';
+import Loading from '../components/loading';
 
 interface AuthProviderProps {
     children: ReactNode;

@@ -158,7 +158,6 @@ export default function DashboardPage() {
             {loading ? (
                 <Center py="xl">
                   <Stack align="center" gap="xs">
-                    <Loader size="lg" color="blue" />
                     <Text c="dimmed" size="md">Yükleniyor...</Text>
                   </Stack>
                 </Center>
