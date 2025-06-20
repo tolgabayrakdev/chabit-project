@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group, Card, SimpleGrid, Box, Stack, Badge, Image, Paper, rem, ThemeIcon, Divider, Anchor } from '@mantine/core';
 import { Accordion, AccordionItem, AccordionControl, AccordionPanel } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -472,8 +472,8 @@ export default function Home() {
             <Stack gap="xs">
               <Text fw={700} size="lg">Bizi Takip Edin</Text>
               <Group gap="xs">
-                <Anchor href="https://github.com" target="_blank" c="white" opacity={0.8}>
-                  <IconBrandGithub size={20} />
+                <Anchor href="https://instagram.com/vunqrdotcom" target="_blank" c="white" opacity={0.8}>
+                  <IconBrandInstagram size={20} />
                 </Anchor>
                 <Anchor href="https://twitter.com" target="_blank" c="white" opacity={0.8}>
                   <IconBrandTwitter size={20} />
