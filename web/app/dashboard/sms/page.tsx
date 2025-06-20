@@ -77,7 +77,9 @@ export default function SMSPage() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 16,
+                    flexDirection: 'row',
                 }}
+                className="qr-info-paper"
             >
                 <ThemeIcon color="red" size={40} radius="xl" variant="light">
                     <IconMessage size={24} />
@@ -216,6 +218,20 @@ export default function SMSPage() {
                         transform: scale(1);
                         opacity: 1;
                     }
+                }
+                @media (max-width: 600px) {
+                  .qr-info-paper {
+                    flex-direction: column !important;
+                    gap: 8px !important;
+                    text-align: center;
+                    padding: 12px !important;
+                  }
+                  .qr-info-paper .mantine-ThemeIcon-root {
+                    margin-bottom: 4px;
+                  }
+                  .qr-info-paper .mantine-Text-root {
+                    font-size: 15px !important;
+                  }
                 }
             `}</style>
         </Container>

@@ -61,6 +61,9 @@ export default function LoginClient() {
     >
       <Container size={420} style={{ width: '100%' }}>
         <Stack align="center" gap="xs">
+          <Text size="xs" style={{ color: 'white', textAlign: 'center', background: 'rgba(0,0,0,0.10)', borderRadius: 8, padding: '6px 12px', marginBottom: 4, maxWidth: 340 }}>
+            En iyi deneyim için Chrome ve Opera gibi modern tarayıcılardan giriş yapmanızı öneririz.
+          </Text>
           <Title
             order={2}
             style={{
