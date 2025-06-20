@@ -16,13 +16,13 @@ export default function SMSPage() {
     const form = useForm({
         initialValues: {
             label: '',
-            phone: '',
-            message: '',
+            number: '',
+            sms: '',
         },
         validate: {
             label: (value) => (value.length < 3 ? 'QR kod ismi en az 3 karakter olmalıdır' : null),
-            phone: (value) => (value.length < 10 ? 'Geçerli bir telefon numarası giriniz' : null),
-            message: (value) => (value.length < 1 ? 'Mesaj gerekli' : null),
+            number: (value) => (value.length < 10 ? 'Geçerli bir telefon numarası giriniz' : null),
+            sms: (value) => (value.length < 1 ? 'Mesaj gerekli' : null),
         },
     });
 
