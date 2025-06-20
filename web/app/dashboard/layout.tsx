@@ -6,6 +6,7 @@ import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogou
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthProvider from '@/providers/auth-provider';
+import { useMediaQuery } from '@mantine/hooks';
 
 export default function DashboardLayout({
     children,
@@ -18,6 +19,7 @@ export default function DashboardLayout({
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
+    const isMobile = useMediaQuery('(max-width: 48em)');
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -120,6 +122,7 @@ export default function DashboardLayout({
                                             color: item.color,
                                         }
                                     }}
+                                    onClick={() => { if (isMobile) setOpened(false); }}
                                 />
                             ))}
                         </div>
