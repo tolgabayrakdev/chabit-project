@@ -16,13 +16,13 @@ export default function SMSPage() {
     const form = useForm({
         initialValues: {
             label: '',
-            number: '',
-            sms: '',
+            phone: '',
+            message: '',
         },
         validate: {
             label: (value) => (value.length < 3 ? 'QR kod ismi en az 3 karakter olmalıdır' : null),
-            number: (value) => (value.length < 10 ? 'Geçerli bir telefon numarası giriniz' : null),
-            sms: (value) => (value.length < 1 ? 'Mesaj gerekli' : null),
+            phone: (value) => (value.length < 10 ? 'Geçerli bir telefon numarası giriniz' : null),
+            message: (value) => (value.length < 1 ? 'Mesaj gerekli' : null),
         },
     });
 
@@ -30,13 +30,18 @@ export default function SMSPage() {
         setLoading(true);
         setShowAnimation(true);
         try {
+            const payload = {
+                label: values.label,
+                number: values.phone,
+                sms: values.message,
+            };
             const response = await fetch(`${apiUrl}/api/qr/sms`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify(values),
+                body: JSON.stringify(payload),
             });
 
             if (response.ok) {
