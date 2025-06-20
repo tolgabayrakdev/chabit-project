@@ -84,7 +84,7 @@ export default function Home() {
         <Container size="lg">
           <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', flexWrap: 'wrap' }}>
             {/* Sol: Başlık ve Açıklama */}
-            <Box style={{ flex: 1, minWidth: 280, maxWidth: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', zIndex: 2 }}>
+            <Box className="hero-title-center" style={{ flex: 1, minWidth: 280, maxWidth: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', zIndex: 2 }}>
               <Title 
                 order={1} 
                 size={rem(48)} 
