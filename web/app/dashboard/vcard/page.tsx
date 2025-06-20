@@ -11,6 +11,7 @@ export default function VCardPage() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
     const router = useRouter();
 
     const form = useForm({
@@ -37,6 +38,7 @@ export default function VCardPage() {
 
     const handleSubmit = async (values: typeof form.values) => {
         setLoading(true);
+        setStatus('loading');
         setShowAnimation(true);
         try {
             const response = await fetch(`${apiUrl}/api/qr/vcard`, {
@@ -51,10 +53,13 @@ export default function VCardPage() {
             if (response.ok) {
                 setTimeout(() => {
                     setShowAnimation(false);
+                    setStatus('success');
+                    setLoading(false);
                     router.push('/dashboard');
                 }, 5000);
             } else {
                 setShowAnimation(false);
+                setStatus('idle');
                 const errorData = await response.json();
                 if (response.status === 429) {
                     notifications.show({
@@ -72,6 +77,7 @@ export default function VCardPage() {
             }
         } catch (error) {
             setShowAnimation(false);
+            setStatus('idle');
             notifications.show({
                 title: 'Hata',
                 message: 'QR kod oluşturulurken bir hata oluştu',
@@ -80,6 +86,11 @@ export default function VCardPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleNewQr = () => {
+        setStatus('idle');
+        form.reset();
     };
 
     return (
@@ -108,32 +119,22 @@ export default function VCardPage() {
                     </Text>
                 </div>
             </Paper>
-            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
-                <div>
-                    <Title order={2} mb="xl">vCard QR Kod Oluştur</Title>
-                    <Paper
-                        p="xl"
-                        radius="lg"
-                        withBorder
-                        style={{
-                            background: 'white',
-                            transition: 'all 0.2s ease',
-                            '&:hover': {
-                                boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-                            }
-                        }}
-                    >
-                        <form onSubmit={form.onSubmit(handleSubmit)}>
-                            <Stack gap="md">
+            <Container size="md" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <Paper withBorder radius="lg" p={24} style={{ width: '100%', maxWidth: 800, marginTop: 24, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Title order={2} mb="xl" ta="center">vCard QR Kod Oluştur</Title>
+                    {status === 'idle' && (
+                        <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: '100%' }}>
+                            <Stack gap="sm" style={{ width: '100%' }}>
                                 <TextInput
                                     label="QR Kod İsmi"
                                     placeholder="QR kodunuz için bir isim girin"
                                     required
                                     radius="md"
                                     size="md"
+                                    style={{ width: '100%' }}
                                     {...form.getInputProps('label')}
                                 />
-                                <Grid>
+                                <Grid gutter="sm">
                                     <Grid.Col span={6}>
                                         <TextInput
                                             label="Ad"
@@ -141,6 +142,7 @@ export default function VCardPage() {
                                             required
                                             radius="md"
                                             size="md"
+                                            style={{ width: '100%' }}
                                             {...form.getInputProps('firstName')}
                                         />
                                     </Grid.Col>
@@ -151,17 +153,19 @@ export default function VCardPage() {
                                             required
                                             radius="md"
                                             size="md"
+                                            style={{ width: '100%' }}
                                             {...form.getInputProps('lastName')}
                                         />
                                     </Grid.Col>
                                 </Grid>
-                                <Grid>
+                                <Grid gutter="sm">
                                     <Grid.Col span={6}>
                                         <TextInput
                                             label="Şirket"
                                             placeholder="Şirket adını girin"
                                             radius="md"
                                             size="md"
+                                            style={{ width: '100%' }}
                                             {...form.getInputProps('company')}
                                         />
                                     </Grid.Col>
@@ -171,17 +175,19 @@ export default function VCardPage() {
                                             placeholder="Ünvanınızı girin"
                                             radius="md"
                                             size="md"
+                                            style={{ width: '100%' }}
                                             {...form.getInputProps('title')}
                                         />
                                     </Grid.Col>
                                 </Grid>
-                                <Grid>
+                                <Grid gutter="sm">
                                     <Grid.Col span={6}>
                                         <TextInput
                                             label="E-posta Adresi"
                                             placeholder="ornek@email.com"
                                             radius="md"
                                             size="md"
+                                            style={{ width: '100%' }}
                                             {...form.getInputProps('email')}
                                         />
                                     </Grid.Col>
@@ -191,6 +197,7 @@ export default function VCardPage() {
                                             placeholder="+90 5XX XXX XX XX"
                                             radius="md"
                                             size="md"
+                                            style={{ width: '100%' }}
                                             {...form.getInputProps('phone')}
                                         />
                                     </Grid.Col>
@@ -200,6 +207,7 @@ export default function VCardPage() {
                                     placeholder="https://www.example.com"
                                     radius="md"
                                     size="md"
+                                    style={{ width: '100%' }}
                                     {...form.getInputProps('website')}
                                 />
                                 <TextInput
@@ -207,6 +215,7 @@ export default function VCardPage() {
                                     placeholder="Adresinizi girin"
                                     radius="md"
                                     size="md"
+                                    style={{ width: '100%' }}
                                     {...form.getInputProps('address')}
                                 />
                                 <Button
@@ -216,6 +225,7 @@ export default function VCardPage() {
                                     size="md"
                                     leftSection={<IconQrcode size={20} />}
                                     style={{
+                                        width: '100%',
                                         background: 'linear-gradient(45deg, #7950f2 0%, #9775fa 100%)',
                                         transition: 'transform 0.2s',
                                         '&:hover': {
@@ -227,58 +237,30 @@ export default function VCardPage() {
                                 </Button>
                             </Stack>
                         </form>
-                    </Paper>
-                </div>
-
-                <Paper
-                    p="xl"
-                    radius="lg"
-                    withBorder
-                    style={{
-                        background: 'white',
-                        minHeight: '600px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '2rem'
-                    }}
-                >
-                    {showAnimation ? (
-                        <Stack align="center" gap="xl">
-                            <ThemeIcon
-                                size={120}
-                                radius="xl"
-                                color="violet"
-                                style={{
-                                    animation: 'pulse 2s infinite',
-                                }}
-                            >
+                    )}
+                    {status === 'loading' && (
+                        <Stack align="center" gap="xl" mt="xl">
+                            <ThemeIcon size={120} radius="xl" color="violet" style={{ animation: 'pulse 2s infinite' }}>
                                 <IconQrcode size={60} />
                             </ThemeIcon>
-                            <Stack align="center" gap="xs">
-                                <Title order={3} ta="center">QR Kodunuz Oluşturuluyor</Title>
-                                <Text c="dimmed" ta="center" size="lg">
-                                    vCard QR kodunuz hazırlanıyor...
-                                </Text>
-                            </Stack>
+                            <Title order={3} ta="center">QR Kodunuz Oluşturuluyor</Title>
+                            <Text c="dimmed" ta="center" size="lg">vCard QR kodunuz hazırlanıyor...</Text>
                             <Loader size="lg" color="violet" />
                         </Stack>
-                    ) : (
-                        <Stack align="center" gap="xl">
+                    )}
+                    {status === 'success' && (
+                        <Stack align="center" gap="xl" mt="xl">
                             <ThemeIcon size={120} radius="xl" color="violet">
-                                <IconAddressBook size={60} />
+                                <IconQrcode size={60} />
                             </ThemeIcon>
-                            <Stack align="center" gap="xs">
-                                <Title order={3} ta="center">vCard QR Kod Oluştur</Title>
-                                <Text c="dimmed" ta="center" size="lg">
-                                    Dijital kartvizitinizi QR kod ile paylaşmak için formu doldurun
-                                </Text>
-                            </Stack>
+                            <Title order={3} ta="center">QR Kodunuz Başarıyla Oluşturuldu!</Title>
+                            <Button onClick={handleNewQr} radius="xl" size="md" variant="outline" color="violet">
+                                Yeni QR Kod Oluştur
+                            </Button>
                         </Stack>
                     )}
                 </Paper>
-            </SimpleGrid>
+            </Container>
 
             <style jsx global>{`
                 @keyframes pulse {

@@ -11,6 +11,7 @@ export default function WifiPage() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
     const router = useRouter();
 
     const form = useForm({
@@ -30,6 +31,7 @@ export default function WifiPage() {
 
     const handleSubmit = async (values: typeof form.values) => {
         setLoading(true);
+        setStatus('loading');
         setShowAnimation(true);
         try {
             const response = await fetch(`${apiUrl}/api/qr/wifi`, {
@@ -44,10 +46,13 @@ export default function WifiPage() {
             if (response.ok) {
                 setTimeout(() => {
                     setShowAnimation(false);
+                    setStatus('success');
+                    setLoading(false);
                     router.push('/dashboard');
                 }, 5000);
             } else {
                 setShowAnimation(false);
+                setStatus('idle');
                 const errorData = await response.json();
                 notifications.show({
                     title: 'Hata',
@@ -57,6 +62,7 @@ export default function WifiPage() {
             }
         } catch (error) {
             setShowAnimation(false);
+            setStatus('idle');
             notifications.show({
                 title: 'Hata',
                 message: 'QR kod oluşturulurken bir hata oluştu',
@@ -65,6 +71,11 @@ export default function WifiPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleNewQr = () => {
+        setStatus('idle');
+        form.reset();
     };
 
     return (
@@ -93,22 +104,11 @@ export default function WifiPage() {
                     </Text>
                 </div>
             </Paper>
-            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
-                <div>
-                    <Title order={2} mb="xl">WiFi QR Kod Oluştur</Title>
-                    <Paper
-                        p="xl"
-                        radius="lg"
-                        withBorder
-                        style={{
-                            background: 'white',
-                            transition: 'all 0.2s ease',
-                            '&:hover': {
-                                boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-                            }
-                        }}
-                    >
-                        <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Container size="md" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <Paper withBorder radius="lg" p={32} style={{ width: '100%', maxWidth: 800, marginTop: 32, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Title order={2} mb="xl" ta="center">WiFi QR Kod Oluştur</Title>
+                    {status === 'idle' && (
+                        <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: '100%' }}>
                             <Stack gap="md">
                                 <TextInput
                                     label="QR Kod İsmi"
@@ -168,58 +168,30 @@ export default function WifiPage() {
                                 </Button>
                             </Stack>
                         </form>
-                    </Paper>
-                </div>
-
-                <Paper
-                    p="xl"
-                    radius="lg"
-                    withBorder
-                    style={{
-                        background: 'white',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '2rem'
-                    }}
-                >
-                    {showAnimation ? (
-                        <Stack align="center" gap="xl">
-                            <ThemeIcon
-                                size={120}
-                                radius="xl"
-                                color="green"
-                                style={{
-                                    animation: 'pulse 2s infinite',
-                                }}
-                            >
+                    )}
+                    {status === 'loading' && (
+                        <Stack align="center" gap="xl" mt="xl">
+                            <ThemeIcon size={120} radius="xl" color="green" style={{ animation: 'pulse 2s infinite' }}>
                                 <IconQrcode size={60} />
                             </ThemeIcon>
-                            <Stack align="center" gap="xs">
-                                <Title order={3} ta="center">QR Kodunuz Oluşturuluyor</Title>
-                                <Text c="dimmed" ta="center" size="lg">
-                                    WiFi QR kodunuz hazırlanıyor...
-                                </Text>
-                            </Stack>
+                            <Title order={3} ta="center">QR Kodunuz Oluşturuluyor</Title>
+                            <Text c="dimmed" ta="center" size="lg">WiFi QR kodunuz hazırlanıyor...</Text>
                             <Loader size="lg" color="green" />
                         </Stack>
-                    ) : (
-                        <Stack align="center" gap="xl">
+                    )}
+                    {status === 'success' && (
+                        <Stack align="center" gap="xl" mt="xl">
                             <ThemeIcon size={120} radius="xl" color="green">
-                                <IconWifi size={60} />
+                                <IconQrcode size={60} />
                             </ThemeIcon>
-                            <Stack align="center" gap="xs">
-                                <Title order={3} ta="center">WiFi QR Kod Oluştur</Title>
-                                <Text c="dimmed" ta="center" size="lg">
-                                    WiFi ağınızı QR kod ile paylaşmak için formu doldurun
-                                </Text>
-                            </Stack>
+                            <Title order={3} ta="center">QR Kodunuz Başarıyla Oluşturuldu!</Title>
+                            <Button onClick={handleNewQr} radius="xl" size="md" variant="outline" color="green">
+                                Yeni QR Kod Oluştur
+                            </Button>
                         </Stack>
                     )}
                 </Paper>
-            </SimpleGrid>
+            </Container>
 
             <style jsx global>{`
                 @keyframes pulse {
