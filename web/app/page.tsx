@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group, Card, SimpleGrid, Box, Stack, Badge, Image, Paper, rem, ThemeIcon, Divider, Anchor } from '@mantine/core';
 import { Accordion, AccordionItem, AccordionControl, AccordionPanel } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -45,6 +45,14 @@ export default function Home() {
       limit: 'Sınırsız',
       devices: [IconDeviceMobile, IconDeviceLaptop],
       color: '#7950f2'
+    },
+    {
+      icon: IconLink,
+      title: 'URL QR Kod',
+      description: 'Web sitenizi, sosyal medya profilinizi veya herhangi bir bağlantıyı QR kod ile paylaşın.',
+      limit: 'Sınırsız',
+      devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
+      color: '#15aabf'
     },
   ];
 
@@ -468,6 +476,8 @@ export default function Home() {
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>WiFi Paylaşımı</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>E-posta Gönderimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>SMS Gönderimi</Anchor>
+              <Anchor component={Link} href="#features" c="white" opacity={0.8}>vCard Yönetimi</Anchor>
+              <Anchor component={Link} href="#features" c="white" opacity={0.8}>URL QR Kod</Anchor>
             </Stack>
             <Stack gap="xs">
               <Text fw={700} size="lg">Bizi Takip Edin</Text>
