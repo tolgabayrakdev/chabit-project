@@ -30,10 +30,7 @@ export default function UrlPage() {
     },
     validate: {
       label: (value) => (value.length < 3 ? "QR kod ismi en az 3 karakter olmalıdır" : null),
-      url: (value) =>
-        !/^https?:\/\//.test(value)
-          ? "Geçerli bir URL giriniz (https:// ile başlamalı)"
-          : null,
+      url: (value) => (value.trim().length < 4 ? "Geçerli bir URL giriniz" : null),
     },
   });
 
@@ -41,13 +38,18 @@ export default function UrlPage() {
     setLoading(true);
     setStatus("loading");
     try {
+      const body = { ...values };
+      if (!/^https?:\/\//.test(body.url)) {
+        body.url = `https://${body.url}`;
+      }
+
       const response = await fetch(`${apiUrl}/api/qr/url`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(values),
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
@@ -126,7 +128,7 @@ export default function UrlPage() {
               />
               <TextInput
                 label="URL"
-                placeholder="https://example.com"
+                placeholder="www.example.com"
                 required
                 radius="md"
                 size="md"
