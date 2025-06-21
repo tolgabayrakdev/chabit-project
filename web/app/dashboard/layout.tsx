@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon } from '@mantine/core';
+import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -94,12 +94,21 @@ export default function DashboardLayout({
                 <AppShell.Navbar p="md" style={{ background: 'white' }}>
                     <Stack h="100%" justify="space-between">
                         <div>
-                            <Text size="sm" c="dimmed" mb="md">
-                                Hoş Geldiniz
-                            </Text>
-                            <Text fw={500} mb="xl" size="lg">
-                                {userEmail}
-                            </Text>
+                            <Paper withBorder p="md" radius="md" mb="xl" style={{ background: '#f8f9fa' }}>
+                                <Group>
+                                    <Avatar color="blue" radius="xl">
+                                        {userEmail ? userEmail.charAt(0).toUpperCase() : ''}
+                                    </Avatar>
+                                    <div style={{ flex: 1 }}>
+                                        <Text size="sm" fw={500} truncate="end">
+                                            {userEmail}
+                                        </Text>
+                                        <Text size="xs" c="dimmed">
+                                            Hoş Geldiniz
+                                        </Text>
+                                    </div>
+                                </Group>
+                            </Paper>
                             {navItems.map((item) => (
                                 <NavLink
                                     key={item.href}
