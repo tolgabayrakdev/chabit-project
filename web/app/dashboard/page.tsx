@@ -158,7 +158,6 @@ export default function DashboardPage() {
             {loading ? (
                 <Center style={{ height: '50vh' }}>
                     <Stack align="center" gap="md">
-                        <Loader size="lg" color="blue" />
                         <Text c="dimmed" size="lg">QR Kodlar Yükleniyor...</Text>
                     </Stack>
                 </Center>
