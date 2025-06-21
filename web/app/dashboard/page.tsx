@@ -156,50 +156,46 @@ export default function DashboardPage() {
             </Modal>
 
             {loading ? (
-                <Center py="xl">
-                  <Stack align="center" gap="xs">
-                    <Text c="dimmed" size="md">Yükleniyor...</Text>
-                  </Stack>
+                <Center style={{ height: '50vh' }}>
+                    <Stack align="center" gap="md">
+                        <Loader size="lg" color="blue" />
+                        <Text c="dimmed" size="lg">QR Kodlar Yükleniyor...</Text>
+                    </Stack>
                 </Center>
             ) : qrCodes.length > 0 ? (
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
                     {qrCodes.map((qr) => (
-                        <Card key={qr.id} padding="lg" radius="md" withBorder>
-                            <Card.Section p="md">
-                                <Group justify="space-between">
-                                    <Badge
-                                        color={getTypeColor(qr.type)}
-                                        style={{
-                                            backgroundColor: getTypeColor(qr.type),
-                                            color: 'white'
-                                        }}
-                                    >
-                                        {getTypeLabel(qr.type)}
-                                    </Badge>
-                                    <Text size="sm" c="dimmed">
-                                        {new Date(qr.created_at).toLocaleDateString('tr-TR')}
-                                    </Text>
-                                </Group>
-                            </Card.Section>
-
-                            <Stack align="center" mt="md">
+                        <Card key={qr.id} padding={0} radius="md" withBorder>
+                            <Card.Section>
                                 <Image
                                     src={`${apiUrl}${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
-                                    width={200}
                                     height={200}
-                                    fit="contain"
                                 />
-                                <Text fw={500} size="lg">
-                                    {qr.label || getTypeLabel(qr.type)}
+                            </Card.Section>
+
+                            <Stack p="md" gap="sm">
+                                <Group justify="space-between">
+                                    <Text fw={700} size="lg" truncate>
+                                        {qr.label || getTypeLabel(qr.type)}
+                                    </Text>
+                                    <Badge color={getTypeColor(qr.type)} variant="light">
+                                        {getTypeLabel(qr.type)}
+                                    </Badge>
+                                </Group>
+                                <Text size="xs" c="dimmed">
+                                    Oluşturulma: {new Date(qr.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
                                 </Text>
-                                <Group mt="md" w="100%">
-                                    <Menu shadow="md" width={200}>
+                            </Stack>
+
+                            <Card.Section withBorder inheritPadding py="sm">
+                                <Group grow>
+                                    <Menu shadow="md" width={150} position="top" withArrow>
                                         <Menu.Target>
                                             <Button
                                                 variant="light"
+                                                color="blue"
                                                 leftSection={<IconDownload size={20} />}
-                                                fullWidth
                                             >
                                                 İndir
                                             </Button>
@@ -209,19 +205,19 @@ export default function DashboardPage() {
                                                 leftSection={<IconFileTypePng size={20} />}
                                                 onClick={() => handleDownload(qr, 'png')}
                                             >
-                                                PNG olarak indir
+                                                PNG
                                             </Menu.Item>
                                             <Menu.Item
                                                 leftSection={<IconFileTypeJpg size={20} />}
                                                 onClick={() => handleDownload(qr, 'jpg')}
                                             >
-                                                JPG olarak indir
+                                                JPG
                                             </Menu.Item>
                                             <Menu.Item
                                                 leftSection={<IconFileTypeSvg size={20} />}
                                                 onClick={() => handleDownload(qr, 'svg')}
                                             >
-                                                SVG olarak indir
+                                                SVG
                                             </Menu.Item>
                                         </Menu.Dropdown>
                                     </Menu>
@@ -230,12 +226,11 @@ export default function DashboardPage() {
                                         color="red"
                                         leftSection={<IconTrash size={20} />}
                                         onClick={() => handleDelete(qr)}
-                                        fullWidth
                                     >
                                         Sil
                                     </Button>
                                 </Group>
-                            </Stack>
+                            </Card.Section>
                         </Card>
                     ))}
                 </SimpleGrid>
