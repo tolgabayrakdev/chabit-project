@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar } from '@mantine/core';
+import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar, Menu } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -50,7 +50,6 @@ export default function DashboardLayout({
         { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
         { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
         { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf' },
-        { icon: IconSettings, label: 'Ayarlar', href: '/dashboard/settings', color: '#868e96' },
     ];
 
     const handleLogout = async () => {
@@ -76,7 +75,7 @@ export default function DashboardLayout({
     return (
         <AuthProvider>
             <AppShell
-                header={{ height: 60 }}
+                header={{ height: 70 }}
                 navbar={{
                     width: 300,
                     breakpoint: 'sm',
@@ -84,31 +83,60 @@ export default function DashboardLayout({
                 }}
                 padding="md"
             >
-                <AppShell.Header style={{ background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)' }}>
+                <AppShell.Header style={{ background: 'white', borderBottom: `1px solid #e9ecef` }}>
                     <Group h="100%" px="md" justify="space-between">
-                        <Text fw={700} size="lg" c="white">VunQR</Text>
-                        <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" color="white" />
+                        <Group>
+                            <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" />
+                            <Group gap="xs" align="center">
+                                <ThemeIcon size={40} radius="md" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
+                                    <IconQrcode size={24} />
+                                </ThemeIcon>
+                                <Text fw={800} size="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 45 }}>VunQR</Text>
+                            </Group>
+                        </Group>
+
+                        <Menu shadow="md" width={240} position="bottom-end" withArrow>
+                            <Menu.Target>
+                                <Group gap="xs" style={{ cursor: 'pointer' }}>
+                                    <Avatar color="blue" radius="xl">
+                                        {userEmail ? userEmail.charAt(0).toUpperCase() : ''}
+                                    </Avatar>
+                                    <Box visibleFrom="sm">
+                                        <Text size="sm" fw={600} truncate>
+                                            {userEmail}
+                                        </Text>
+                                        <Text size="xs" c="dimmed">
+                                            Kullanıcı
+                                        </Text>
+                                    </Box>
+                                </Group>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                                <Menu.Label>Hesap</Menu.Label>
+                                <Menu.Item
+                                    component={Link}
+                                    href="/dashboard/settings"
+                                    leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} />}
+                                >
+                                    Ayarlar
+                                </Menu.Item>
+                                <Menu.Divider />
+                                <Menu.Item
+                                    color="red"
+                                    leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} />}
+                                    onClick={handleLogout}
+                                    disabled={isLoggingOut}
+                                >
+                                    {isLoggingOut ? 'Çıkış yapılıyor...' : 'Çıkış Yap'}
+                                </Menu.Item>
+                            </Menu.Dropdown>
+                        </Menu>
                     </Group>
                 </AppShell.Header>
 
                 <AppShell.Navbar p="md" style={{ background: 'white' }}>
                     <Stack h="100%" justify="space-between">
                         <div>
-                            <Paper withBorder p="md" radius="md" mb="xl" style={{ background: '#f8f9fa' }}>
-                                <Group>
-                                    <Avatar color="blue" radius="xl">
-                                        {userEmail ? userEmail.charAt(0).toUpperCase() : ''}
-                                    </Avatar>
-                                    <div style={{ flex: 1 }}>
-                                        <Text size="sm" fw={500} truncate="end">
-                                            {userEmail}
-                                        </Text>
-                                        <Text size="xs" c="dimmed">
-                                            Hoş Geldiniz
-                                        </Text>
-                                    </div>
-                                </Group>
-                            </Paper>
                             {navItems.map((item) => (
                                 <NavLink
                                     key={item.href}
@@ -137,24 +165,6 @@ export default function DashboardLayout({
                             ))}
                         </div>
                         <div>
-                            <Divider my="md" />
-                            <Button
-                                variant="subtle"
-                                color="red"
-                                leftSection={<IconLogout style={{ width: rem(20), height: rem(20) }} stroke={1.5} />}
-                                onClick={handleLogout}
-                                loading={isLoggingOut}
-                                fullWidth
-                                style={{
-                                    borderRadius: 'md',
-                                    transition: 'all 0.2s ease',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(250, 82, 82, 0.1)',
-                                    }
-                                }}
-                            >
-                                Çıkış Yap
-                            </Button>
                         </div>
                     </Stack>
                 </AppShell.Navbar>
