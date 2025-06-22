@@ -24,7 +24,7 @@ export default function DashboardLayout({
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`${apiUrl}/api/auth/me`, {
+                const response = await fetch(`/api/auth/me`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
