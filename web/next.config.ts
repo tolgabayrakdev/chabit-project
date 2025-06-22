@@ -1,11 +1,13 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*",  // Frontend'den gelen istekler
-        destination: "https://vunqr-backend-production.up.railway.app/api/:path*",  // Backend API adresin
+        source: "/api/:path*",
+        destination: "https://vunqr-backend-production.up.railway.app/api/:path*",
+      },
+      {
+        source: "/uploads/:path*",
+        destination: "https://vunqr-backend-production.up.railway.app/uploads/:path*",
       },
     ];
   },
