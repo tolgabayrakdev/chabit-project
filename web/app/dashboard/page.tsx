@@ -166,7 +166,7 @@ export default function DashboardPage() {
                         <Card key={qr.id} padding={0} radius="md" withBorder>
                             <Card.Section>
                                 <Image
-                                    src={`/${qr.qr_code_image}`}
+                                    src={`${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
                                     height={200}
                                 />
