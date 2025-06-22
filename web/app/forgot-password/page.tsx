@@ -6,7 +6,6 @@ import Link from 'next/link';
 
 
 export default function ForgotPasswordPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -23,7 +22,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`${apiUrl}/api/auth/forgot-password`, {
+      const response = await fetch(`/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

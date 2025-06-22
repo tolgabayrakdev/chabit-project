@@ -8,7 +8,6 @@ import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 
 export default function EmailPage() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
@@ -34,7 +33,7 @@ export default function EmailPage() {
         setStatus('loading');
         setShowAnimation(true);
         try {
-            const response = await fetch(`${apiUrl}/api/qr/mail`, {
+            const response = await fetch(`/api/qr/mail`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

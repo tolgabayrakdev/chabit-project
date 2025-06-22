@@ -18,7 +18,6 @@ import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
 
 export default function UrlPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const router = useRouter();
@@ -43,7 +42,7 @@ export default function UrlPage() {
         body.url = `https://${body.url}`;
       }
 
-      const response = await fetch(`${apiUrl}/api/qr/url`, {
+      const response = await fetch(`/api/qr/url`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

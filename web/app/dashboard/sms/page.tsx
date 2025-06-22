@@ -8,7 +8,6 @@ import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 
 export default function SMSPage() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
@@ -37,7 +36,7 @@ export default function SMSPage() {
                 number: values.phone,
                 sms: values.message,
             };
-            const response = await fetch(`${apiUrl}/api/qr/sms`, {
+            const response = await fetch(`/api/qr/sms`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

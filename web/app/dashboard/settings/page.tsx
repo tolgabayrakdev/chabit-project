@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 import { useDisclosure } from '@mantine/hooks';
 
 export default function SettingsPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
@@ -33,7 +32,7 @@ export default function SettingsPage() {
   const handlePasswordChange = async (values: typeof form.values) => {
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/auth/change-password`, {
+      const response = await fetch(`/api/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +82,7 @@ export default function SettingsPage() {
 
     setDeleteLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/auth/delete-account`, {
+      const response = await fetch(`/api/auth/delete-account`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

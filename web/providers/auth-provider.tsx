@@ -8,7 +8,6 @@ interface AuthProviderProps {
 }
 
 function AuthProvider({ children }: AuthProviderProps) {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const router = useRouter()
     const [loading, setLoading] = useState(true);
     const [accessDenied, setAccessDenied] = useState(false);
@@ -16,7 +15,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const verifyAuthToken = async () => {
             try {
-                const res = await fetch(`${apiUrl}/api/auth/me`, {
+                const res = await fetch(`/api/auth/me`, {
                     method: 'GET',
                     credentials: 'include',
                 });

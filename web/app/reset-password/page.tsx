@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 function ResetPasswordContent() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -35,7 +34,7 @@ function ResetPasswordContent() {
     setStatus('idle');
     setMessage('');
     try {
-      const response = await fetch(`${apiUrl}/api/auth/reset-password`, {
+      const response = await fetch(`/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

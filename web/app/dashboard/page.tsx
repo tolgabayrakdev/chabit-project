@@ -48,7 +48,6 @@ const getTypeLabel = (type: string) => {
 };
 
 export default function DashboardPage() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [qrCodes, setQRCodes] = useState<QRCode[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
@@ -57,7 +56,7 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchQRCodes = async () => {
             try {
-                const response = await fetch(`${apiUrl}/api/qr`, {
+                const response = await fetch(`/api/qr`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -82,7 +81,7 @@ export default function DashboardPage() {
     const handleDownload = async (qrCode: QRCode, format: 'png' | 'jpg' | 'svg') => {
         try {
             // QR kod görselini indir
-            const response = await fetch(`${apiUrl}${qrCode.qr_code_image}?format=${format}`, {
+            const response = await fetch(`${qrCode.qr_code_image}?format=${format}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -121,7 +120,7 @@ export default function DashboardPage() {
         if (!selectedQR) return;
 
         try {
-            const response = await fetch(`${apiUrl}/api/qr/${selectedQR.id}`, {
+            const response = await fetch(`/api/qr/${selectedQR.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
                 headers: {
@@ -167,7 +166,7 @@ export default function DashboardPage() {
                         <Card key={qr.id} padding={0} radius="md" withBorder>
                             <Card.Section>
                                 <Image
-                                    src={`${apiUrl}${qr.qr_code_image}`}
+                                    src={`/${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
                                     height={200}
                                 />

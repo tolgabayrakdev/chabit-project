@@ -13,7 +13,6 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode
 }) {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [opened, setOpened] = useState(false);
     const [userEmail, setUserEmail] = useState<string>('');
     const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -55,7 +54,7 @@ export default function DashboardLayout({
     const handleLogout = async () => {
         try {
             setIsLoggingOut(true);
-            const response = await fetch(`${apiUrl}/api/auth/logout`, {
+            const response = await fetch(`/api/auth/logout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
