@@ -43,6 +43,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { IconType } from 'react-icons';
 import Cropper from 'react-easy-crop';
 import type { Area } from 'react-easy-crop';
+import Head from 'next/head';
 
 type Link = {
   label: string;
@@ -255,6 +256,9 @@ export default function LinkInBioPage() {
   const [croppedImage, setCroppedImage] = useState<Blob | null>(null);
   const [rawImageUrl, setRawImageUrl] = useState<string | null>(null);
 
+  const pageTitle = profile?.username ? `${profile.username} | VunQR` : `${slug} | VunQR`;
+  const pageDescription = profile?.username ? `${profile.username} link in bio sayfasıdır` : `${slug} link in bio sayfasıdır`;
+
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
@@ -460,332 +464,338 @@ export default function LinkInBioPage() {
   if (!profile) return null;
 
   return (
-    <Box
-      style={{
-        position: 'relative',
-        minHeight: '100vh',
-        overflow: 'hidden',
-        background: '#f8faff',
-        padding: '2rem',
-      }}
-    >
+    <>
+      <Head>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+      </Head>
       <Box
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '3rem',
-          padding: '3rem',
-          opacity: 0.1,
-          transform: 'rotate(-15deg) scale(1.2)',
-          pointerEvents: 'none',
-          zIndex: 0,
-          color: '#2563eb',
-          fontSize: '24px',
-          fontWeight: 'bold',
+          position: 'relative',
+          minHeight: '100vh',
+          overflow: 'hidden',
+          background: '#f8faff',
+          padding: '2rem',
         }}
       >
-        {Array(50).fill('vunqr').map((text, i) => (
-          <Text key={i} size="xl" fw={900} style={{ letterSpacing: '1px' }}>
-            {text}
-          </Text>
-        ))}
-      </Box>
-      
-      <Stack 
-        gap="xl" 
-        align="center" 
-        style={{ 
-          position: 'relative', 
-          zIndex: 1,
-          maxWidth: '640px',
-          margin: '0 auto',
-          width: '100%',
-          padding: '0 1rem'
-        }}
-      >
-        {isOwner && (
-          <Button
-            leftSection={<IconPencil size={16} />}
-            variant="light"
-            onClick={openEditModal}
-          >
-            Profili Düzenle
-          </Button>
-        )}
-        <Stack gap="md" align="center" style={{ textAlign: 'center' }}>
-          <Avatar
-            size={120}
-            radius="xl"
-            src={croppedImage ? URL.createObjectURL(croppedImage) : imageFile ? URL.createObjectURL(imageFile) : profile.profile_image || '/default-avatar.png'}
-            alt={profile.username}
-            style={{ border: '4px solid #e9ecef', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}
-          />
-          <Stack gap="xs" align="center">
-            <Group gap="xs" align="center">
-              <Text size="xl" fw={700} c="dark">@{profile.username}</Text>
-            </Group>
-            <Text size="md" c="dimmed" style={{ whiteSpace: 'pre-line', lineHeight: 1.6, maxWidth: '400px' }}>
-              {profile.bio_text}
+        <Box
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '3rem',
+            padding: '3rem',
+            opacity: 0.1,
+            transform: 'rotate(-15deg) scale(1.2)',
+            pointerEvents: 'none',
+            zIndex: 0,
+            color: '#2563eb',
+            fontSize: '24px',
+            fontWeight: 'bold',
+          }}
+        >
+          {Array(50).fill('vunqr').map((text, i) => (
+            <Text key={i} size="xl" fw={900} style={{ letterSpacing: '1px' }}>
+              {text}
             </Text>
-          </Stack>
-        </Stack>
-        <Divider style={{ width: '100%' }} />
-        <Stack gap="md" style={{ width: '100%' }}>
-          <Group justify="space-between" align="center">
-            <Text size="lg" fw={600} c="dark">Bağlantılar</Text>
-            {isOwner && (
-              <Button
-                size="xs"
-                variant="subtle"
-                leftSection={<IconPencil size={14} />}
-                onClick={openEditLinksModal}
-              >
-                Düzenle
-              </Button>
-            )}
-          </Group>
-          <Stack gap="sm">
-            {profile.links.map((link, index) => (
-              <LinkCard key={index} link={link} onClick={(url) => window.open(url, '_blank')} />
-            ))}
-          </Stack>
-        </Stack>
+          ))}
+        </Box>
         
-        <Divider style={{ width: '100%' }} />
-        <Stack gap="md" style={{ width: '100%' }}>
-          <Group justify="space-between" align="center">
-            <Text size="lg" fw={600} c="dark">
-              Medya Galerisi
-            </Text>
-            <Group>
+        <Stack 
+          gap="xl" 
+          align="center" 
+          style={{ 
+            position: 'relative', 
+            zIndex: 1,
+            maxWidth: '640px',
+            margin: '0 auto',
+            width: '100%',
+            padding: '0 1rem'
+          }}
+        >
+          {isOwner && (
+            <Button
+              leftSection={<IconPencil size={16} />}
+              variant="light"
+              onClick={openEditModal}
+            >
+              Profili Düzenle
+            </Button>
+          )}
+          <Stack gap="md" align="center" style={{ textAlign: 'center' }}>
+            <Avatar
+              size={120}
+              radius="xl"
+              src={croppedImage ? URL.createObjectURL(croppedImage) : imageFile ? URL.createObjectURL(imageFile) : profile.profile_image || '/default-avatar.png'}
+              alt={profile.username}
+              style={{ border: '4px solid #e9ecef', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}
+            />
+            <Stack gap="xs" align="center">
+              <Group gap="xs" align="center">
+                <Text size="xl" fw={700} c="dark">@{profile.username}</Text>
+              </Group>
+              <Text size="md" c="dimmed" style={{ whiteSpace: 'pre-line', lineHeight: 1.6, maxWidth: '400px' }}>
+                {profile.bio_text}
+              </Text>
+            </Stack>
+          </Stack>
+          <Divider style={{ width: '100%' }} />
+          <Stack gap="md" style={{ width: '100%' }}>
+            <Group justify="space-between" align="center">
+              <Text size="lg" fw={600} c="dark">Bağlantılar</Text>
               {isOwner && (
                 <Button
                   size="xs"
                   variant="subtle"
                   leftSection={<IconPencil size={14} />}
-                  onClick={openEditMediaModal}
+                  onClick={openEditLinksModal}
                 >
                   Düzenle
                 </Button>
               )}
-              {profile.media && profile.media.length > 0 && (
-                <Badge variant="light" color="grape">
-                  {profile.media.length} öğe
-                </Badge>
-              )}
             </Group>
-          </Group>
-          {profile.media && profile.media.length > 0 ? (
-            <MediaGallery media={profile.media} />
-          ) : (
-            <Text c="dimmed" ta="center" py="xl">
-              Henüz medya eklenmemiş
+            <Stack gap="sm">
+              {profile.links.map((link, index) => (
+                <LinkCard key={index} link={link} onClick={(url) => window.open(url, '_blank')} />
+              ))}
+            </Stack>
+          </Stack>
+          
+          <Divider style={{ width: '100%' }} />
+          <Stack gap="md" style={{ width: '100%' }}>
+            <Group justify="space-between" align="center">
+              <Text size="lg" fw={600} c="dark">
+                Medya Galerisi
+              </Text>
+              <Group>
+                {isOwner && (
+                  <Button
+                    size="xs"
+                    variant="subtle"
+                    leftSection={<IconPencil size={14} />}
+                    onClick={openEditMediaModal}
+                  >
+                    Düzenle
+                  </Button>
+                )}
+                {profile.media && profile.media.length > 0 && (
+                  <Badge variant="light" color="grape">
+                    {profile.media.length} öğe
+                  </Badge>
+                )}
+              </Group>
+            </Group>
+            {profile.media && profile.media.length > 0 ? (
+              <MediaGallery media={profile.media} />
+            ) : (
+              <Text c="dimmed" ta="center" py="xl">
+                Henüz medya eklenmemiş
+              </Text>
+            )}
+          </Stack>
+
+          <Box mt="xl" pt="xl" style={{ borderTop: '1px solid #e9ecef', width: '100%' }}>
+            <Text size="sm" c="dimmed" ta="center">
+              vunqr.com tarafından oluşturuldu
             </Text>
-          )}
+          </Box>
         </Stack>
 
-        <Box mt="xl" pt="xl" style={{ borderTop: '1px solid #e9ecef', width: '100%' }}>
-          <Text size="sm" c="dimmed" ta="center">
-            vunqr.com tarafından oluşturuldu
-          </Text>
-        </Box>
-      </Stack>
+        <Modal opened={editModalOpen} onClose={() => setEditModalOpen(false)} title="Profili Düzenle" centered>
+          <Stack gap="md">
+            <Avatar
+              size={80}
+              radius="xl"
+              src={imageFile ? URL.createObjectURL(imageFile) : profile?.profile_image || '/default-avatar.png'}
+              alt={profile?.username}
+              style={{ alignSelf: 'center', border: '2px solid #e9ecef' }}
+            />
+            <Button
+              variant="light"
+              onClick={() => fileInputRef.current?.click()}
+              style={{ alignSelf: 'center' }}
+            >
+              Profil Resmi Seç
+            </Button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={async e => {
+                if (e.target.files && e.target.files[0]) {
+                  const file = e.target.files[0];
+                  const url = URL.createObjectURL(file);
+                  setRawImageUrl(url);
+                  setCropModalOpen(true);
+                }
+              }}
+            />
+            <Textarea
+              label="Profil Açıklaması (Bio)"
+              placeholder="Kendinizi tanıtın..."
+              value={bioText}
+              onChange={(event) => setBioText(event.currentTarget.value)}
+              autosize
+              minRows={3}
+            />
+            <Button onClick={handleSaveChanges} loading={isSaving}>
+              Değişiklikleri Kaydet
+            </Button>
+          </Stack>
+        </Modal>
 
-      <Modal opened={editModalOpen} onClose={() => setEditModalOpen(false)} title="Profili Düzenle" centered>
-        <Stack gap="md">
-          <Avatar
-            size={80}
-            radius="xl"
-            src={imageFile ? URL.createObjectURL(imageFile) : profile?.profile_image || '/default-avatar.png'}
-            alt={profile?.username}
-            style={{ alignSelf: 'center', border: '2px solid #e9ecef' }}
-          />
-          <Button
-            variant="light"
-            onClick={() => fileInputRef.current?.click()}
-            style={{ alignSelf: 'center' }}
-          >
-            Profil Resmi Seç
-          </Button>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={async e => {
-              if (e.target.files && e.target.files[0]) {
-                const file = e.target.files[0];
-                const url = URL.createObjectURL(file);
-                setRawImageUrl(url);
-                setCropModalOpen(true);
-              }
-            }}
-          />
-          <Textarea
-            label="Profil Açıklaması (Bio)"
-            placeholder="Kendinizi tanıtın..."
-            value={bioText}
-            onChange={(event) => setBioText(event.currentTarget.value)}
-            autosize
-            minRows={3}
-          />
-          <Button onClick={handleSaveChanges} loading={isSaving}>
-            Değişiklikleri Kaydet
-          </Button>
-        </Stack>
-      </Modal>
+        <Modal opened={editLinksModalOpen} onClose={() => setEditLinksModalOpen(false)} title="Linkleri Düzenle" centered>
+          <Stack gap="md">
+            {linksDraft.map((link, idx) => (
+              <Group
+                key={idx}
+                align="center"
+                draggable
+                onDragStart={() => handleDragStart(idx)}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(idx)}
+                style={{
+                  opacity: draggedIndex === idx ? 0.5 : 1,
+                  border: draggedIndex === idx ? '1px dashed #aaa' : undefined,
+                  cursor: 'grab',
+                  background: draggedIndex === idx ? '#f8f9fa' : undefined,
+                  borderRadius: 8,
+                  padding: 4,
+                }}
+              >
+                <span style={{ fontSize: 18, cursor: 'grab', userSelect: 'none' }}>☰</span>
+                <Select
+                  value={link.value}
+                  onChange={(val) => {
+                    const platform = SOCIAL_PLATFORMS.find(p => p.value === val);
+                    if (platform) {
+                      updateLink(idx, 'label', platform.label);
+                      updateLink(idx, 'value', platform.value);
+                      let defaultUrl = '';
+                      switch (platform.value) {
+                        case 'instagram':
+                          defaultUrl = 'https://instagram.com/';
+                          break;
+                        case 'x':
+                          defaultUrl = 'https://x.com/';
+                          break;
+                        case 'youtube':
+                          defaultUrl = 'https://youtube.com/';
+                          break;
+                        case 'linkedin':
+                          defaultUrl = 'https://linkedin.com/in/';
+                          break;
+                        case 'github':
+                          defaultUrl = 'https://github.com/';
+                          break;
+                        case 'snapchat':
+                          defaultUrl = 'https://snapchat.com/add/';
+                          break;
+                        case 'email':
+                          defaultUrl = 'mailto:';
+                          break;
+                        case 'phone':
+                          defaultUrl = 'tel:+90';
+                          break;
+                        default:
+                          defaultUrl = '';
+                      }
+                      updateLink(idx, 'url', defaultUrl);
+                    }
+                  }}
+                  data={SOCIAL_PLATFORMS.map(p => ({ value: p.value, label: p.label }))}
+                  style={{ flex: 1 }}
+                />
+                <TextInput
+                  value={link.url}
+                  onChange={e => updateLink(idx, 'url', e.currentTarget.value)}
+                  placeholder={
+                    link.label === 'E-posta' ? "mailto:ornek@email.com" :
+                    link.label === 'Telefon' ? "tel:+905551234567" :
+                    "https://..."
+                  }
+                  style={{ flex: 2 }}
+                />
+                <Button color="red" size="xs" onClick={() => removeLink(idx)}>Sil</Button>
+              </Group>
+            ))}
+            <Button onClick={addLink} variant="light">Yeni Link Ekle</Button>
+            <Button onClick={handleSaveLinks} loading={isSaving}>Kaydet</Button>
+          </Stack>
+        </Modal>
 
-      <Modal opened={editLinksModalOpen} onClose={() => setEditLinksModalOpen(false)} title="Linkleri Düzenle" centered>
-        <Stack gap="md">
-          {linksDraft.map((link, idx) => (
-            <Group
-              key={idx}
-              align="center"
-              draggable
-              onDragStart={() => handleDragStart(idx)}
-              onDragOver={handleDragOver}
-              onDrop={() => handleDrop(idx)}
-              style={{
-                opacity: draggedIndex === idx ? 0.5 : 1,
-                border: draggedIndex === idx ? '1px dashed #aaa' : undefined,
-                cursor: 'grab',
-                background: draggedIndex === idx ? '#f8f9fa' : undefined,
-                borderRadius: 8,
-                padding: 4,
+        <Modal opened={editMediaModalOpen} onClose={() => setEditMediaModalOpen(false)} title="Medya Galerisini Düzenle" centered>
+          <Stack gap="md">
+            {mediaDraft.map((item, idx) => (
+              <Group key={idx} align="center">
+                <Select
+                  value={item.type}
+                  onChange={val => updateMedia(idx, 'type', val || 'image')}
+                  data={[
+                    { value: 'image', label: 'Resim' },
+                    { value: 'gif', label: 'GIF' },
+                  ]}
+                  style={{ width: 100 }}
+                />
+                <TextInput
+                  value={item.url}
+                  onChange={e => updateMedia(idx, 'url', e.currentTarget.value)}
+                  placeholder="URL"
+                  style={{ flex: 2 }}
+                />
+                <TextInput
+                  value={item.caption || ''}
+                  onChange={e => updateMedia(idx, 'caption', e.currentTarget.value)}
+                  placeholder="Açıklama"
+                  style={{ flex: 2 }}
+                />
+                <Button color="red" size="xs" onClick={() => removeMedia(idx)}>Sil</Button>
+              </Group>
+            ))}
+            <Button onClick={addMedia} variant="light">Yeni Medya Ekle</Button>
+            <Button onClick={handleSaveMedia} loading={isSaving}>Kaydet</Button>
+          </Stack>
+        </Modal>
+
+        {/* Crop Modal for profile image */}
+        <Modal opened={cropModalOpen} onClose={() => setCropModalOpen(false)} title="Profil Fotoğrafını Kırp" centered size="lg">
+          <div style={{ position: 'relative', width: '100%', height: 300, background: '#222' }}>
+            {rawImageUrl && (
+              <Cropper
+                image={rawImageUrl}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={(_: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)}
+              />
+            )}
+          </div>
+          <Group mt="md" justify="center">
+            <Button
+              onClick={async () => {
+                if (rawImageUrl && croppedAreaPixels) {
+                  const blob = await getCroppedImg(rawImageUrl, croppedAreaPixels);
+                  setCroppedImage(blob);
+                  setImageFile(new File([blob], 'profile.jpg', { type: 'image/jpeg' }));
+                  setCropModalOpen(false);
+                }
               }}
             >
-              <span style={{ fontSize: 18, cursor: 'grab', userSelect: 'none' }}>☰</span>
-              <Select
-                value={link.value}
-                onChange={(val) => {
-                  const platform = SOCIAL_PLATFORMS.find(p => p.value === val);
-                  if (platform) {
-                    updateLink(idx, 'label', platform.label);
-                    updateLink(idx, 'value', platform.value);
-                    let defaultUrl = '';
-                    switch (platform.value) {
-                      case 'instagram':
-                        defaultUrl = 'https://instagram.com/';
-                        break;
-                      case 'x':
-                        defaultUrl = 'https://x.com/';
-                        break;
-                      case 'youtube':
-                        defaultUrl = 'https://youtube.com/';
-                        break;
-                      case 'linkedin':
-                        defaultUrl = 'https://linkedin.com/in/';
-                        break;
-                      case 'github':
-                        defaultUrl = 'https://github.com/';
-                        break;
-                      case 'snapchat':
-                        defaultUrl = 'https://snapchat.com/add/';
-                        break;
-                      case 'email':
-                        defaultUrl = 'mailto:';
-                        break;
-                      case 'phone':
-                        defaultUrl = 'tel:+90';
-                        break;
-                      default:
-                        defaultUrl = '';
-                    }
-                    updateLink(idx, 'url', defaultUrl);
-                  }
-                }}
-                data={SOCIAL_PLATFORMS.map(p => ({ value: p.value, label: p.label }))}
-                style={{ flex: 1 }}
-              />
-              <TextInput
-                value={link.url}
-                onChange={e => updateLink(idx, 'url', e.currentTarget.value)}
-                placeholder={
-                  link.label === 'E-posta' ? "mailto:ornek@email.com" :
-                  link.label === 'Telefon' ? "tel:+905551234567" :
-                  "https://..."
-                }
-                style={{ flex: 2 }}
-              />
-              <Button color="red" size="xs" onClick={() => removeLink(idx)}>Sil</Button>
-            </Group>
-          ))}
-          <Button onClick={addLink} variant="light">Yeni Link Ekle</Button>
-          <Button onClick={handleSaveLinks} loading={isSaving}>Kaydet</Button>
-        </Stack>
-      </Modal>
-
-      <Modal opened={editMediaModalOpen} onClose={() => setEditMediaModalOpen(false)} title="Medya Galerisini Düzenle" centered>
-        <Stack gap="md">
-          {mediaDraft.map((item, idx) => (
-            <Group key={idx} align="center">
-              <Select
-                value={item.type}
-                onChange={val => updateMedia(idx, 'type', val || 'image')}
-                data={[
-                  { value: 'image', label: 'Resim' },
-                  { value: 'gif', label: 'GIF' },
-                ]}
-                style={{ width: 100 }}
-              />
-              <TextInput
-                value={item.url}
-                onChange={e => updateMedia(idx, 'url', e.currentTarget.value)}
-                placeholder="URL"
-                style={{ flex: 2 }}
-              />
-              <TextInput
-                value={item.caption || ''}
-                onChange={e => updateMedia(idx, 'caption', e.currentTarget.value)}
-                placeholder="Açıklama"
-                style={{ flex: 2 }}
-              />
-              <Button color="red" size="xs" onClick={() => removeMedia(idx)}>Sil</Button>
-            </Group>
-          ))}
-          <Button onClick={addMedia} variant="light">Yeni Medya Ekle</Button>
-          <Button onClick={handleSaveMedia} loading={isSaving}>Kaydet</Button>
-        </Stack>
-      </Modal>
-
-      {/* Crop Modal for profile image */}
-      <Modal opened={cropModalOpen} onClose={() => setCropModalOpen(false)} title="Profil Fotoğrafını Kırp" centered size="lg">
-        <div style={{ position: 'relative', width: '100%', height: 300, background: '#222' }}>
-          {rawImageUrl && (
-            <Cropper
-              image={rawImageUrl}
-              crop={crop}
-              zoom={zoom}
-              aspect={1}
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={(_: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)}
-            />
-          )}
-        </div>
-        <Group mt="md" justify="center">
-          <Button
-            onClick={async () => {
-              if (rawImageUrl && croppedAreaPixels) {
-                const blob = await getCroppedImg(rawImageUrl, croppedAreaPixels);
-                setCroppedImage(blob);
-                setImageFile(new File([blob], 'profile.jpg', { type: 'image/jpeg' }));
-                setCropModalOpen(false);
-              }
-            }}
-          >
-            Kırp ve Kullan
-          </Button>
-          <Button variant="light" color="red" onClick={() => setCropModalOpen(false)}>
-            İptal
-          </Button>
-        </Group>
-      </Modal>
-    </Box>
+              Kırp ve Kullan
+            </Button>
+            <Button variant="light" color="red" onClick={() => setCropModalOpen(false)}>
+              İptal
+            </Button>
+          </Group>
+        </Modal>
+      </Box>
+    </>
   );
 }
