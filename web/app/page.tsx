@@ -10,6 +10,7 @@ export default function Home() {
       icon: IconQrcode,
       title: 'QR Kod Oluşturma',
       description: 'Hızlı ve kolay bir şekilde özelleştirilebilir QR kodlar oluşturun.',
+      detail: 'Kendi logonuzu, marka renklerinizi ve farklı QR kod tiplerini kullanarak, kişisel veya kurumsal ihtiyaçlarınıza uygun QR kodlar oluşturabilirsiniz. QR kodlarınızı kolayca yönetebilir, istatistiklerini takip edebilirsiniz.',
       limit: '24 saat içinde 3 QR kod',
       devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
       color: '#228be6'
@@ -18,6 +19,7 @@ export default function Home() {
       icon: IconWifi,
       title: 'WiFi Paylaşımı',
       description: 'WiFi ağlarınızı QR kod ile güvenli bir şekilde paylaşın.',
+      detail: 'Misafirleriniz veya müşterileriniz için WiFi şifresini paylaşmak artık çok kolay. WiFi ağınızı QR kod ile paylaşarak, kullanıcıların tek tıkla ağa bağlanmasını sağlayabilirsiniz. Şifreyi manuel yazmaya gerek kalmaz.',
       limit: 'Sınırsız',
       devices: [IconDeviceMobile, IconDeviceLaptop],
       color: '#40c057'
@@ -26,6 +28,7 @@ export default function Home() {
       icon: IconMail,
       title: 'E-posta Gönderimi',
       description: 'Toplu e-posta gönderimi ve e-posta şablonları ile iletişiminizi kolaylaştırın.',
+      detail: 'Hazır e-posta şablonları ile toplu veya bireysel e-posta gönderebilir, alıcı listenizi kolayca yönetebilirsiniz. Otomatik yanıtlar ve zamanlanmış gönderimler ile iletişiminizi profesyonelleştirin.',
       limit: 'Sınırsız',
       devices: [IconDeviceLaptop, IconDeviceDesktop],
       color: '#fd7e14'
@@ -34,6 +37,7 @@ export default function Home() {
       icon: IconMessage,
       title: 'SMS Gönderimi',
       description: 'Toplu SMS gönderimi ve otomatik mesaj şablonları ile müşterilerinizle iletişimde kalın.',
+      detail: 'Kampanya, bilgilendirme veya onay mesajlarınızı hızlıca gönderebilir, SMS şablonları oluşturabilirsiniz. Gönderim raporları ile iletilerin durumunu anlık olarak takip edin.',
       limit: 'Sınırsız',
       devices: [IconDeviceMobile],
       color: '#fa5252'
@@ -42,6 +46,7 @@ export default function Home() {
       icon: IconAddressBook,
       title: 'vCard Yönetimi',
       description: 'Dijital kartvizitlerinizi oluşturun ve paylaşın.',
+      detail: 'Kişisel veya kurumsal dijital kartvizitler oluşturabilir, iletişim bilgilerinizi, sosyal medya hesaplarınızı ve daha fazlasını ekleyebilirsiniz. QR kod ile kartvizitinizi kolayca paylaşın.',
       limit: 'Sınırsız',
       devices: [IconDeviceMobile, IconDeviceLaptop],
       color: '#7950f2'
@@ -50,9 +55,19 @@ export default function Home() {
       icon: IconLink,
       title: 'URL QR Kod',
       description: 'Web sitenizi, sosyal medya profilinizi veya herhangi bir bağlantıyı QR kod ile paylaşın.',
+      detail: 'Her türlü web sitesi, sosyal medya profili veya özel bağlantıyı QR kod haline getirin. Ziyaretçilerinizi hızlıca istediğiniz sayfaya yönlendirin. Takip ve analiz özellikleriyle bağlantı performansını ölçün.',
       limit: 'Sınırsız',
       devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
       color: '#15aabf'
+    },
+    {
+      icon: IconLink,
+      title: 'Link in Bio',
+      description: 'Tüm sosyal medya ve iletişim linklerinizi tek bir sayfada toplayın, kolayca paylaşın.',
+      detail: 'Instagram, Twitter, LinkedIn gibi tüm sosyal medya ve iletişim kanallarınızı tek bir biyografi sayfasında birleştirin. Kişisel veya kurumsal profilinizi özelleştirin, takipçilerinize tek linkle tüm bağlantılarınızı sunun. Ücretsiz kullanıcılar bir adet Link in Bio oluşturabilir.',
+      limit: 'Ücretsiz kullanıcılar için 1 Link in Bio',
+      devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
+      color: '#e8590c'
     },
   ];
 
@@ -341,11 +356,13 @@ export default function Home() {
                     <Group>
                       <Text fw={700} size="lg">{feature.title}</Text>
                     </Group>
-                    <Text size="sm" c="dimmed">{feature.description}</Text>
+                    <Text size="sm" c="dimmed">{feature.detail}</Text>
                     <Group gap="xs">
-                      <Badge leftSection={<IconDownload size={14} />} color={feature.color} variant="light">
-                        PNG, JPG, SVG
-                      </Badge>
+                      {feature.title !== 'Link in Bio' && (
+                        <Badge leftSection={<IconDownload size={14} />} color={feature.color} variant="light">
+                          PNG, JPG, SVG
+                        </Badge>
+                      )}
                       {feature.limit === 'Sınırsız' ? (
                         <Badge leftSection={<IconInfinity size={14} />} color="green" variant="light">
                           Sınırsız
