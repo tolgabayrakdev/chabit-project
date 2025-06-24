@@ -199,7 +199,10 @@ const MediaGallery: FC<MediaGalleryProps> = ({ media }) => {
 
   return (
     <>
-      <SimpleGrid cols={3} spacing="xs">
+      <SimpleGrid
+        cols={{ base: 1, sm: 2, md: 3 }}
+        spacing="xs"
+      >
         {media.map((item, index) => (
           <Card
             key={index}
