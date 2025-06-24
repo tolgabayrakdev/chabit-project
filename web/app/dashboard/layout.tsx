@@ -49,6 +49,7 @@ export default function DashboardLayout({
         { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
         { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
         { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf' },
+        { icon: IconLink, label: 'Link in Bio', href: '/dashboard/link-in-bio', color: '#e64980' },
     ];
 
     const handleLogout = async () => {
