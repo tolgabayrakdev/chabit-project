@@ -149,6 +149,41 @@ const LinkCard: FC<LinkCardProps> = ({ link, onClick }) => {
   );
 };
 
+// ResponsiveGif bileşeni: GIF'in oranını otomatik ayarlar ve fit="contain" ile gösterir
+const ResponsiveGif: FC<{ url: string; alt?: string }> = ({ url, alt }) => {
+  const [aspectRatio, setAspectRatio] = useState(1);
+
+  useEffect(() => {
+    const img = new window.Image();
+    img.onload = () => {
+      setAspectRatio(img.width / img.height || 1);
+    };
+    img.src = url;
+  }, [url]);
+
+  return (
+    <Box
+      style={{
+        width: '100%',
+        aspectRatio: `${aspectRatio}`,
+        background: '#f8f8f8',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Image
+        src={url}
+        alt={alt}
+        fit="contain"
+        width="100%"
+        height="100%"
+        style={{ maxHeight: '100%', maxWidth: '100%' }}
+      />
+    </Box>
+  );
+};
+
 interface MediaGalleryProps {
   media: MediaItem[];
 }
@@ -174,30 +209,34 @@ const MediaGallery: FC<MediaGalleryProps> = ({ media }) => {
             onClick={() => handleMediaClick(item)}
             className="hover:shadow-lg transition-all duration-200"
           >
-            <Box style={{ position: 'relative', aspectRatio: '1/1' }}>
-              {item.type === 'gif' && (
-                <Box
-                  style={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    zIndex: 2,
-                    background: 'rgba(0,0,0,0.7)',
-                    borderRadius: '4px',
-                    padding: '2px 6px'
-                  }}
-                >
-                  <Text size="xs" c="white" fw={600}>GIF</Text>
-                </Box>
-              )}
-              <Image
-                src={item.url}
-                alt={item.caption || 'Media'}
-                fit="cover"
-                height="100%"
-                width="100%"
-              />
-            </Box>
+            {item.type === 'gif' ? (
+              <ResponsiveGif url={item.url} alt={item.caption || 'Media'} />
+            ) : (
+              <Box style={{ position: 'relative', aspectRatio: '1/1' }}>
+                <Image
+                  src={item.url}
+                  alt={item.caption || 'Media'}
+                  fit="cover"
+                  height="100%"
+                  width="100%"
+                />
+              </Box>
+            )}
+            {item.type === 'gif' && (
+              <Box
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  zIndex: 2,
+                  background: 'rgba(0,0,0,0.7)',
+                  borderRadius: '4px',
+                  padding: '2px 6px'
+                }}
+              >
+                <Text size="xs" c="white" fw={600}>GIF</Text>
+              </Box>
+            )}
           </Card>
         ))}
       </SimpleGrid>
