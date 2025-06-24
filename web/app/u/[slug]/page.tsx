@@ -256,9 +256,6 @@ export default function LinkInBioPage() {
   const [croppedImage, setCroppedImage] = useState<Blob | null>(null);
   const [rawImageUrl, setRawImageUrl] = useState<string | null>(null);
 
-  const pageTitle = profile?.username ? `${profile.username} | VunQR` : `${slug} | VunQR`;
-  const pageDescription = profile?.username ? `${profile.username} link in bio sayfasıdır` : `${slug} link in bio sayfasıdır`;
-
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
@@ -465,10 +462,6 @@ export default function LinkInBioPage() {
 
   return (
     <>
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-      </Head>
       <Box
         style={{
           position: 'relative',
