@@ -170,11 +170,11 @@ const MediaGallery: FC<MediaGalleryProps> = ({ media }) => {
             key={index}
             p={0}
             radius="md"
-            style={{ cursor: 'pointer', overflow: 'hidden' }}
+            style={{ cursor: 'pointer', overflow: 'hidden', height: '100%' }}
             onClick={() => handleMediaClick(item)}
             className="hover:shadow-lg transition-all duration-200"
           >
-            <Box style={{ position: 'relative', aspectRatio: '1/1' }}>
+            <Box style={{ position: 'relative', aspectRatio: '1/1', width: '100%', height: '100%', overflow: 'hidden' }}>
               {item.type === 'gif' && (
                 <Box
                   style={{
@@ -196,6 +196,7 @@ const MediaGallery: FC<MediaGalleryProps> = ({ media }) => {
                 fit="cover"
                 height="100%"
                 width="100%"
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
               />
             </Box>
           </Card>
