@@ -170,6 +170,8 @@ const ResponsiveGif: FC<{ url: string; alt?: string }> = ({ url, alt }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        maxWidth: 600,
+        margin: '0 auto'
       }}
     >
       <Image
@@ -200,22 +202,22 @@ const MediaGallery: FC<MediaGalleryProps> = ({ media }) => {
   return (
     <>
       <SimpleGrid
-        cols={{ base: 1, sm: 2, md: 3 }}
-        spacing="xs"
+        cols={{ base: 1, sm: 2, lg: 2 }}
+        spacing="xl"
       >
         {media.map((item, index) => (
           <Card
             key={index}
             p={0}
             radius="md"
-            style={{ cursor: 'pointer', overflow: 'hidden' }}
+            style={{ cursor: 'pointer', overflow: 'hidden', width: '100%', maxWidth: 600, margin: '0 auto' }}
             onClick={() => handleMediaClick(item)}
             className="hover:shadow-lg transition-all duration-200"
           >
             {item.type === 'gif' ? (
               <ResponsiveGif url={item.url} alt={item.caption || 'Media'} />
             ) : (
-              <Box style={{ position: 'relative', aspectRatio: '1/1' }}>
+              <Box style={{ position: 'relative', aspectRatio: '1/1', width: '100%', maxWidth: 600, margin: '0 auto' }}>
                 <Image
                   src={item.url}
                   alt={item.caption || 'Media'}
@@ -763,6 +765,9 @@ export default function LinkInBioPage() {
 
       <Modal opened={editMediaModalOpen} onClose={() => setEditMediaModalOpen(false)} title="Medya Galerisini Düzenle" centered>
         <Stack gap="md">
+          <Text size="xs" c="dimmed" ta="center">
+            GIF bulmak için <a href="https://giphy.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#0A66C2', textDecoration: 'underline' }}>Giphy</a>'yi ziyaret edebilirsiniz.
+          </Text>
           {mediaDraft.map((item, idx) => (
             <Group key={idx} align="center">
               <Select
