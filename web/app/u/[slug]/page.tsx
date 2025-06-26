@@ -1,17 +1,17 @@
 import LinkInBioPage from "./LinkInBioClient";
+import { Metadata } from "next";
 
-interface PageParams {
-  params: { slug: string };
-}
-
-export async function generateMetadata({ params }: PageParams) {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   const username = params.slug;
+
   return {
     title: `${username} | VunQR`,
-    description: "Tüm sosyal medya, iletişim ve tanıtım linklerinizi sade, şık ve etkili bir sayfada birleştirin.",
+    description:
+      "Tüm sosyal medya, iletişim ve tanıtım linklerinizi sade, şık ve etkili bir sayfada birleştirin.",
     openGraph: {
       title: `${username} | VunQR`,
-      description: "Tüm sosyal medya, iletişim ve tanıtım linklerinizi sade, şık ve etkili bir sayfada birleştirin.",
+      description:
+        "Tüm sosyal medya, iletişim ve tanıtım linklerinizi sade, şık ve etkili bir sayfada birleştirin.",
       url: `https://vunqr.com/u/${username}`,
       images: [
         {
@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: PageParams) {
     twitter: {
       card: "summary",
       title: `${username} | VunQR`,
-      description: "Tüm sosyal medya, iletişim ve tanıtım linklerinizi sade, şık ve etkili bir sayfada birleştirin.",
+      description:
+        "Tüm sosyal medya, iletişim ve tanıtım linklerinizi sade, şık ve etkili bir sayfada birleştirin.",
       images: ["https://vunqr.com/icon.png"],
     },
   };
