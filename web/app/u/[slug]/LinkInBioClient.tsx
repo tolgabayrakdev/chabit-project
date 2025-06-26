@@ -492,9 +492,19 @@ export default function LinkInBioPage() {
   if (error) {
     return (
       <Center style={{ height: '100vh' }}>
-        <Stack align="center">
-          <Title order={3} c="red">{error}</Title>
-          <Button onClick={() => router.push('/dashboard')}>Dashboard'a Dön</Button>
+        <Stack align="center" gap="md">
+          <ThemeIcon size={48} radius="xl" variant="light" color="red">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" fill="#ffe5e5"/>
+              <path d="M9.17 9.17L12 12m0 0l2.83 2.83M12 12l2.83-2.83M12 12l-2.83 2.83" stroke="#e03131" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </ThemeIcon>
+          <Title order={2} c="red" style={{ fontWeight: 800, letterSpacing: 1 }}>Profil Bulunamadı</Title>
+          <Text c="dimmed" ta="center" size="md" style={{ maxWidth: 340 }}>
+            Üzgünüz, aradığınız profil bulunamadı.<br />
+            Ana sayfaya dönmek için aşağıdaki butonu kullanabilirsiniz.
+          </Text>
+          <Button variant="filled" color="blue" size="md" onClick={() => router.push('/')}>Ana Sayfaya Dön</Button>
         </Stack>
       </Center>
     );

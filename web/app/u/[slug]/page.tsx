@@ -1,9 +1,9 @@
 import LinkInBioPage from "./LinkInBioClient";
 import { Metadata } from "next";
 
-export async function generateMetadata({ params }: any): Promise<Metadata> {
-  const username = params.slug;
-
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const awaitedParams = await params;
+  const username = awaitedParams.slug;
   return {
     title: `${username} | VunQR`,
     description:
