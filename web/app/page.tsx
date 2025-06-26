@@ -91,6 +91,10 @@ export default function Home() {
     {
       question: 'vCard oluşturma özelliği nasıl çalışır?',
       answer: 'vCard özelliği ile dijital kartvizitlerinizi oluşturabilir, özelleştirebilir ve QR kod olarak paylaşabilirsiniz. Kartvizitlerinize iletişim bilgilerinizi, sosyal medya hesaplarınızı ve daha fazlasını ekleyebilirsiniz.'
+    },
+    {
+      question: 'Link in Bio nedir ve nasıl kullanılır?',
+      answer: 'Link in Bio, tüm sosyal medya ve iletişim linklerinizi tek bir sayfada toplamanızı sağlar. Profilinizde tek bir bağlantı paylaşarak takipçilerinize tüm önemli linklerinizi sunabilirsiniz. Vunqr ile kolayca Link in Bio oluşturabilir ve özelleştirebilirsiniz.'
     }
   ];
 
@@ -432,6 +436,27 @@ export default function Home() {
         </Container>
       </Box>
 
+      {/* Blog Section */}
+      <Container size="lg" py={80}>
+        <Title order={2} ta="center" mb={30} style={{ fontSize: '2.25rem', fontWeight: 800 }}>
+          Blog
+        </Title>
+        <Text ta="center" size="lg" mb={32} c="dimmed">
+          Güncel yazılarımızı, ipuçlarını ve ilham veren içerikleri blog sayfamızda bulabilirsiniz.
+        </Text>
+        <Box ta="center">
+          <Button
+            size="lg"
+            radius="xl"
+            component={Link}
+            href="/blogs"
+            style={{ background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', color: 'white', fontWeight: 600 }}
+          >
+            Blog Yazılarına Göz At
+          </Button>
+        </Box>
+      </Container>
+
       {/* FAQ Section */}
       <Container size="lg" py={80}>
         <Title 
@@ -484,6 +509,7 @@ export default function Home() {
               <Anchor component={Link} href="/register" c="white" opacity={0.8}>Kayıt Ol</Anchor>
               <Anchor component={Link} href="/dashboard" c="white" opacity={0.8}>Dashboard</Anchor>
               <Anchor component={Link} href="/examples" c="white" opacity={0.8}>Tasarımlar</Anchor>
+              <Anchor component={Link} href="/blogs" c="white" opacity={0.8}>Blog</Anchor>
               <Anchor component={Link} href="/terms" c="white" opacity={0.8}>Kullanım Şartları</Anchor>
               <Anchor component={Link} href="/privacy" c="white" opacity={0.8}>Gizlilik Politikası</Anchor>
             </Stack>
