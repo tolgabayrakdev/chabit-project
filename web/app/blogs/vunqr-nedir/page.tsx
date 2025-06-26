@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import {
   Box,
@@ -18,6 +16,39 @@ function getTodayTR() {
     year: "numeric",
   });
 }
+
+export const metadata = {
+  title: "VunQR Nedir? Dijital Çağın İletişim Aracı | VunQR Blog",
+  description:
+    "VunQR, dijital kartvizit, link-in-bio ve QR kod yönetimi gibi araçlarla iletişimi modernleştirir. İşletmeler ve bireyler için dijital çözümler sunar.",
+  keywords:
+    "VunQR, QR Kod Oluşturucu, Link in Bio, Dijital Kartvizit, Sosyal Medya Profili, QR Pazarlama, Cloudinary",
+  openGraph: {
+    title: "VunQR Nedir? Dijital İletişimde Yeni Dönem",
+    description:
+      "QR kod, link-in-bio ve daha fazlasıyla dijital varlığınızı yönetin. VunQR ile tanışın.",
+    url: "https://vunqr.com/blogs/vunqr-nedir",
+    type: "article",
+    siteName: "VunQR",
+    images: [
+      {
+        url: "https://vunqr.com/icon.png",
+        width: 600,
+        height: 315,
+        alt: "VunQR Dijital Araçlar",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VunQR Nedir? Dijital Dünyada Yeni Bir Başlangıç",
+    description:
+      "QR kodlar, sosyal medya bağlantıları ve dijital kartvizitlerle iletişiminizi sadeleştirin.",
+    images: ["https://vunqr.com/icon.png"],
+  },
+
+};
+
 
 const bannerText = {
   title: "Vunqr Blog",
