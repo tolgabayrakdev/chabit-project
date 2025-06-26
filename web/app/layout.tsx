@@ -38,8 +38,12 @@ export const metadata: Metadata = {
     title: "Dijital İletişim Çözümleri | VunQR",
     description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle işletmenizin dijital varlığını güçlendirin.",
   },
-  viewport: "width=device-width, initial-scale=1"
 };
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 
 export default function RootLayout({
   children,
