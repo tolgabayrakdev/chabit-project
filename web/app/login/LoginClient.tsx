@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Box, Stack, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 export default function LoginClient() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const router = useRouter();
   const form = useForm({
     initialValues: {
@@ -19,6 +20,19 @@ export default function LoginClient() {
       password: (value) => (value.length < 6 ? 'Şifre en az 6 karakter olmalıdır' : null),
     },
   });
+
+  useEffect(() => {
+    // Giriş kontrolü
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(res => {
+        if (res.ok) {
+          router.replace('/dashboard');
+        } else {
+          setCheckingAuth(false);
+        }
+      })
+      .catch(() => setCheckingAuth(false));
+  }, [router]);
 
   const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
@@ -46,6 +60,14 @@ export default function LoginClient() {
       setLoading(false);
     }
   };
+
+  if (checkingAuth) {
+    return (
+      <Box style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)' }}>
+        <Text style={{ color: 'white', fontSize: 20 }}>Yükleniyor...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box

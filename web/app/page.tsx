@@ -464,22 +464,22 @@ export default function Home() {
         style={{ 
           background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)',
           color: 'white',
-          padding: `${rem(60)} 0`
+          padding: `${rem(90)} 0 ${rem(30)} 0`
         }}
       >
         <Container size="lg">
-          <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="xl">
-            <Stack gap="xs">
-              <Text fw={700} size="lg">Hakkımızda</Text>
-              <Text size="sm" c="white" opacity={0.8}>
+          <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="md">
+            <Stack gap={4}>
+              <Text fw={700} size="md">Hakkımızda</Text>
+              <Text size="xs" c="white" opacity={0.8}>
                 Dijital iletişim çözümleri sunan modern ve kullanıcı dostu bir platform.
               </Text>
-              <Text size="sm" c="white" opacity={0.8}>
+              <Text size="xs" c="white" opacity={0.8}>
                 İletişim: <a href="mailto:vunqrdotcom@gmail.com" style={{ color: 'white', textDecoration: 'underline' }}>vunqrdotcom@gmail.com</a>
               </Text>
             </Stack>
-            <Stack gap="xs">
-              <Text fw={700} size="lg">Hızlı Bağlantılar</Text>
+            <Stack gap={4}>
+              <Text fw={700} size="md">Hızlı Bağlantılar</Text>
               <Anchor component={Link} href="/login" c="white" opacity={0.8}>Giriş Yap</Anchor>
               <Anchor component={Link} href="/register" c="white" opacity={0.8}>Kayıt Ol</Anchor>
               <Anchor component={Link} href="/dashboard" c="white" opacity={0.8}>Dashboard</Anchor>
@@ -487,18 +487,19 @@ export default function Home() {
               <Anchor component={Link} href="/terms" c="white" opacity={0.8}>Kullanım Şartları</Anchor>
               <Anchor component={Link} href="/privacy" c="white" opacity={0.8}>Gizlilik Politikası</Anchor>
             </Stack>
-            <Stack gap="xs">
-              <Text fw={700} size="lg">Özellikler</Text>
+            <Stack gap={4}>
+              <Text fw={700} size="md">Özellikler</Text>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>QR Kod Oluşturma</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>WiFi Paylaşımı</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>E-posta Gönderimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>SMS Gönderimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>vCard Yönetimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>URL QR Kod</Anchor>
+              <Anchor component={Link} href="#features" c="white" opacity={0.8}>Link in Bio</Anchor>
             </Stack>
-            <Stack gap="xs">
-              <Text fw={700} size="lg">Bizi Takip Edin</Text>
-              <Group gap="xs">
+            <Stack gap={4}>
+              <Text fw={700} size="md">Bizi Takip Edin</Text>
+              <Group gap={4}>
                 <Anchor href="https://instagram.com/vunqrdotcom" target="_blank" c="white" opacity={0.8}>
                   <IconBrandInstagram size={20} />
                 </Anchor>
@@ -511,8 +512,8 @@ export default function Home() {
               </Group>
             </Stack>
           </SimpleGrid>
-          <Divider my="xl" color="white" opacity={0.2} />
-          <Text ta="center" size="sm" c="white" opacity={0.8}>
+          <Divider my={32} color="white" opacity={0.2} />
+          <Text ta="center" size="xs" c="white" opacity={0.8}>
             © 2025 VunQR - Dijital İletişim Çözümleri. Tüm hakları saklıdır.
           </Text>
         </Container>
