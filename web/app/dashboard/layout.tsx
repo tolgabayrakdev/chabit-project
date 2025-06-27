@@ -2,11 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar, Menu } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthProvider from '@/providers/auth-provider';
 import { useMediaQuery } from '@mantine/hooks';
+
+// Nav item tipi tanımı
+interface NavChild {
+    icon: any;
+    label: string;
+    href: string;
+    color: string;
+}
+interface NavItem extends NavChild {
+    children?: NavChild[];
+}
 
 export default function DashboardLayout({
     children,
@@ -42,14 +53,44 @@ export default function DashboardLayout({
         fetchUserData();
     }, []);
 
-    const navItems = [
-        { icon: IconQrcode, label: 'QR Kodlarım', href: '/dashboard', color: '#228be6' },
-        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi', color: '#40c057' },
-        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14' },
-        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
-        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
-        { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf' },
-        { icon: IconLink, label: 'Link in Bio', href: '/dashboard/link-in-bio', color: '#e64980' },
+    const navGroups: { label: string; items: NavItem[] }[] = [
+        {
+            label: '',
+            items: [
+                { icon: IconHome, label: 'Anasayfa', href: '/dashboard', color: '#228be6' },
+            ],
+        },
+        {
+            label: 'QR Kodlarım',
+            items: [
+                {
+                    icon: IconQrcode,
+                    label: 'QR Kodlarım',
+                    href: '/dashboard',
+                    color: '#228be6',
+                    children: [
+                        { icon: IconList, label: 'Tüm QR Kodlar', href: '/dashboard/qr-codes', color: '#228be6' },
+                        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi', color: '#40c057' },
+                        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14' },
+                        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
+                        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
+                        { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf' },
+                    ]
+                },
+            ],
+        },
+        {
+            label: 'Link in Bio',
+            items: [
+                { icon: IconLink, label: 'Link in Bio', href: '/dashboard/link-in-bio', color: '#e64980' },
+            ],
+        },
+        {
+            label: 'Menü Oluşturma',
+            items: [
+                { icon: IconSettings, label: 'Menü Oluştur', href: '/dashboard/menu', color: '#fab005' },
+            ],
+        },
     ];
 
     const handleLogout = async () => {
@@ -137,31 +178,106 @@ export default function DashboardLayout({
                 <AppShell.Navbar p="md" style={{ background: 'white' }}>
                     <Stack h="100%" justify="space-between">
                         <div>
-                            {navItems.map((item) => (
-                                <NavLink
-                                    key={item.href}
-                                    component={Link}
-                                    href={item.href}
-                                    label={item.label}
-                                    leftSection={
-                                        <ThemeIcon size={34} radius="md" color={item.color}>
-                                            <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
-                                        </ThemeIcon>
-                                    }
-                                    active={pathname === item.href}
-                                    style={{
-                                        borderRadius: 'md',
-                                        marginBottom: '0.5rem',
-                                        transition: 'all 0.2s ease',
-                                        backgroundColor: pathname === item.href ? `${item.color}15` : 'transparent',
-                                        color: pathname === item.href ? item.color : 'inherit',
-                                        '&:hover': {
-                                            backgroundColor: `${item.color}15`,
-                                            color: item.color,
+                            {navGroups.map((group, idx) => (
+                                <Box key={group.label} mb="sm">
+                                    <Text size="xs" fw={700} c="dimmed" mb={4} pl={4}>{group.label}</Text>
+                                    {group.items.map((item) => {
+                                        if (item.children) {
+                                            return (
+                                                <React.Fragment key={item.href}>
+                                                    <NavLink
+                                                        label={item.label}
+                                                        leftSection={
+                                                            <ThemeIcon size={34} radius="md" color={item.color}>
+                                                                <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                            </ThemeIcon>
+                                                        }
+                                                        active={pathname !== '/dashboard' && (pathname === item.href || item.children.some((child: { href: string }) => pathname === child.href))}
+                                                        style={{
+                                                            borderRadius: 'md',
+                                                            marginBottom: '0.5rem',
+                                                            transition: 'all 0.2s ease',
+                                                            backgroundColor: pathname !== '/dashboard' && (pathname === item.href || item.children.some((child: { href: string }) => pathname === child.href)) ? `${item.color}15` : 'transparent',
+                                                            color: pathname !== '/dashboard' && (pathname === item.href || item.children.some((child: { href: string }) => pathname === child.href)) ? item.color : 'inherit',
+                                                            overflow: 'hidden',
+                                                            whiteSpace: 'nowrap',
+                                                            textOverflow: 'ellipsis',
+                                                            maxWidth: '100%',
+                                                            '&:hover': {
+                                                                backgroundColor: `${item.color}15`,
+                                                                color: item.color,
+                                                            }
+                                                        }}
+                                                        defaultOpened={item.children.some((child: { href: string }) => pathname === child.href)}
+                                                    >
+                                                        {item.children.map((child: { icon: any; label: string; href: string; color: string }) => (
+                                                            <NavLink
+                                                                key={child.href}
+                                                                component={Link}
+                                                                href={child.href}
+                                                                label={child.label}
+                                                                leftSection={
+                                                                    <ThemeIcon size={28} radius="md" color={child.color}>
+                                                                        <child.icon style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                                                                    </ThemeIcon>
+                                                                }
+                                                                active={pathname === child.href}
+                                                                style={{
+                                                                    borderRadius: 'md',
+                                                                    marginBottom: '0.3rem',
+                                                                    marginLeft: '1.5rem',
+                                                                    backgroundColor: pathname === child.href ? `${child.color}15` : 'transparent',
+                                                                    color: pathname === child.href ? child.color : 'inherit',
+                                                                    overflow: 'hidden',
+                                                                    whiteSpace: 'nowrap',
+                                                                    textOverflow: 'ellipsis',
+                                                                    maxWidth: '90%',
+                                                                    '&:hover': {
+                                                                        backgroundColor: `${child.color}15`,
+                                                                        color: child.color,
+                                                                    }
+                                                                }}
+                                                                onClick={() => { if (isMobile) setOpened(false); }}
+                                                            />
+                                                        ))}
+                                                    </NavLink>
+                                                </React.Fragment>
+                                            );
+                                        } else {
+                                            return (
+                                                <NavLink
+                                                    key={item.href}
+                                                    component={Link}
+                                                    href={item.href}
+                                                    label={item.label}
+                                                    leftSection={
+                                                        <ThemeIcon size={34} radius="md" color={item.color}>
+                                                            <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                        </ThemeIcon>
+                                                    }
+                                                    active={pathname === item.href}
+                                                    style={{
+                                                        borderRadius: 'md',
+                                                        marginBottom: '0.5rem',
+                                                        transition: 'all 0.2s ease',
+                                                        backgroundColor: pathname === item.href ? `${item.color}15` : 'transparent',
+                                                        color: pathname === item.href ? item.color : 'inherit',
+                                                        overflow: 'hidden',
+                                                        whiteSpace: 'nowrap',
+                                                        textOverflow: 'ellipsis',
+                                                        maxWidth: '100%',
+                                                        '&:hover': {
+                                                            backgroundColor: `${item.color}15`,
+                                                            color: item.color,
+                                                        }
+                                                    }}
+                                                    onClick={() => { if (isMobile) setOpened(false); }}
+                                                />
+                                            );
                                         }
-                                    }}
-                                    onClick={() => { if (isMobile) setOpened(false); }}
-                                />
+                                    })}
+                                    {idx < navGroups.length - 1 && <Divider my="xs" />}
+                                </Box>
                             ))}
                         </div>
                         <div>

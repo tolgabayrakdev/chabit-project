@@ -48,7 +48,6 @@ export default function LoginClient() {
       })
 
       if (response.ok) {
-        setLoading(false);
         router.push('/dashboard');
       } else {
         const data = await response.json();

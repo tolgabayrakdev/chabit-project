@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconLink, IconSettings, IconClock } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -13,22 +13,6 @@ interface QRCode {
     qr_code_image: string;
 }
 
-const getTypeColor = (type: string) => {
-    switch (type) {
-        case 'wifi':
-            return '#40c057'; // Yeşil
-        case 'mail':
-            return '#fd7e14'; // Turuncu
-        case 'sms':
-            return '#fa5252'; // Kırmızı
-        case 'vcard':
-            return '#7950f2'; // Mor
-        case 'url':
-            return '#228be6'; // Mavi
-        default:
-            return 'gray';
-    }
-};
 
 const getTypeLabel = (type: string) => {
     switch (type) {
@@ -50,8 +34,7 @@ const getTypeLabel = (type: string) => {
 export default function DashboardPage() {
     const [qrCodes, setQRCodes] = useState<QRCode[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
-    const [opened, { open, close }] = useDisclosure(false);
+    const [historyOpened, { open: openHistory, close: closeHistory }] = useDisclosure(false);
 
     useEffect(() => {
         const fetchQRCodes = async () => {
@@ -78,173 +61,91 @@ export default function DashboardPage() {
         fetchQRCodes();
     }, []);
 
-    const handleDownload = async (qrCode: QRCode, format: 'png' | 'jpg' | 'svg') => {
-        try {
-            // QR kod görselini indir
-            const response = await fetch(`${qrCode.qr_code_image}?format=${format}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': `image/${format}`,
-                },
-            });
-            const blob = await response.blob();
-
-            // İndirme bağlantısı oluştur
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-
-            // Dosya adını oluştur
-            const fileName = `${qrCode.label || qrCode.type}_${new Date().getTime()}.${format}`;
-            link.download = fileName;
-
-            // İndirmeyi başlat
-            document.body.appendChild(link);
-            link.click();
-
-            // Temizlik
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('QR kod indirme hatası:', error);
-        }
-    };
-
-    const handleDelete = async (qrCode: QRCode) => {
-        setSelectedQR(qrCode);
-        open();
-    };
-
-    const confirmDelete = async () => {
-        if (!selectedQR) return;
-
-        try {
-            const response = await fetch(`/api/qr/${selectedQR.id}`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                setQRCodes(qrCodes.filter(qr => qr.id !== selectedQR.id));
-                close();
-            } else {
-                console.error('QR kod silme hatası:', await response.text());
-            }
-        } catch (error) {
-            console.error('QR kod silme hatası:', error);
-        }
-    };
 
     return (
         <Container size="lg">
-            <Title order={2} mb="xl">QR Kodlarım</Title>
-
-            <Modal opened={opened} onClose={close} title="QR Kodu Sil" centered>
-                <Text>Bu QR kodu silmek istediğinizden emin misiniz?</Text>
-                <Text size="sm" c="dimmed" mt="xs">
-                    {selectedQR?.label || getTypeLabel(selectedQR?.type || '')}
-                </Text>
-                <Group justify="flex-end" mt="xl">
-                    <Button variant="default" onClick={close}>İptal</Button>
-                    <Button color="red" onClick={confirmDelete}>Sil</Button>
+            <Title order={2} mb="xl">Dashboard</Title>
+            <Card withBorder p="xl" radius="lg" mb="xl" style={{ background: '#fff', boxShadow: '0 4px 24px rgba(34, 139, 230, 0.08)', border: '1px solid #e3e8ee' }}>
+                <Group justify="space-between" align="center" mb="xl">
+                    <div>
+                        <Title order={3} mb={4} style={{ fontWeight: 700, fontSize: 28 }}>İstatistikler</Title>
+                        <Text c="dimmed" size="md" style={{ fontWeight: 500 }}>Hesabınıza ait özet bilgiler</Text>
+                    </div>
+                    <Button variant="light" color="blue" size="sm" onClick={openHistory}>Daha Fazla</Button>
                 </Group>
+                <Group gap="xl" mb="md" style={{ justifyContent: 'center' }}>
+                    <Card withBorder radius="lg" p="lg" style={{ minWidth: 200, minHeight: 140, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 2px 8px rgba(34, 139, 230, 0.06)' }}>
+                        <IconQrcode size={36} color="#228be6" style={{ marginBottom: 8 }} />
+                        <Text size="xs" c="dimmed" mb={4}>Toplam QR Kod</Text>
+                        {loading ? (
+                            <Center style={{ minHeight: 40 }}><Loader size="sm" /></Center>
+                        ) : (
+                            <Title order={2}>{qrCodes.length}</Title>
+                        )}
+                    </Card>
+                    <Card withBorder radius="lg" p="lg" style={{ minWidth: 200, minHeight: 140, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 2px 8px rgba(34, 139, 230, 0.06)' }}>
+                        <IconClock size={36} color="#fd7e14" style={{ marginBottom: 8 }} />
+                        <Text size="xs" c="dimmed" mb={4}>Son Oluşturulan QR</Text>
+                        {loading ? (
+                            <Center style={{ minHeight: 40 }}><Loader size="sm" /></Center>
+                        ) : (
+                            <Title order={2}>{qrCodes[0]?.label || 'Yok'}</Title>
+                        )}
+                    </Card>
+                    <Card withBorder radius="lg" p="lg" style={{ minWidth: 200, minHeight: 140, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 2px 8px rgba(34, 139, 230, 0.06)' }}>
+                        <IconSettings size={36} color="#40c057" style={{ marginBottom: 8 }} />
+                        <Text size="xs" c="dimmed" mb={4}>Aktif Özellikler</Text>
+                        {loading ? (
+                            <Center style={{ minHeight: 40 }}><Loader size="sm" /></Center>
+                        ) : (
+                            <Title order={2}>7</Title>
+                        )}
+                    </Card>
+                </Group>
+                <Group mt="md">
+                    <Card withBorder radius="md" p="md" style={{ minWidth: 380, minHeight: 120, flex: 1, background: '#f1f3f5' }}>
+                        <Text c="dimmed" size="sm" ta="center" mt={30}>
+                            (Buraya yakında grafik ve gelişmiş istatistikler eklenecek)
+                        </Text>
+                    </Card>
+                </Group>
+            </Card>
+            <Card withBorder p="xl" radius="md" mt="xl">
+                <Title order={4} mb="md">Aktif Özellikler</Title>
+                <Stack gap="sm">
+                    <Group>
+                        <Badge color="blue" leftSection={<IconQrcode size={16} />}>QR Kod Oluşturma</Badge>
+                        <Badge color="cyan" leftSection={<IconLink size={16} />}>Link in Bio</Badge>
+                        <Badge color="yellow" leftSection={<IconSettings size={16} />}>Menü Oluşturma</Badge>
+                    </Group>
+                    <Group>
+                        <Badge color="green" leftSection={<IconWifi size={16} />}>WiFi QR Kod</Badge>
+                        <Badge color="orange" leftSection={<IconMail size={16} />}>E-posta QR Kod</Badge>
+                        <Badge color="red" leftSection={<IconMessage size={16} />}>SMS QR Kod</Badge>
+                        <Badge color="grape" leftSection={<IconAddressBook size={16} />}>vCard QR Kod</Badge>
+                        <Badge color="teal" leftSection={<IconLink size={16} />}>URL QR Kod</Badge>
+                    </Group>
+                </Stack>
+            </Card>
+            <Modal opened={historyOpened} onClose={closeHistory} title="QR Kod Geçmişi" size="lg" centered>
+                {loading ? (
+                    <Center style={{ minHeight: 120 }}><Loader size="md" /></Center>
+                ) : qrCodes.length === 0 ? (
+                    <Text c="dimmed">Henüz QR kodu oluşturulmamış.</Text>
+                ) : (
+                    <Stack>
+                        {qrCodes.map(qr => (
+                            <Group key={qr.id} align="center" gap={6} style={{ borderBottom: '1px solid #f3f4f6', padding: '2px 0' }}>
+                                <Image src={qr.qr_code_image} alt={qr.label || qr.type} style={{ width: 180, height: 180 }} radius="xl" />
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                    <Text fw={500} size="sm">{qr.label || 'Etiket Yok'}</Text>
+                                    <Text size="xs" c="dimmed">{getTypeLabel(qr.type)} • {new Date(qr.created_at).toLocaleString('tr-TR')}</Text>
+                                </div>
+                            </Group>
+                        ))}
+                    </Stack>
+                )}
             </Modal>
-
-            {loading ? (
-                <Center style={{ height: '50vh' }}>
-                    <Stack align="center" gap="md">
-                        <Text c="dimmed" size="lg">QR Kodlar Yükleniyor...</Text>
-                    </Stack>
-                </Center>
-            ) : qrCodes.length > 0 ? (
-                <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
-                    {qrCodes.map((qr) => (
-                        <Card key={qr.id} padding={0} radius="md" withBorder>
-                            <Card.Section>
-                                <Image
-                                    src={`${qr.qr_code_image}`}
-                                    alt={qr.label || qr.type}
-                                    height={200}
-                                />
-                            </Card.Section>
-
-                            <Stack p="md" gap="sm">
-                                <Group justify="space-between">
-                                    <Text fw={700} size="lg" truncate>
-                                        {qr.label || getTypeLabel(qr.type)}
-                                    </Text>
-                                    <Badge color={getTypeColor(qr.type)} variant="light">
-                                        {getTypeLabel(qr.type)}
-                                    </Badge>
-                                </Group>
-                                <Text size="xs" c="dimmed">
-                                    Oluşturulma: {new Date(qr.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                </Text>
-                            </Stack>
-
-                            <Card.Section withBorder inheritPadding py="sm">
-                                <Group grow>
-                                    <Menu shadow="md" width={150} position="top" withArrow>
-                                        <Menu.Target>
-                                            <Button
-                                                variant="light"
-                                                color="blue"
-                                                leftSection={<IconDownload size={20} />}
-                                            >
-                                                İndir
-                                            </Button>
-                                        </Menu.Target>
-                                        <Menu.Dropdown>
-                                            <Menu.Item
-                                                leftSection={<IconFileTypePng size={20} />}
-                                                onClick={() => handleDownload(qr, 'png')}
-                                            >
-                                                PNG
-                                            </Menu.Item>
-                                            <Menu.Item
-                                                leftSection={<IconFileTypeJpg size={20} />}
-                                                onClick={() => handleDownload(qr, 'jpg')}
-                                            >
-                                                JPG
-                                            </Menu.Item>
-                                            <Menu.Item
-                                                leftSection={<IconFileTypeSvg size={20} />}
-                                                onClick={() => handleDownload(qr, 'svg')}
-                                            >
-                                                SVG
-                                            </Menu.Item>
-                                        </Menu.Dropdown>
-                                    </Menu>
-                                    <Button
-                                        variant="light"
-                                        color="red"
-                                        leftSection={<IconTrash size={20} />}
-                                        onClick={() => handleDelete(qr)}
-                                    >
-                                        Sil
-                                    </Button>
-                                </Group>
-                            </Card.Section>
-                        </Card>
-                    ))}
-                </SimpleGrid>
-            ) : (
-                <Card withBorder p="xl" radius="md">
-                    <Stack align="center" py="xl">
-                        <IconQrcode size={48} stroke={1.5} color="gray" />
-                        <Text size="lg" fw={500}>
-                            Henüz QR kodunuz yok
-                        </Text>
-                        <Text c="dimmed" ta="center">
-                            Sol menüden yeni bir QR kod oluşturabilirsiniz
-                        </Text>
-                    </Stack>
-                </Card>
-            )}
         </Container>
     );
 }
