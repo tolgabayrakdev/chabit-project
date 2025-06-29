@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconLink, IconSettings, IconClock } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconLink, IconSettings, IconClock, IconFileTypePdf } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -117,6 +117,7 @@ export default function DashboardPage() {
                         <Badge color="blue" leftSection={<IconQrcode size={16} />}>QR Kod Oluşturma</Badge>
                         <Badge color="cyan" leftSection={<IconLink size={16} />}>Link in Bio</Badge>
                         <Badge color="yellow" leftSection={<IconSettings size={16} />}>Menü Oluşturma</Badge>
+                        <Badge color="indigo" leftSection={<IconFileTypePdf size={16} />}>PDF Menü</Badge>
                     </Group>
                     <Group>
                         <Badge color="green" leftSection={<IconWifi size={16} />}>WiFi QR Kod</Badge>
