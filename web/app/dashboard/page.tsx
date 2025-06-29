@@ -98,7 +98,7 @@ export default function DashboardPage() {
                         {loading ? (
                             <Center style={{ minHeight: 40 }}><Loader size="sm" /></Center>
                         ) : (
-                            <Title order={2}>7</Title>
+                            <Title order={2}>8</Title>
                         )}
                     </Card>
                 </Group>
