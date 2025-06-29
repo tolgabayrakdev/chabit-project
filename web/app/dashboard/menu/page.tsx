@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, TextInput, FileInput, Paper, Divider, ActionIcon, Tooltip, ThemeIcon } from '@mantine/core';
-import { IconFileTypePdf, IconUpload, IconTrash, IconEye, IconDownload, IconPlus, IconFile, IconEdit, IconExternalLink } from '@tabler/icons-react';
+import { IconFileTypePdf, IconUpload, IconTrash, IconEye, IconDownload, IconPlus, IconFile, IconEdit, IconExternalLink, IconQrcode, IconCopy, IconCheck } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
+import { useRouter } from 'next/navigation';
 
 interface Menu {
     id: string;
@@ -21,8 +22,12 @@ export default function MenusPage() {
     const [uploading, setUploading] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
     const [opened, { open, close }] = useDisclosure(false);
-    const [uploadOpened, { open: openUpload, close: closeUpload }] = useDisclosure(false);
     const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+    const [successOpened, { open: openSuccess, close: closeSuccess }] = useDisclosure(false);
+    const [newlyCreatedMenu, setNewlyCreatedMenu] = useState<Menu | null>(null);
+    const [copied, setCopied] = useState(false);
+    const [copiedMenuId, setCopiedMenuId] = useState<string | null>(null);
+    const router = useRouter();
     const [formData, setFormData] = useState({
         name: '',
         menuPdf: null as File | null
@@ -86,12 +91,9 @@ export default function MenusPage() {
             });
 
             if (response.ok) {
-                notifications.show({
-                    title: 'Başarılı',
-                    message: 'Menü başarıyla yüklendi',
-                    color: 'green'
-                });
-                closeUpload();
+                const newMenu = await response.json();
+                setNewlyCreatedMenu(newMenu);
+                openSuccess();
                 setFormData({ name: '', menuPdf: null });
                 fetchMenus();
             } else {
@@ -112,6 +114,54 @@ export default function MenusPage() {
         } finally {
             setUploading(false);
         }
+    };
+
+    const copyMenuUrl = async () => {
+        if (!newlyCreatedMenu) return;
+        
+        const menuUrl = `${window.location.origin}/menu/${newlyCreatedMenu.id}`;
+        try {
+            await navigator.clipboard.writeText(menuUrl);
+            setCopied(true);
+            notifications.show({
+                title: 'Başarılı',
+                message: 'Menü URL\'si kopyalandı',
+                color: 'green'
+            });
+            setTimeout(() => setCopied(false), 2000);
+        } catch (error) {
+            notifications.show({
+                title: 'Hata',
+                message: 'URL kopyalanamadı',
+                color: 'red'
+            });
+        }
+    };
+
+    const copyExistingMenuUrl = async (menuId: string) => {
+        const menuUrl = `${window.location.origin}/menu/${menuId}`;
+        try {
+            await navigator.clipboard.writeText(menuUrl);
+            setCopiedMenuId(menuId);
+            notifications.show({
+                title: 'Başarılı',
+                message: 'Menü URL\'si kopyalandı',
+                color: 'green'
+            });
+            setTimeout(() => setCopiedMenuId(null), 2000);
+        } catch (error) {
+            notifications.show({
+                title: 'Hata',
+                message: 'URL kopyalanamadı',
+                color: 'red'
+            });
+        }
+    };
+
+    const goToQrCreation = () => {
+        if (!newlyCreatedMenu) return;
+        const menuUrl = `${window.location.origin}/menu/${newlyCreatedMenu.id}`;
+        router.push(`/dashboard/url?url=${encodeURIComponent(menuUrl)}`);
     };
 
     const handleDelete = async (menu: Menu) => {
@@ -314,13 +364,14 @@ export default function MenusPage() {
                         />
                     </Stack>
                     <Button
-                        onClick={openUpload}
+                        onClick={handleUpload}
                         disabled={!formData.name || !formData.menuPdf}
                         radius="xl"
                         size="md"
                         color="#fab005"
                         style={{ width: "100%" }}
                         leftSection={<IconPlus size={16} />}
+                        loading={uploading}
                     >
                         Menü Ekle
                     </Button>
@@ -379,6 +430,14 @@ export default function MenusPage() {
                                                 <IconDownload size={16} />
                                             </ActionIcon>
                                             <ActionIcon 
+                                                color="orange" 
+                                                variant="subtle" 
+                                                onClick={() => copyExistingMenuUrl(menu.id)}
+                                                size="md"
+                                            >
+                                                {copiedMenuId === menu.id ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                                            </ActionIcon>
+                                            <ActionIcon 
                                                 color="red" 
                                                 variant="subtle" 
                                                 onClick={() => handleDelete(menu)}
@@ -401,34 +460,67 @@ export default function MenusPage() {
                 </Paper>
             )}
 
-            {/* Upload Modal */}
-            <Modal opened={uploadOpened} onClose={closeUpload} title="Yeni Menü Ekle" centered size="md" styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}>
-                <Stack gap="md">
-                    <TextInput
-                        label="Menü Adı"
-                        placeholder="Menü adını girin"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                    />
-                    <FileInput
-                        label="PDF Dosyası"
-                        placeholder="PDF dosyası seçin"
-                        accept=".pdf"
-                        leftSection={<IconFile size={16} />}
-                        value={formData.menuPdf}
-                        onChange={(file) => setFormData({ ...formData, menuPdf: file })}
-                        required
-                    />
-                    <Group justify="flex-end" mt="md" gap="xs">
-                        <Button variant="default" onClick={closeUpload} size="sm">İptal</Button>
-                        <Button 
-                            onClick={handleUpload} 
-                            loading={uploading}
-                            disabled={!formData.name || !formData.menuPdf}
+            {/* Success Modal */}
+            <Modal 
+                opened={successOpened} 
+                onClose={closeSuccess} 
+                title={
+                    <Group gap="sm">
+                        <ThemeIcon color="green" size="sm" radius="xl">
+                            <IconCheck size={16} />
+                        </ThemeIcon>
+                        <Text fw={600}>Menü Başarıyla Oluşturuldu!</Text>
+                    </Group>
+                } 
+                centered 
+                size="md"
+                styles={{ 
+                    root: { '@media (maxWidth: 768px)': { width: '95%' } },
+                    title: { fontSize: '1.1rem' }
+                }}
+            >
+                <Stack gap="lg">
+                    <Text size="sm" c="dimmed">
+                        <strong>{newlyCreatedMenu?.name}</strong> menünüz başarıyla yüklendi. 
+                        Müşterilerinizle paylaşmak için aşağıdaki seçenekleri kullanabilirsiniz:
+                    </Text>
+                    
+                    <Paper p="md" radius="md" withBorder style={{ background: '#f8f9fa' }}>
+                        <Text size="xs" fw={600} c="dimmed" mb="xs">Menü URL'si:</Text>
+                        <Text size="sm" style={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
+                            {newlyCreatedMenu ? `${window.location.origin}/menu/${newlyCreatedMenu.id}` : ''}
+                        </Text>
+                    </Paper>
+
+                    <Group gap="sm" justify="center">
+                        <Button
+                            variant="outline"
+                            leftSection={copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                            onClick={copyMenuUrl}
                             size="sm"
+                            color={copied ? "green" : "blue"}
                         >
-                            Yükle
+                            {copied ? 'Kopyalandı!' : 'URL Kopyala'}
+                        </Button>
+                        <Button
+                            leftSection={<IconQrcode size={16} />}
+                            onClick={goToQrCreation}
+                            size="sm"
+                            color="#fab005"
+                        >
+                            QR Kod Oluştur
+                        </Button>
+                    </Group>
+
+                    <Divider />
+
+                    <Text size="xs" c="dimmed" ta="center">
+                        QR kod oluşturarak menünüzü fiziksel olarak da paylaşabilirsiniz.
+                    </Text>
+
+                    <Group justify="center" mt="md">
+                        <Button variant="default" onClick={closeSuccess} size="sm">
+                            Tamam
                         </Button>
                     </Group>
                 </Stack>

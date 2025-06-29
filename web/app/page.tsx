@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group, Card, SimpleGrid, Box, Stack, Badge, Image, Paper, rem, ThemeIcon, Divider, Anchor } from '@mantine/core';
 import { Accordion, AccordionItem, AccordionControl, AccordionPanel } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -61,6 +61,15 @@ export default function Home() {
       color: '#15aabf'
     },
     {
+      icon: IconFileTypePdf,
+      title: 'PDF Menü Yönetimi',
+      description: 'Restoran menülerinizi dijital ortamda yönetin ve müşterilerinizle paylaşın.',
+      detail: 'PDF menülerinizi kolayca yükleyin ve vunqr.com/menu/menu-id adresiyle müşterilerinizle paylaşın. Menülerinizi güncelleyebilir, indirebilir ve yönetebilirsiniz. Müşterileriniz menülerinize her yerden erişebilir.',
+      limit: 'Ücretsiz kullanıcılar için 1 menü',
+      devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
+      color: '#fab005'
+    },
+    {
       icon: IconLink,
       title: 'Link in Bio',
       description: 'Tüm sosyal medya ve iletişim linklerinizi tek bir sayfada toplayın, kolayca paylaşın.',
@@ -91,6 +100,10 @@ export default function Home() {
     {
       question: 'vCard oluşturma özelliği nasıl çalışır?',
       answer: 'vCard özelliği ile dijital kartvizitlerinizi oluşturabilir, özelleştirebilir ve QR kod olarak paylaşabilirsiniz. Kartvizitlerinize iletişim bilgilerinizi, sosyal medya hesaplarınızı ve daha fazlasını ekleyebilirsiniz.'
+    },
+    {
+      question: 'PDF menü yönetimi nasıl çalışır?',
+      answer: 'PDF menü yönetimi ile restoran menülerinizi dijital ortamda yönetebilirsiniz. PDF dosyanızı yükleyin ve vunqr.com/menu/menu-id adresiyle müşterilerinizle paylaşın. Menülerinizi güncelleyebilir, indirebilir ve kolayca yönetebilirsiniz.'
     },
     {
       question: 'Link in Bio nedir ve nasıl kullanılır?',
@@ -521,6 +534,7 @@ export default function Home() {
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>SMS Gönderimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>vCard Yönetimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>URL QR Kod</Anchor>
+              <Anchor component={Link} href="#features" c="white" opacity={0.8}>PDF Menü Yönetimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>Link in Bio</Anchor>
             </Stack>
             <Stack gap={4}>
