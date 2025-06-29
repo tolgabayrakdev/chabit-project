@@ -265,6 +265,15 @@ export default function MenusPage() {
                     width: '100%',
                     maxWidth: 800,
                 }}
+                styles={{
+                    root: {
+                        '@media (maxWidth: 768px)': {
+                            flexDirection: 'column',
+                            textAlign: 'center',
+                            gap: 12,
+                        }
+                    }
+                }}
             >
                 <ThemeIcon color="#fab005" size={36} radius="xl" variant="light">
                     <IconFileTypePdf size={20} />
@@ -282,7 +291,7 @@ export default function MenusPage() {
                     Yeni Menü Ekle
                 </Title>
                 <Stack gap="md" style={{ width: "100%" }}>
-                    <Group grow>
+                    <Stack gap="md">
                         <TextInput
                             label="Menü Adı"
                             placeholder="Menü adını girin"
@@ -303,7 +312,7 @@ export default function MenusPage() {
                             radius="md"
                             required
                         />
-                    </Group>
+                    </Stack>
                     <Button
                         onClick={openUpload}
                         disabled={!formData.name || !formData.menuPdf}
@@ -339,7 +348,7 @@ export default function MenusPage() {
                                             day: 'numeric' 
                                         })}
                                     </Text>
-                                    <Group justify="space-between">
+                                    <Stack gap="xs">
                                         <Button 
                                             component="a" 
                                             href={`/menu/${menu.id}`} 
@@ -347,37 +356,38 @@ export default function MenusPage() {
                                             variant="subtle" 
                                             color="#fab005" 
                                             leftSection={<IconExternalLink size={14} />}
-                                            size="xs"
+                                            size="sm"
+                                            fullWidth
                                         >
                                             Görüntüle
                                         </Button>
-                                        <Group gap="xs">
+                                        <Group gap="xs" justify="center">
                                             <ActionIcon 
                                                 color="blue" 
                                                 variant="subtle" 
                                                 onClick={() => handleEdit(menu)}
-                                                size="sm"
+                                                size="md"
                                             >
-                                                <IconEdit size={14} />
+                                                <IconEdit size={16} />
                                             </ActionIcon>
                                             <ActionIcon 
                                                 color="green" 
                                                 variant="subtle" 
                                                 onClick={() => handleDownload(menu)}
-                                                size="sm"
+                                                size="md"
                                             >
-                                                <IconDownload size={14} />
+                                                <IconDownload size={16} />
                                             </ActionIcon>
                                             <ActionIcon 
                                                 color="red" 
                                                 variant="subtle" 
                                                 onClick={() => handleDelete(menu)}
-                                                size="sm"
+                                                size="md"
                                             >
-                                                <IconTrash size={14} />
+                                                <IconTrash size={16} />
                                             </ActionIcon>
                                         </Group>
-                                    </Group>
+                                    </Stack>
                                 </Stack>
                             </Paper>
                         ))}
@@ -392,7 +402,7 @@ export default function MenusPage() {
             )}
 
             {/* Upload Modal */}
-            <Modal opened={uploadOpened} onClose={closeUpload} title="Yeni Menü Ekle" centered size="md">
+            <Modal opened={uploadOpened} onClose={closeUpload} title="Yeni Menü Ekle" centered size="md" styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}>
                 <Stack gap="md">
                     <TextInput
                         label="Menü Adı"
@@ -410,12 +420,13 @@ export default function MenusPage() {
                         onChange={(file) => setFormData({ ...formData, menuPdf: file })}
                         required
                     />
-                    <Group justify="flex-end" mt="md">
-                        <Button variant="default" onClick={closeUpload}>İptal</Button>
+                    <Group justify="flex-end" mt="md" gap="xs">
+                        <Button variant="default" onClick={closeUpload} size="sm">İptal</Button>
                         <Button 
                             onClick={handleUpload} 
                             loading={uploading}
                             disabled={!formData.name || !formData.menuPdf}
+                            size="sm"
                         >
                             Yükle
                         </Button>
@@ -424,7 +435,7 @@ export default function MenusPage() {
             </Modal>
 
             {/* Edit Modal */}
-            <Modal opened={editOpened} onClose={closeEdit} title="Menü Düzenle" centered size="md">
+            <Modal opened={editOpened} onClose={closeEdit} title="Menü Düzenle" centered size="md" styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}>
                 <Stack gap="md">
                     <TextInput
                         label="Menü Adı"
@@ -444,12 +455,13 @@ export default function MenusPage() {
                     <Text size="xs" c="dimmed">
                         * PDF dosyası seçmezseniz mevcut dosya korunacaktır
                     </Text>
-                    <Group justify="flex-end" mt="md">
-                        <Button variant="default" onClick={closeEdit}>İptal</Button>
+                    <Group justify="flex-end" mt="md" gap="xs">
+                        <Button variant="default" onClick={closeEdit} size="sm">İptal</Button>
                         <Button 
                             onClick={handleUpdate} 
                             loading={uploading}
                             disabled={!editFormData.name}
+                            size="sm"
                         >
                             Güncelle
                         </Button>
@@ -458,14 +470,14 @@ export default function MenusPage() {
             </Modal>
 
             {/* Delete Confirmation Modal */}
-            <Modal opened={opened} onClose={close} title="Menü Sil" centered>
+            <Modal opened={opened} onClose={close} title="Menü Sil" centered size="sm" styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}>
                 <Text>Bu menüyü silmek istediğinizden emin misiniz?</Text>
                 <Text size="sm" c="dimmed" mt="xs">
                     {selectedMenu?.name}
                 </Text>
-                <Group justify="flex-end" mt="xl">
-                    <Button variant="default" onClick={close}>İptal</Button>
-                    <Button color="red" onClick={confirmDelete}>Sil</Button>
+                <Group justify="flex-end" mt="xl" gap="xs">
+                    <Button variant="default" onClick={close} size="sm">İptal</Button>
+                    <Button color="red" onClick={confirmDelete} size="sm">Sil</Button>
                 </Group>
             </Modal>
         </Container>
