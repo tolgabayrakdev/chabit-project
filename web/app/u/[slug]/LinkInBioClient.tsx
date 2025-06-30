@@ -329,6 +329,8 @@ export default function LinkInBioPage() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [croppedImage, setCroppedImage] = useState<Blob | null>(null);
   const [rawImageUrl, setRawImageUrl] = useState<string | null>(null);
+  const [linkErrors, setLinkErrors] = useState<{ label?: string; url?: string }[]>([]);
+  const [mediaErrors, setMediaErrors] = useState<{ type?: string; url?: string }[]>([]);
 
   useEffect(() => {
     if (!slug) return;
@@ -384,7 +386,11 @@ export default function LinkInBioPage() {
         if (!response.ok) throw new Error('Profil güncellenemedi.');
         updatedProfile = await response.json();
       }
-      setProfile(updatedProfile);
+      const normalizedProfile: Profile = {
+        ...updatedProfile,
+        links: normalizeLinks(updatedProfile.links || [])
+      };
+      setProfile(normalizedProfile);
       setEditModalOpen(false);
     } catch (error) {
       console.error(error);
@@ -431,8 +437,33 @@ export default function LinkInBioPage() {
     setDraggedIndex(null);
   };
 
+  const validateLinks = () => {
+    return linksDraft.map(link => {
+      const errors: { label?: string; url?: string } = {};
+      if (!link.label || link.label.trim() === "") {
+        errors.label = "Link etiketi boş bırakılamaz.";
+      } else if (link.label.length > 50) {
+        errors.label = "Link etiketi en fazla 50 karakter olabilir.";
+      }
+      if (!link.url || link.url.trim() === "") {
+        errors.url = "URL boş bırakılamaz.";
+      } else {
+        try {
+          new URL(link.url);
+        } catch {
+          errors.url = "Geçerli bir URL girin.";
+        }
+      }
+      return errors;
+    });
+  };
+
   const handleSaveLinks = async () => {
     if (!profile) return;
+    const errors = validateLinks();
+    setLinkErrors(errors);
+    const hasError = errors.some(e => e.label || e.url);
+    if (hasError) return;
     setIsSaving(true);
     try {
       const linksToSend = linksDraft.map(({ url, label }) => ({ url, label }));
@@ -464,8 +495,31 @@ export default function LinkInBioPage() {
     setMediaDraft(mediaDraft.map((item, i) => i === index ? { ...item, [key]: value } : item));
   };
 
+  const validateMedia = () => {
+    return mediaDraft.map(item => {
+      const errors: { type?: string; url?: string } = {};
+      if (!item.type || !["gif", "image", "video"].includes(item.type)) {
+        errors.type = "Medya türü gif, image veya video olabilir.";
+      }
+      if (!item.url || item.url.trim() === "") {
+        errors.url = "Medya URL'si boş bırakılamaz.";
+      } else {
+        try {
+          new URL(item.url);
+        } catch {
+          errors.url = "Geçerli bir medya URL'si girin.";
+        }
+      }
+      return errors;
+    });
+  };
+
   const handleSaveMedia = async () => {
     if (!profile) return;
+    const errors = validateMedia();
+    setMediaErrors(errors);
+    const hasError = errors.some(e => e.type || e.url);
+    if (hasError) return;
     setIsSaving(true);
     try {
       const response = await fetch('/api/link-in-bio', {
@@ -478,7 +532,11 @@ export default function LinkInBioPage() {
       });
       if (!response.ok) throw new Error('Medya güncellenemedi.');
       const updatedProfile = await response.json();
-      setProfile(updatedProfile);
+      const normalizedProfile: Profile = {
+        ...updatedProfile,
+        links: normalizeLinks(updatedProfile.links || [])
+      };
+      setProfile(normalizedProfile);
       setEditMediaModalOpen(false);
     } catch (error) {
     } finally {
@@ -800,6 +858,7 @@ export default function LinkInBioPage() {
                 }}
                 data={SOCIAL_PLATFORMS.map(p => ({ value: p.value, label: p.label }))}
                 style={{ flex: 1, minWidth: 120 }}
+                error={linkErrors[idx]?.label}
               />
               <TextInput
                 value={link.url}
@@ -810,6 +869,7 @@ export default function LinkInBioPage() {
                   "https://..."
                 }
                 style={{ flex: 2, minWidth: 120 }}
+                error={linkErrors[idx]?.url}
               />
               <Button color="red" size="xs" onClick={() => removeLink(idx)}>Sil</Button>
             </Group>
@@ -834,12 +894,14 @@ export default function LinkInBioPage() {
                   { value: 'gif', label: 'GIF' },
                 ]}
                 style={{ minWidth: 100, flex: 1 }}
+                error={mediaErrors[idx]?.type}
               />
               <TextInput
                 value={item.url}
                 onChange={e => updateMedia(idx, 'url', e.currentTarget.value)}
                 placeholder="URL"
                 style={{ flex: 2, minWidth: 120 }}
+                error={mediaErrors[idx]?.url}
               />
               <TextInput
                 value={item.caption || ''}
