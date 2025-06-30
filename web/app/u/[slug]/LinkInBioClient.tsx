@@ -37,7 +37,8 @@ import {
   FaEnvelope,
   FaPhone,
   FaGlobe,
-  FaLink
+  FaLink,
+  FaTiktok
 } from 'react-icons/fa6';
 import { useRouter, useParams } from 'next/navigation';
 import { IconType } from 'react-icons';
@@ -82,6 +83,7 @@ const SOCIAL_PLATFORMS: Platform[] = [
   { value: 'youtube', label: 'YouTube', icon: FaYoutube, color: '#FF0000' },
   { value: 'linkedin', label: 'LinkedIn', icon: FaLinkedin, color: '#0A66C2' },
   { value: 'github', label: 'GitHub', icon: FaGithub, color: '#181717' },
+  { value: 'tiktok', label: 'TikTok', icon: FaTiktok, color: '#000000' },
   { value: 'snapchat', label: 'Snapchat', icon: FaSnapchat, color: '#FFFC00' },
   { value: 'email', label: 'E-posta', icon: FaEnvelope, color: '#EA4335' },
   { value: 'phone', label: 'Telefon', icon: FaPhone, color: '#25D366' },
@@ -96,19 +98,20 @@ interface LinkCardProps {
 
 const LinkCard: FC<LinkCardProps> = ({ link, onClick }) => {
   const detectPlatform = (label: string, url: string, value?: string): Platform => {
+    if (value) {
+      const platformByValue = SOCIAL_PLATFORMS.find(p => p.value === value);
+      if (platformByValue) return platformByValue;
+    }
     const urlLower = url.toLowerCase();
     if (urlLower.includes('instagram.com')) return SOCIAL_PLATFORMS[0];
     if (urlLower.includes('twitter.com') || urlLower.includes('x.com')) return SOCIAL_PLATFORMS[1];
     if (urlLower.includes('youtube.com')) return SOCIAL_PLATFORMS[2];
     if (urlLower.includes('linkedin.com')) return SOCIAL_PLATFORMS[3];
     if (urlLower.includes('github.com')) return SOCIAL_PLATFORMS[4];
-    if (urlLower.includes('snapchat.com')) return SOCIAL_PLATFORMS[5];
-    if (urlLower.startsWith('mailto:')) return SOCIAL_PLATFORMS[6];
-    if (urlLower.startsWith('tel:')) return SOCIAL_PLATFORMS[7];
-    if (value) {
-      const platformByValue = SOCIAL_PLATFORMS.find(p => p.value === value);
-      if (platformByValue) return platformByValue;
-    }
+    if (urlLower.includes('tiktok.com')) return SOCIAL_PLATFORMS[5];
+    if (urlLower.includes('snapchat.com')) return SOCIAL_PLATFORMS[6];
+    if (urlLower.startsWith('mailto:')) return SOCIAL_PLATFORMS[7];
+    if (urlLower.startsWith('tel:')) return SOCIAL_PLATFORMS[8];
     const platformByLabel = SOCIAL_PLATFORMS.find(p => p.label.toLowerCase() === label.toLowerCase());
     if (platformByLabel) return platformByLabel;
     return SOCIAL_PLATFORMS[9];
@@ -272,6 +275,35 @@ const MediaGallery: FC<MediaGalleryProps> = ({ media }) => {
   );
 };
 
+// Linkleri normalize et: value ve label'ı SOCIAL_PLATFORMS ile birebir eşleştir
+const normalizeLinks = (links: Link[]): Link[] => {
+  return links.map(link => {
+    let result: Link;
+    if (link.value && SOCIAL_PLATFORMS.some(p => p.value === link.value)) {
+      const platform = SOCIAL_PLATFORMS.find(p => p.value === link.value)!;
+      result = { ...link, value: platform.value, label: platform.label };
+    } else {
+      const urlLower = link.url?.toLowerCase() || '';
+      let platform: Platform | undefined;
+      if (urlLower.includes('instagram.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'instagram');
+      else if (urlLower.includes('twitter.com') || urlLower.includes('x.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'x');
+      else if (urlLower.includes('youtube.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'youtube');
+      else if (urlLower.includes('linkedin.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'linkedin');
+      else if (urlLower.includes('github.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'github');
+      else if (urlLower.includes('tiktok.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'tiktok');
+      else if (urlLower.includes('snapchat.com')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'snapchat');
+      else if (urlLower.startsWith('mailto:')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'email');
+      else if (urlLower.startsWith('tel:')) platform = SOCIAL_PLATFORMS.find(p => p.value === 'phone');
+      if (!platform) {
+        platform = SOCIAL_PLATFORMS.find(p => p.label.toLowerCase() === link.label.toLowerCase()) || SOCIAL_PLATFORMS.find(p => p.value === 'other');
+      }
+      const safePlatform = platform || SOCIAL_PLATFORMS.find(p => p.value === 'other')!;
+      result = { ...link, value: safePlatform.value, label: safePlatform.label };
+    }
+    return result;
+  });
+};
+
 export default function LinkInBioPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -307,11 +339,15 @@ export default function LinkInBioPage() {
         if (!res.ok) throw new Error("Profil bulunamadı.");
         return res.json();
       })
-      .then(profileData => {
-        setProfile(profileData);
+      .then((profileData: Profile) => {
+        const normalizedProfile: Profile = {
+          ...profileData,
+          links: normalizeLinks(profileData.links || [])
+        };
+        setProfile(normalizedProfile);
         setIsOwner(!!profileData.isOwner);
       })
-      .catch(err => setError(err.message))
+      .catch((err: any) => setError(err.message))
       .finally(() => setLoading(false));
   }, [slug]);
 
@@ -376,8 +412,8 @@ export default function LinkInBioPage() {
 
   const addLink = () => setLinksDraft([...linksDraft, { label: 'Diğer', url: '', value: 'other' }]);
   const removeLink = (index: number) => setLinksDraft(linksDraft.filter((_, i) => i !== index));
-  const updateLink = (index: number, key: keyof Link, value: string) => {
-    setLinksDraft(linksDraft.map((link, i) => i === index ? { ...link, [key]: value } : link));
+  const updateLink = (index: number, updates: Partial<Link>) => {
+    setLinksDraft(linksDraft => linksDraft.map((link, i) => i === index ? { ...link, ...updates } : link));
   };
 
   const handleDragStart = (index: number) => setDraggedIndex(index);
@@ -409,7 +445,11 @@ export default function LinkInBioPage() {
       });
       if (!response.ok) throw new Error('Linkler güncellenemedi.');
       const updatedProfile = await response.json();
-      setProfile(updatedProfile);
+      const normalizedProfile: Profile = {
+        ...updatedProfile,
+        links: normalizeLinks(updatedProfile.links || [])
+      };
+      setProfile(normalizedProfile);
       setEditLinksModalOpen(false);
     } catch (error) {
     } finally {
@@ -693,7 +733,7 @@ export default function LinkInBioPage() {
         </Stack>
       </Modal>
 
-      <Modal opened={editLinksModalOpen} onClose={() => setEditLinksModalOpen(false)} title="Linkleri Düzenle" centered>
+      <Modal opened={editLinksModalOpen} onClose={() => setEditLinksModalOpen(false)} title="Linkleri Düzenle" centered size="lg">
         <Stack gap="md">
           {linksDraft.map((link, idx) => (
             <Group
@@ -710,7 +750,11 @@ export default function LinkInBioPage() {
                 background: draggedIndex === idx ? '#f8f9fa' : undefined,
                 borderRadius: 8,
                 padding: 4,
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+                gap: 8,
               }}
+              className="link-edit-group"
             >
               <span style={{ fontSize: 18, cursor: 'grab', userSelect: 'none' }}>☰</span>
               <Select
@@ -718,8 +762,6 @@ export default function LinkInBioPage() {
                 onChange={(val) => {
                   const platform = SOCIAL_PLATFORMS.find(p => p.value === val);
                   if (platform) {
-                    updateLink(idx, 'label', platform.label);
-                    updateLink(idx, 'value', platform.value);
                     let defaultUrl = '';
                     switch (platform.value) {
                       case 'instagram':
@@ -737,6 +779,9 @@ export default function LinkInBioPage() {
                       case 'github':
                         defaultUrl = 'https://github.com/';
                         break;
+                      case 'tiktok':
+                        defaultUrl = 'https://tiktok.com/';
+                        break;
                       case 'snapchat':
                         defaultUrl = 'https://snapchat.com/add/';
                         break;
@@ -749,21 +794,21 @@ export default function LinkInBioPage() {
                       default:
                         defaultUrl = '';
                     }
-                    updateLink(idx, 'url', defaultUrl);
+                    updateLink(idx, { label: platform.label, value: platform.value, url: defaultUrl });
                   }
                 }}
                 data={SOCIAL_PLATFORMS.map(p => ({ value: p.value, label: p.label }))}
-                style={{ flex: 1 }}
+                style={{ flex: 1, minWidth: 120 }}
               />
               <TextInput
                 value={link.url}
-                onChange={e => updateLink(idx, 'url', e.currentTarget.value)}
+                onChange={e => updateLink(idx, { url: e.currentTarget.value })}
                 placeholder={
                   link.label === 'E-posta' ? "mailto:ornek@email.com" :
                   link.label === 'Telefon' ? "tel:+905551234567" :
                   "https://..."
                 }
-                style={{ flex: 2 }}
+                style={{ flex: 2, minWidth: 120 }}
               />
               <Button color="red" size="xs" onClick={() => removeLink(idx)}>Sil</Button>
             </Group>
@@ -773,13 +818,13 @@ export default function LinkInBioPage() {
         </Stack>
       </Modal>
 
-      <Modal opened={editMediaModalOpen} onClose={() => setEditMediaModalOpen(false)} title="Medya Galerisini Düzenle" centered>
+      <Modal opened={editMediaModalOpen} onClose={() => setEditMediaModalOpen(false)} title="Medya Galerisini Düzenle" centered size="lg">
         <Stack gap="md">
           <Text size="xs" c="dimmed" ta="center">
             GIF bulmak için <a href="https://giphy.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#0A66C2', textDecoration: 'underline' }}>Giphy</a>'yi ziyaret edebilirsiniz.
           </Text>
           {mediaDraft.map((item, idx) => (
-            <Group key={idx} align="center">
+            <Group key={idx} align="center" className="media-edit-group" style={{ flexWrap: 'wrap', gap: 8 }}>
               <Select
                 value={item.type}
                 onChange={val => updateMedia(idx, 'type', val || 'image')}
@@ -787,19 +832,19 @@ export default function LinkInBioPage() {
                   { value: 'image', label: 'Resim' },
                   { value: 'gif', label: 'GIF' },
                 ]}
-                style={{ width: 100 }}
+                style={{ minWidth: 100, flex: 1 }}
               />
               <TextInput
                 value={item.url}
                 onChange={e => updateMedia(idx, 'url', e.currentTarget.value)}
                 placeholder="URL"
-                style={{ flex: 2 }}
+                style={{ flex: 2, minWidth: 120 }}
               />
               <TextInput
                 value={item.caption || ''}
                 onChange={e => updateMedia(idx, 'caption', e.currentTarget.value)}
                 placeholder="Açıklama"
-                style={{ flex: 2 }}
+                style={{ flex: 2, minWidth: 120 }}
               />
               <Button color="red" size="xs" onClick={() => removeMedia(idx)}>Sil</Button>
             </Group>
@@ -842,6 +887,21 @@ export default function LinkInBioPage() {
           </Button>
         </Group>
       </Modal>
+
+      {/* Responsive mobil için: Group'ları column yap */}
+      <style jsx global>{`
+        @media (max-width: 600px) {
+          .link-edit-group, .media-edit-group {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 8px !important;
+          }
+          .link-edit-group > *, .media-edit-group > * {
+            width: 100% !important;
+            min-width: 0 !important;
+          }
+        }
+      `}</style>
     </Box>
   );
 }
