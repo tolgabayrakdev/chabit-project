@@ -435,11 +435,12 @@ export default function LinkInBioPage() {
     if (!profile) return;
     setIsSaving(true);
     try {
+      const linksToSend = linksDraft.map(({ url, label }) => ({ url, label }));
       const response = await fetch('/api/link-in-bio', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          links: linksDraft,
+          links: linksToSend,
         }),
         credentials: 'include',
       });
