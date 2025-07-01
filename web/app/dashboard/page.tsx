@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
+import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, Divider } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconLink, IconSettings, IconClock, IconFileTypePdf } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
@@ -13,6 +13,17 @@ interface QRCode {
     qr_code_image: string;
 }
 
+interface LinkInBioProfile {
+    id: string;
+    username: string;
+    created_at: string;
+}
+
+interface Menu {
+    id: string;
+    name: string;
+    created_at: string;
+}
 
 const getTypeLabel = (type: string) => {
     switch (type) {
@@ -33,7 +44,11 @@ const getTypeLabel = (type: string) => {
 
 export default function DashboardPage() {
     const [qrCodes, setQRCodes] = useState<QRCode[]>([]);
+    const [linkInBioProfiles, setLinkInBioProfiles] = useState<LinkInBioProfile[]>([]);
+    const [menus, setMenus] = useState<Menu[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadingLinkInBio, setLoadingLinkInBio] = useState(true);
+    const [loadingMenus, setLoadingMenus] = useState(true);
     const [historyOpened, { open: openHistory, close: closeHistory }] = useDisclosure(false);
 
     useEffect(() => {
@@ -59,6 +74,42 @@ export default function DashboardPage() {
         };
 
         fetchQRCodes();
+
+        // Fetch Link in Bio profiles
+        const fetchLinkInBioProfiles = async () => {
+            try {
+                const response = await fetch('/api/link-in-bio/all', {
+                    credentials: 'include',
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setLinkInBioProfiles(data);
+                }
+            } catch (error) {
+                setLinkInBioProfiles([]);
+            } finally {
+                setLoadingLinkInBio(false);
+            }
+        };
+        fetchLinkInBioProfiles();
+
+        // Fetch Menus
+        const fetchMenus = async () => {
+            try {
+                const response = await fetch('/api/menu', {
+                    credentials: 'include',
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setMenus(data);
+                }
+            } catch (error) {
+                setMenus([]);
+            } finally {
+                setLoadingMenus(false);
+            }
+        };
+        fetchMenus();
     }, []);
 
 
@@ -103,12 +154,75 @@ export default function DashboardPage() {
                     </Card>
                 </Group>
                 <Group mt="md">
-                    <Card withBorder radius="md" p="md" style={{ minWidth: 380, minHeight: 120, flex: 1, background: '#f1f3f5' }}>
-                        <Text c="dimmed" size="sm" ta="center" mt={30}>
-                            (Buraya yakında grafik ve gelişmiş istatistikler eklenecek)
-                        </Text>
-                    </Card>
+                    {/* Grafik ve gelişmiş istatistikler kartı kaldırıldı */}
                 </Group>
+            </Card>
+            {/* Ayrı Link in Bio ve Menü Widget'ları - Aktif Özellikler kartından önce */}
+            <Card withBorder p="xl" radius="lg" mb="xl" style={{ background: '#fff', boxShadow: '0 4px 24px rgba(34, 139, 230, 0.08)', border: '1px solid #e3e8ee' }}>
+                <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
+                    {/* Link in Bio Widget */}
+                    <Card withBorder radius="lg" p="xl" style={{ minWidth: 0, background: '#fff', boxShadow: '0 4px 24px rgba(230, 73, 128, 0.08)', border: '1px solid #f3d9e3' }}>
+                        <Group gap="sm" align="center" mb="md">
+                            <IconLink size={32} color="#e64980" />
+                            <Title order={4} style={{ color: '#e64980', fontWeight: 700 }}>Link in Bio</Title>
+                        </Group>
+                        {loadingLinkInBio ? (
+                            <Center style={{ minHeight: 80 }}><Loader size="md" color="pink" /></Center>
+                        ) : linkInBioProfiles.length > 0 ? (
+                            (() => {
+                                const latest = [...linkInBioProfiles].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+                                return (
+                                    <Stack gap="xs">
+                                        <Group align="center" gap="xs">
+                                            <Text size="sm" c="dimmed">Toplam:</Text>
+                                            <Title order={3} c="#e64980">{linkInBioProfiles.length}</Title>
+                                        </Group>
+                                        <Divider my="xs" />
+                                        <Text size="sm" c="dimmed">Son Oluşturulan:</Text>
+                                        <Text size="lg" fw={600}>@{latest.username}</Text>
+                                        <Text size="sm" c="dimmed">Oluşturulma: {new Date(latest.created_at).toLocaleString('tr-TR')}</Text>
+                                        <Button component="a" href={`/u/${latest.username}`} target="_blank" color="pink" variant="light" size="sm" mt="xs">
+                                            Profili Görüntüle
+                                        </Button>
+                                    </Stack>
+                                );
+                            })()
+                        ) : (
+                            <Text c="dimmed">Henüz Link in Bio oluşturulmamış.</Text>
+                        )}
+                    </Card>
+                    {/* Menü Widget */}
+                    <Card withBorder radius="lg" p="xl" style={{ minWidth: 0, background: '#fff', boxShadow: '0 4px 24px rgba(250, 176, 5, 0.08)', border: '1px solid #ffe066' }}>
+                        <Group gap="sm" align="center" mb="md">
+                            <IconFileTypePdf size={32} color="#fab005" />
+                            <Title order={4} style={{ color: '#fab005', fontWeight: 700 }}>Menü</Title>
+                        </Group>
+                        {loadingMenus ? (
+                            <Center style={{ minHeight: 80 }}><Loader size="md" color="yellow" /></Center>
+                        ) : menus.length > 0 ? (
+                            (() => {
+                                const latest = [...menus].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+                                return (
+                                    <Stack gap="xs">
+                                        <Group align="center" gap="xs">
+                                            <Text size="sm" c="dimmed">Toplam:</Text>
+                                            <Title order={3} c="#fab005">{menus.length}</Title>
+                                        </Group>
+                                        <Divider my="xs" />
+                                        <Text size="sm" c="dimmed">Son Oluşturulan:</Text>
+                                        <Text size="lg" fw={600}>{latest.name}</Text>
+                                        <Text size="sm" c="dimmed">Oluşturulma: {new Date(latest.created_at).toLocaleString('tr-TR')}</Text>
+                                        <Button component="a" href={`/menu/${latest.id}`} target="_blank" color="yellow" variant="light" size="sm" mt="xs">
+                                            Menüyü Görüntüle
+                                        </Button>
+                                    </Stack>
+                                );
+                            })()
+                        ) : (
+                            <Text c="dimmed">Henüz menü oluşturulmamış.</Text>
+                        )}
+                    </Card>
+                </SimpleGrid>
             </Card>
             <Card withBorder p="xl" radius="md" mt="xl">
                 <Title order={4} mb="md">Aktif Özellikler</Title>
