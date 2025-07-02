@@ -158,7 +158,7 @@ export default function Home() {
                   marginTop: rem(16)
                 }}
               >
-                QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi gibi özelliklerle
+                QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle
                 işletmenizin dijital varlığını güçlendirin.
               </Text>
               <Group justify="flex-start" mt="xl" gap="xl">
