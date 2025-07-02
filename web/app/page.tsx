@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group, Card, SimpleGrid, Box, Stack, Badge, Image, Paper, rem, ThemeIcon, Divider, Anchor } from '@mantine/core';
 import { Accordion, AccordionItem, AccordionControl, AccordionPanel } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf, IconStar } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -78,6 +78,15 @@ export default function Home() {
       devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
       color: '#e8590c'
     },
+    {
+      icon: IconStar,
+      title: 'Google Yorumlar',
+      description: 'Müşterilerinizin işletmenize kolayca Google üzerinden yorum bırakmasını sağlayan QR kodlar oluşturun.',
+      detail: 'Google Review QR kodu ile müşterileriniz, QR kodu okutarak doğrudan firmanızın Google yorum sayfasına yönlendirilir. Yorum sayınızı ve müşteri memnuniyetinizi artırmak için idealdir.',
+      limit: 'Sınırsız',
+      devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
+      color: '#fab005'
+    },
   ];
 
   const faqData = [
@@ -108,7 +117,11 @@ export default function Home() {
     {
       question: 'Link in Bio nedir ve nasıl kullanılır?',
       answer: 'Link in Bio, tüm sosyal medya ve iletişim linklerinizi tek bir sayfada toplamanızı sağlar. Profilinizde tek bir bağlantı paylaşarak takipçilerinize tüm önemli linklerinizi sunabilirsiniz. Vunqr ile kolayca Link in Bio oluşturabilir ve özelleştirebilirsiniz.'
-    }
+    },
+    {
+      question: 'Google Yorumlar QR kodu nedir ve nasıl çalışır?',
+      answer: "Google Yorumlar QR kodu, müşterilerinizin QR kodu okutarak doğrudan firmanızın Google yorum sayfasına ulaşmasını sağlar. Böylece müşterileriniz kolayca işletmenize yorum bırakabilir ve Google puanınızı artırabilirsiniz. QR kodu oluşturmak için Google Place ID'nizi girmeniz yeterlidir."
+    },
   ];
 
   return (
@@ -535,6 +548,7 @@ export default function Home() {
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>vCard Yönetimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>URL QR Kod</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>PDF Menü Yönetimi</Anchor>
+              <Anchor component={Link} href="#features" c="white" opacity={0.8}>Google Yorumlar</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>Link in Bio</Anchor>
             </Stack>
             <Stack gap={4}>

@@ -25,6 +25,9 @@ const getTypeColor = (type: string) => {
             return '#7950f2'; // Mor
         case 'url':
             return '#228be6'; // Mavi
+        case 'google-review':
+        case 'google_review':
+            return '#fab005'; // Sarı (Google Review)
         default:
             return 'gray';
     }
@@ -42,6 +45,9 @@ const getTypeLabel = (type: string) => {
             return 'vCard';
         case 'url':
             return 'URL';
+        case 'google-review':
+        case 'google_review':
+            return 'Google Yorum';
         default:
             return type;
     }
