@@ -136,7 +136,7 @@ export default function GoogleReviewQrPage() {
                   Google Place ID, işletmenizin Google Haritalar üzerindeki benzersiz kimliğidir. QR kod ile müşterilerinizin doğrudan Google yorum sayfanıza ulaşmasını sağlar.<br /><br />
                   <b>Nasıl bulabilirim?</b><br />
                   1. <a href="https://developers.google.com/maps/documentation/places/web-service/place-id" target="_blank" rel="noopener noreferrer" style={{ color: '#fab005', textDecoration: 'underline' }}>Google Place ID Finder</a> sayfasını açın.<br />
-                  2. Harita üzerinden işletmenizi arayın ve seçin.<br />
+                  2. Harita üzerinden işletmenizi arayın ve seçin.(Belirli bir yerin kimliğini bulma alanını kullanın)<br />
                   3. Açılan pencerede Place ID'nizi göreceksiniz.<br /><br />
                   <b>Örnek Place ID:</b> <code>ChIJN1t_tDeuEmsRUsoyG83frY4</code>
                 </Text>
