@@ -123,7 +123,7 @@ const LinkCard: FC<LinkCardProps> = ({ link, onClick }) => {
   return (
     <Paper
       p="md"
-      radius="xl"
+      radius="md"
       shadow="sm"
       style={{ cursor: 'pointer', transition: 'all 0.2s ease', border: '1px solid #e9ecef', background: '#fff' }}
       onClick={() => onClick(link.url)}
