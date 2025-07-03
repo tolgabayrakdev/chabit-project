@@ -149,15 +149,12 @@ export default function DashboardPage() {
                         {loading ? (
                             <Center style={{ minHeight: 40 }}><Loader size="sm" /></Center>
                         ) : (
-                            <Title order={2}>8</Title>
+                            <Title order={2}>9</Title>
                         )}
                     </Card>
                 </Group>
-                <Group mt="md">
-                    {/* Grafik ve gelişmiş istatistikler kartı kaldırıldı */}
-                </Group>
             </Card>
-            {/* Ayrı Link in Bio ve Menü Widget'ları - Aktif Özellikler kartından önce */}
+           
             <Card withBorder p="xl" radius="lg" mb="xl" style={{ background: '#fff', boxShadow: '0 4px 24px rgba(34, 139, 230, 0.08)', border: '1px solid #e3e8ee' }}>
                 <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
                     {/* Link in Bio Widget */}
@@ -239,6 +236,7 @@ export default function DashboardPage() {
                         <Badge color="red" leftSection={<IconMessage size={16} />}>SMS QR Kod</Badge>
                         <Badge color="grape" leftSection={<IconAddressBook size={16} />}>vCard QR Kod</Badge>
                         <Badge color="teal" leftSection={<IconLink size={16} />}>URL QR Kod</Badge>
+                        <Badge color="lime" leftSection={<IconFileTypePdf size={16} />}>Google Yorum QR Kod</Badge>
                     </Group>
                 </Stack>
             </Card>
