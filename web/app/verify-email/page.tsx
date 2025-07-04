@@ -83,7 +83,7 @@ function EmailVerificationContent() {
           {verificationStatus !== 'loading' && (
             <Button
               onClick={() => router.push('/login')}
-              radius="xl"
+              radius="md"
               size="md"
               style={{
                 background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',

@@ -197,7 +197,7 @@ export default function LinkInBioDashboardPage() {
             <Button
               type="submit"
               disabled={!username.trim() || loading || usernameAvailable === false || usernameCheckLoading}
-              radius="xl"
+              radius="md"
               size="md"
               color="pink"
               style={{ width: "100%" }}

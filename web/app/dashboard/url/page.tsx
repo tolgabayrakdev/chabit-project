@@ -137,7 +137,7 @@ export default function UrlPage() {
               <Button
                 type="submit"
                 loading={loading}
-                radius="xl"
+                radius="md"
                 size="md"
                 leftSection={<IconQrcode size={20} />}
                 style={{

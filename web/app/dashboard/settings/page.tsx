@@ -167,7 +167,7 @@ export default function SettingsPage() {
               <Button
                 type="submit"
                 loading={loading}
-                radius="xl"
+                radius="md"
                 size="md"
                 leftSection={<IconLock size={20} />}
                 style={{
@@ -205,7 +205,7 @@ export default function SettingsPage() {
               variant="light"
               color="red"
               leftSection={<IconTrash size={20} />}
-              radius="xl"
+              radius="md"
               size="md"
               onClick={open}
               style={{

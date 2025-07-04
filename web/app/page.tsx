@@ -164,7 +164,7 @@ export default function Home() {
               <Group justify="flex-start" mt="xl" gap="xl">
                 <Button 
                   size="lg" 
-                  radius="xl"
+                  radius="md"
                   component={Link} 
                   href="/register"
                   style={{
@@ -181,7 +181,7 @@ export default function Home() {
                 </Button>
                 <Button 
                   size="lg" 
-                  radius="xl"
+                  radius="md"
                   variant="outline" 
                   component={Link} 
                   href="/login"

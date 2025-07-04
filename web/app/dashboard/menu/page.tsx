@@ -366,7 +366,7 @@ export default function MenusPage() {
                     <Button
                         onClick={handleUpload}
                         disabled={!formData.name || !formData.menuPdf}
-                        radius="xl"
+                        radius="md"
                         size="md"
                         color="#fab005"
                         style={{ width: "100%" }}

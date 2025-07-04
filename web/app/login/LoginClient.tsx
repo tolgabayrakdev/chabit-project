@@ -164,7 +164,7 @@ export default function LoginClient() {
                   loading={loading}
                   fullWidth
                   type="submit"
-                  radius="xl"
+                  radius="md"
                   size="md"
                   style={{
                     background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
