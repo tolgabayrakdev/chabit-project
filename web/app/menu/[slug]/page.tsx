@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // Menü verilerini çek
   let menuName = 'Menü';
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'vunqr-backend-production.up.railway.app';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://vunqr-backend-production.up.railway.app';
     const response = await fetch(`${baseUrl}/api/menu/public/${slug}`, {
       method: 'GET',
       headers: {
