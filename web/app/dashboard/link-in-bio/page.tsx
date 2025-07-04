@@ -267,6 +267,96 @@ export default function LinkInBioDashboardPage() {
           </Button>
         </Stack>
       </Modal>
+
+      <style jsx global>{`
+        @media (max-width: 600px) {
+          /* Mobil için form düzenlemeleri */
+          .mantine-Container-root {
+            padding: 0 8px !important;
+          }
+          
+          .mantine-Paper-root {
+            padding: 16px !important;
+            margin: 8px 0 !important;
+          }
+          
+          .mantine-TextInput-root,
+          .mantine-PasswordInput-root,
+          .mantine-Select-root,
+          .mantine-Textarea-root {
+            margin-bottom: 12px !important;
+          }
+          
+          .mantine-TextInput-label,
+          .mantine-PasswordInput-label,
+          .mantine-Select-label,
+          .mantine-Textarea-label {
+            font-size: 14px !important;
+            margin-bottom: 4px !important;
+          }
+          
+          .mantine-TextInput-input,
+          .mantine-PasswordInput-input,
+          .mantine-Select-input,
+          .mantine-Textarea-input {
+            font-size: 16px !important;
+            padding: 8px 12px !important;
+            min-height: 44px !important;
+          }
+          
+          .mantine-Stack-root {
+            gap: 8px !important;
+          }
+          
+          .mantine-Button-root {
+            min-height: 44px !important;
+            font-size: 16px !important;
+          }
+          
+          .mantine-Title-root {
+            font-size: 20px !important;
+            margin-bottom: 16px !important;
+          }
+          
+          .mantine-Checkbox-root {
+            margin-top: 8px !important;
+          }
+
+          /* Link in Bio sayfasına özel düzenlemeler */
+          .mantine-Paper-root:first-child {
+            flex-direction: column !important;
+            gap: 8px !important;
+            text-align: center;
+            padding: 12px !important;
+          }
+          
+          .mantine-Paper-root:first-child .mantine-ThemeIcon-root {
+            margin-bottom: 4px;
+          }
+          
+          .mantine-Paper-root:first-child .mantine-Text-root {
+            font-size: 15px !important;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .mantine-Container-root {
+            padding: 0 4px !important;
+          }
+          
+          .mantine-Paper-root {
+            padding: 12px !important;
+          }
+          
+          .mantine-TextInput-input,
+          .mantine-PasswordInput-input,
+          .mantine-Select-input,
+          .mantine-Textarea-input {
+            font-size: 16px !important;
+            padding: 10px 12px !important;
+          }
+        }
+      `}</style>
     </Container>
   );
 }

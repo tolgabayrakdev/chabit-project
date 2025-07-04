@@ -289,6 +289,72 @@ export default function VCardPage() {
                   .qr-info-paper .mantine-Text-root {
                     font-size: 15px !important;
                   }
+                  
+                  /* Mobil için form düzenlemeleri */
+                  .mantine-Container-root {
+                    padding: 0 8px !important;
+                  }
+                  
+                  .mantine-Paper-root {
+                    padding: 16px !important;
+                    margin: 8px 0 !important;
+                  }
+                  
+                  .mantine-TextInput-root {
+                    margin-bottom: 12px !important;
+                  }
+                  
+                  .mantine-TextInput-label {
+                    font-size: 14px !important;
+                    margin-bottom: 4px !important;
+                  }
+                  
+                  .mantine-TextInput-input {
+                    font-size: 16px !important;
+                    padding: 8px 12px !important;
+                    min-height: 44px !important;
+                  }
+                  
+                  .mantine-Grid-root {
+                    margin: 0 !important;
+                  }
+                  
+                  .mantine-Grid-col {
+                    padding: 0 4px !important;
+                  }
+                  
+                  .mantine-Stack-root {
+                    gap: 8px !important;
+                  }
+                  
+                  .mantine-Button-root {
+                    min-height: 44px !important;
+                    font-size: 16px !important;
+                  }
+                  
+                  .mantine-Title-root {
+                    font-size: 20px !important;
+                    margin-bottom: 16px !important;
+                  }
+                }
+                
+                @media (max-width: 480px) {
+                  .mantine-Container-root {
+                    padding: 0 4px !important;
+                  }
+                  
+                  .mantine-Paper-root {
+                    padding: 12px !important;
+                  }
+                  
+                  .mantine-Grid-col {
+                    padding: 0 2px !important;
+                  }
+                  
+                  .mantine-TextInput-input {
+                    font-size: 16px !important;
+                    padding: 10px 12px !important;
+                  }
                 }
             `}</style>
         </Container>
