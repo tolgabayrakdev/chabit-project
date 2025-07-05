@@ -96,7 +96,7 @@ export default function BlogPostWifiQr() {
         </Text>
 
         <Image
-          src="https://images.unsplash.com/photo-1615014816663-7b4e95d518ce?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0"
+          src="https://unsplash.com/photos/a-close-up-of-the-wifi-logo-on-the-side-of-a-bus-sOdVYQQo4UU"
           alt="WiFi QR Kod"
           width={500}
           height={300}
@@ -127,7 +127,7 @@ export default function BlogPostWifiQr() {
         </Text>
 
         <Text size="md" style={{ color: "#444", lineHeight: 1.7, marginBottom: "2rem" }}>
-          Müşteri memnuniyetini artırmak artık küçük bir detayla mümkün: Şifre sormaya son! <Link href="/wifi" style={{ textDecoration: "underline", color: "#228be6" }}>WiFi QR kodunuzu hemen oluşturun</Link> ve dijital kolaylığı yaşayın.
+          Müşteri memnuniyetini artırmak artık küçük bir detayla mümkün: Şifre sormaya son! <Link href="/register" style={{ textDecoration: "underline", color: "#228be6" }}>WiFi QR kodunuzu hemen oluşturun</Link> ve dijital kolaylığı yaşayın.
         </Text>
 
         <Box style={{ flex: 1 }} />
