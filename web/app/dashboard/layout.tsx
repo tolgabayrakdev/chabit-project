@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar, Menu } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome, IconStar } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome, IconStar, IconGift } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthProvider from '@/providers/auth-provider';
@@ -14,6 +14,7 @@ interface NavChild {
     label: string;
     href: string;
     color: string;
+    disabled?: boolean;
 }
 interface NavItem extends NavChild {
     children?: NavChild[];
@@ -26,6 +27,7 @@ export default function DashboardLayout({
 }) {
     const [opened, setOpened] = useState(false);
     const [userEmail, setUserEmail] = useState<string>('');
+    const [userPlan, setUserPlan] = useState<string>('free');
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
@@ -45,6 +47,7 @@ export default function DashboardLayout({
                 if (response.ok) {
                     const data = await response.json();
                     setUserEmail(data.user.email);
+                    setUserPlan(data.user.plan || 'free');
                 }
             } catch (error) {
             }
@@ -90,6 +93,18 @@ export default function DashboardLayout({
             label: 'Menü Oluşturma',
             items: [
                 { icon: IconSettings, label: 'Menü Oluştur', href: '/dashboard/menu', color: '#fab005' },
+            ],
+        },
+        {
+            label: 'Kampanyalar',
+            items: [
+                { 
+                    icon: IconGift, 
+                    label: userPlan === 'free' ? 'Kampanya Yönetimi (PRO)' : 'Kampanya Yönetimi', 
+                    href: '/dashboard/campaigns', 
+                    color: '#e64980',
+                    disabled: false
+                },
             ],
         },
     ];
@@ -267,12 +282,16 @@ export default function DashboardLayout({
                                                         whiteSpace: 'nowrap',
                                                         textOverflow: 'ellipsis',
                                                         maxWidth: '100%',
+                                                        opacity: userPlan === 'free' && item.label.includes('(PRO)') ? 0.6 : 1,
+                                                        cursor: 'pointer',
                                                         '&:hover': {
                                                             backgroundColor: `${item.color}15`,
                                                             color: item.color,
                                                         }
                                                     }}
-                                                    onClick={() => { if (isMobile) setOpened(false); }}
+                                                    onClick={() => { 
+                                                        if (isMobile) setOpened(false); 
+                                                    }}
                                                 />
                                             );
                                         }
