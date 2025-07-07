@@ -108,7 +108,6 @@ export const metadata: Metadata = {
     yandex: "your-yandex-verification-code",
     yahoo: "your-yahoo-verification-code",
   },
-  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/favicon.ico" },
