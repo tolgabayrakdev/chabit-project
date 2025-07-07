@@ -370,6 +370,17 @@ export default function CampaignPage() {
                         font-size: 16px !important;
                         padding: 12px !important;
                         min-height: 48px !important;
+                        padding-left: 40px !important;
+                    }
+                    
+                    .mantine-TextInput-section {
+                        width: 40px !important;
+                        left: 0 !important;
+                    }
+                    
+                    .mantine-TextInput-section svg {
+                        width: 18px !important;
+                        height: 18px !important;
                     }
                     
                     .mantine-Button-root {
@@ -389,6 +400,19 @@ export default function CampaignPage() {
                     
                     .mantine-Title-root {
                         font-size: 20px !important;
+                    }
+                    
+                    .mantine-TextInput-input {
+                        padding-left: 36px !important;
+                    }
+                    
+                    .mantine-TextInput-section {
+                        width: 36px !important;
+                    }
+                    
+                    .mantine-TextInput-section svg {
+                        width: 16px !important;
+                        height: 16px !important;
                     }
                 }
             `}</style>
