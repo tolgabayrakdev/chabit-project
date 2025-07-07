@@ -19,10 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Dijital İletişim Çözümleri | VunQR",
-    template: "%s | VunQR"
-  },
+  title: "Dijital İletişim Çözümleri | VunQR",
   description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle işletmenizin dijital varlığını güçlendirin. Türkiye'nin en kapsamlı dijital iletişim platformu.",
   keywords: [
     "QR kod",
