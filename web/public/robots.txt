@@ -1,12 +1,24 @@
-# Allow all crawlers
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Sitemap
 Sitemap: https://vunqr.com/sitemap.xml
 
-# Disallow admin and api routes
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin and private areas
+Disallow: /dashboard/
 Disallow: /api/
-Disallow: /admin/
 Disallow: /_next/
-Disallow: /static/ 
+Disallow: /admin/
+
+# Allow important pages
+Allow: /
+Allow: /login
+Allow: /register
+Allow: /blogs
+Allow: /examples
+Allow: /how-it-works
+Allow: /terms
+Allow: /privacy 

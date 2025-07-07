@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group, Card, SimpleGrid, Box, Stack, Badge, Image, Paper, rem, ThemeIcon, Divider, Anchor } from '@mantine/core';
 import { Accordion, AccordionItem, AccordionControl, AccordionPanel } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf, IconStar } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf, IconStar, IconRocket, IconTarget, IconBolt } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -99,14 +99,6 @@ export default function Home() {
       answer: 'QR kodlarınızı PNG, JPG ve SVG formatlarında indirebilirsiniz. İndirme işlemi için QR kodunuzun yanındaki indirme butonunu kullanabilirsiniz.'
     },
     {
-      question: 'WiFi paylaşımı güvenli mi?',
-      answer: 'Evet, WiFi paylaşımı tamamen güvenlidir. QR kodlar şifrelenmiş bağlantı bilgilerini içerir ve sadece sizin belirlediğiniz süre boyunca geçerlidir.'
-    },
-    {
-      question: 'Toplu SMS gönderimi için limit var mı?',
-      answer: 'Ücretsiz kullanıcılar aylık 100 SMS gönderebilir. Premium üyelik ile sınırsız SMS gönderimi yapabilirsiniz.'
-    },
-    {
       question: 'vCard oluşturma özelliği nasıl çalışır?',
       answer: 'vCard özelliği ile dijital kartvizitlerinizi oluşturabilir, özelleştirebilir ve QR kod olarak paylaşabilirsiniz. Kartvizitlerinize iletişim bilgilerinizi, sosyal medya hesaplarınızı ve daha fazlasını ekleyebilirsiniz.'
     },
@@ -121,6 +113,10 @@ export default function Home() {
     {
       question: 'Google Yorumlar QR kodu nedir ve nasıl çalışır?',
       answer: "Google Yorumlar QR kodu, müşterilerinizin QR kodu okutarak doğrudan firmanızın Google yorum sayfasına ulaşmasını sağlar. Böylece müşterileriniz kolayca işletmenize yorum bırakabilir ve Google puanınızı artırabilirsiniz. QR kodu oluşturmak için Google Place ID'nizi girmeniz yeterlidir."
+    },
+    {
+      question: 'Kampanya yönetimi özelliği nedir ve nasıl çalışır?',
+      answer: 'Kampanya yönetimi (PRO özellik) ile çekiliş ve kampanyalar oluşturabilir, katılımcıları yönetebilir ve kazananları seçebilirsiniz. vunqr.com/campaign/slug adresiyle kampanyalarınızı paylaşabilir, müşteri etkileşimini artırabilirsiniz. Bu özellik sadece PRO kullanıcılar için mevcuttur.'
     },
   ];
 
@@ -451,12 +447,173 @@ export default function Home() {
           <Box ta="center">
             <Button
               size="lg"
-              radius="xl"
+              radius="md"
               component={Link}
               href="/examples"
               style={{ background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', color: 'white', fontWeight: 600 }}
             >
               Tüm Tasarımları Gör
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* How It Works Section */}
+      <Box style={{ background: '#f8f9fa', padding: `${rem(80)} 0` }}>
+        <Container size="lg">
+          <Title 
+            order={2} 
+            ta="center" 
+            mb={30}
+            style={{ fontSize: rem(36), fontWeight: 800 }}
+          >
+            VunQR Nasıl Çalışır?
+          </Title>
+          <Text ta="center" size="lg" mb={50} c="dimmed" style={{ maxWidth: 600, margin: '0 auto' }}>
+            4 basit adımda profesyonel QR kodlarınızı oluşturun. VunQR ile dijital dönüşümünüzü başlatın.
+          </Text>
+          
+          <div style={{ position: 'relative', marginBottom: rem(60) }}>
+            {/* Bağlantı çizgileri için arka plan */}
+            <div style={{ 
+              position: 'absolute', 
+              top: '50%', 
+              left: 0, 
+              right: 0, 
+              height: 2, 
+              background: 'linear-gradient(90deg, #228be6, #40c057, #fd7e14, #7950f2)',
+              zIndex: 0,
+              transform: 'translateY(-50%)'
+            }} />
+            
+            <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} spacing="xl">
+              {[
+                {
+                  step: 1,
+                  title: "Hesap Oluşturun",
+                  description: "Ücretsiz hesabınızı oluşturun",
+                  icon: IconRocket,
+                  color: "#228be6"
+                },
+                {
+                  step: 2,
+                  title: "QR Kod Türünü Seçin",
+                  description: "WiFi, vCard, URL, E-posta, SMS veya Google Yorum",
+                  icon: IconTarget,
+                  color: "#40c057"
+                },
+                {
+                  step: 3,
+                  title: "İçeriğinizi Girin",
+                  description: "Gerekli bilgileri doldurun",
+                  icon: IconBolt,
+                  color: "#fd7e14"
+                },
+                {
+                  step: 4,
+                  title: "QR Kodunuzu Oluşturun",
+                  description: "İndirin ve kullanmaya başlayın",
+                  icon: IconQrcode,
+                  color: "#7950f2"
+                }
+              ].map((step, index) => (
+                <Card 
+                  key={index} 
+                  shadow="lg" 
+                  radius="xl" 
+                  padding="xl" 
+                  withBorder
+                  style={{ 
+                    position: 'relative',
+                    zIndex: 5,
+                    background: 'white',
+                    border: `2px solid ${step.color}20`,
+                    transition: 'all 0.3s ease',
+                    overflow: 'visible',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: `0 20px 40px ${step.color}20`,
+                      borderColor: step.color
+                    }
+                  }}
+                >
+                  <div style={{ textAlign: 'center', marginBottom: rem(24) }}>
+                    {/* Adım numarası */}
+                    <div style={{
+                      position: 'absolute',
+                      top: -20,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: 45,
+                      height: 45,
+                      borderRadius: '50%',
+                      background: `linear-gradient(135deg, ${step.color}, ${step.color}dd)`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      fontSize: '20px',
+                      boxShadow: `0 6px 16px ${step.color}50`,
+                      zIndex: 10,
+                      border: '3px solid white'
+                    }}>
+                      {step.step}
+                    </div>
+                    
+                    {/* İkon */}
+                    <ThemeIcon 
+                      size={rem(70)} 
+                      radius="xl" 
+                      style={{ 
+                        backgroundColor: `${step.color}15`,
+                        color: step.color,
+                        marginBottom: rem(16),
+                        border: `3px solid ${step.color}30`
+                      }}
+                    >
+                      <step.icon size={rem(35)} />
+                    </ThemeIcon>
+                  </div>
+                  
+                  <Title order={3} size="h4" style={{ 
+                    marginBottom: rem(12), 
+                    textAlign: 'center',
+                    color: step.color,
+                    fontWeight: 700
+                  }}>
+                    {step.title}
+                  </Title>
+                  
+                  <Text 
+                    size="sm" 
+                    color="dimmed" 
+                    style={{ 
+                      textAlign: 'center',
+                      lineHeight: 1.6
+                    }}
+                  >
+                    {step.description}
+                  </Text>
+                </Card>
+              ))}
+            </SimpleGrid>
+          </div>
+
+          <Box ta="center">
+            <Button
+              size="lg"
+              radius="md"
+              component={Link}
+              href="/how-it-works"
+              style={{ 
+                background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', 
+                color: 'white', 
+                fontWeight: 600,
+                padding: '12px 32px'
+              }}
+            >
+              Detaylı Rehberi İncele
             </Button>
           </Box>
         </Container>
@@ -473,7 +630,7 @@ export default function Home() {
         <Box ta="center">
           <Button
             size="lg"
-            radius="xl"
+            radius="md"
             component={Link}
             href="/blogs"
             style={{ background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', color: 'white', fontWeight: 600 }}
@@ -550,6 +707,7 @@ export default function Home() {
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>PDF Menü Yönetimi</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>Google Yorumlar</Anchor>
               <Anchor component={Link} href="#features" c="white" opacity={0.8}>Link in Bio</Anchor>
+              <Anchor component={Link} href="#features" c="white" opacity={0.8}>Kampanya Yönetimi (PRO)</Anchor>
             </Stack>
             <Stack gap={4}>
               <Text fw={700} size="md">Bizi Takip Edin</Text>
