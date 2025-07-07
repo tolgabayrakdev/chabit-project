@@ -343,6 +343,23 @@ export default function CampaignPage() {
                 </Stack>
             </Modal>
 
+            {/* Footer */}
+            <Paper withBorder radius="lg" p="md" mt="xl">
+                <Stack gap="xs" align="center">
+                    <Text size="sm" c="dimmed" ta="center">
+                        Bu sayfa VunQR tarafından oluşturuldu
+                    </Text>
+                    <Text size="sm" ta="center">
+                        <Text component="span" c="dimmed">Dijital iletişim çözümleri için </Text>
+                        <Text component="a" href="https://vunqr.com" target="_blank" rel="noopener noreferrer" 
+                              style={{ color: '#e64980', textDecoration: 'none', fontWeight: 600 }}>
+                            vunqr.com
+                        </Text>
+                        <Text component="span" c="dimmed"> u ziyaret edin</Text>
+                    </Text>
+                </Stack>
+            </Paper>
+
             <style jsx global>{`
                 @media (max-width: 600px) {
                     .mantine-Container-root {
