@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, Divider, Modal, Alert } from '@mantine/core';
-import { IconLock, IconTrash, IconAlertCircle, IconAlertTriangle } from '@tabler/icons-react';
+import React, { useState, useEffect } from 'react';
+import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, Divider, Modal, Alert, Badge } from '@mantine/core';
+import { IconLock, IconTrash, IconAlertCircle, IconAlertTriangle, IconUser, IconCrown } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,37 @@ export default function SettingsPage() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const [confirmText, setConfirmText] = useState('');
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [userPlan, setUserPlan] = useState<string>('free');
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setIsLoadingUser(true);
+        const response = await fetch(`/api/auth/me`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserEmail(data.user.email);
+          setUserPlan(data.user.plan || 'free');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setIsLoadingUser(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -117,6 +147,32 @@ export default function SettingsPage() {
     }
   };
 
+  const getPlanColor = (plan: string) => {
+    switch (plan) {
+      case 'free':
+        return 'gray';
+      case 'basic':
+        return 'blue';
+      case 'pro':
+        return 'violet';
+      default:
+        return 'gray';
+    }
+  };
+
+  const getPlanIcon = (plan: string) => {
+    switch (plan) {
+      case 'free':
+        return <IconUser size={16} />;
+      case 'basic':
+        return <IconUser size={16} />;
+      case 'pro':
+        return <IconCrown size={16} />;
+      default:
+        return <IconUser size={16} />;
+    }
+  };
+
   return (
     <Container size="sm">
       <Stack gap="xl">
@@ -124,6 +180,43 @@ export default function SettingsPage() {
           <Title order={2} mb="md">Ayarlar</Title>
           <Text c="dimmed">Hesap ayarlarınızı buradan yönetebilirsiniz.</Text>
         </div>
+
+        <Paper
+          p="xl"
+          radius="lg"
+          withBorder
+          style={{
+            background: 'white',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+            }
+          }}
+        >
+          <Stack gap="md">
+            <Title order={3} size="h4">Hesap Bilgileri</Title>
+            <Group>
+              <Text size="sm" fw={500}>E-posta:</Text>
+              <Text size="sm" c="dimmed">
+                {isLoadingUser ? 'Yükleniyor...' : userEmail}
+              </Text>
+            </Group>
+            <Group>
+              <Text size="sm" fw={500}>Plan:</Text>
+              {isLoadingUser ? (
+                <Text size="sm" c="dimmed">Yükleniyor...</Text>
+              ) : (
+                <Badge 
+                  color={getPlanColor(userPlan)} 
+                  variant="light"
+                  leftSection={getPlanIcon(userPlan)}
+                >
+                  {userPlan === 'free' ? 'Ücretsiz Plan' : userPlan === 'basic' ? 'Basit Plan' : userPlan === 'pro' ? 'Pro Plan' : 'Kullanıcı'}
+                </Badge>
+              )}
+            </Group>
+          </Stack>
+        </Paper>
 
         <Paper
           p="xl"

@@ -29,6 +29,7 @@ export default function DashboardLayout({
     const [userEmail, setUserEmail] = useState<string>('');
     const [userPlan, setUserPlan] = useState<string>('free');
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [isLoadingUser, setIsLoadingUser] = useState(true);
     const pathname = usePathname();
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 48em)');
@@ -36,6 +37,7 @@ export default function DashboardLayout({
     useEffect(() => {
         const fetchUserData = async () => {
             try {
+                setIsLoadingUser(true);
                 const response = await fetch(`/api/auth/me`, {
                     method: 'GET',
                     headers: {
@@ -50,6 +52,9 @@ export default function DashboardLayout({
                     setUserPlan(data.user.plan || 'free');
                 }
             } catch (error) {
+                console.error('Error fetching user data:', error);
+            } finally {
+                setIsLoadingUser(false);
             }
         };
 
@@ -156,14 +161,14 @@ export default function DashboardLayout({
                             <Menu.Target>
                                 <Group gap="xs" style={{ cursor: 'pointer' }}>
                                     <Avatar color="blue" radius="xl">
-                                        {userEmail ? userEmail.charAt(0).toUpperCase() : ''}
+                                        {isLoadingUser ? '' : (userEmail ? userEmail.charAt(0).toUpperCase() : '')}
                                     </Avatar>
                                     <Box visibleFrom="sm">
                                         <Text size="sm" fw={600} truncate>
-                                            {userEmail}
+                                            {isLoadingUser ? 'Yükleniyor...' : userEmail}
                                         </Text>
                                         <Text size="xs" c="dimmed">
-                                            Kullanıcı
+                                            {isLoadingUser ? 'Yükleniyor...' : (userPlan === 'free' ? 'Ücretsiz Plan' : userPlan === 'basic' ? 'Basit Plan' : userPlan === 'pro' ? 'Pro Plan' : 'Kullanıcı')}
                                         </Text>
                                     </Box>
                                 </Group>
