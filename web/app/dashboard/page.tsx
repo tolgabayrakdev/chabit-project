@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, Divider } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconLink, IconSettings, IconClock, IconFileTypePdf } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconLink, IconSettings, IconClock, IconFileTypePdf, IconGift } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -23,6 +23,27 @@ interface Menu {
     id: string;
     name: string;
     created_at: string;
+}
+
+interface Campaign {
+    id: string;
+    title: string;
+    description: string;
+    slug: string;
+    start_date: string;
+    end_date: string;
+    thank_you_message: string;
+    contact_email?: string;
+    is_active?: boolean;
+    created_at: string;
+    entries_count?: number;
+    winners?: Array<{
+        id: string;
+        name: string;
+        email: string;
+        phone?: string;
+        rank: number;
+    }>;
 }
 
 const getTypeLabel = (type: string) => {
@@ -46,12 +67,34 @@ export default function DashboardPage() {
     const [qrCodes, setQRCodes] = useState<QRCode[]>([]);
     const [linkInBioProfiles, setLinkInBioProfiles] = useState<LinkInBioProfile[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
     const [loadingLinkInBio, setLoadingLinkInBio] = useState(true);
     const [loadingMenus, setLoadingMenus] = useState(true);
+    const [loadingCampaigns, setLoadingCampaigns] = useState(true);
+    const [userPlan, setUserPlan] = useState<string>('free');
     const [historyOpened, { open: openHistory, close: closeHistory }] = useDisclosure(false);
 
     useEffect(() => {
+        const fetchUserPlan = async () => {
+            try {
+                const response = await fetch(`/api/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserPlan(data.user.plan || 'free');
+                }
+            } catch (error) {
+                console.error('Error fetching user plan:', error);
+            }
+        };
+
         const fetchQRCodes = async () => {
             try {
                 const response = await fetch(`/api/qr`, {
@@ -73,9 +116,6 @@ export default function DashboardPage() {
             }
         };
 
-        fetchQRCodes();
-
-        // Fetch Link in Bio profiles
         const fetchLinkInBioProfiles = async () => {
             try {
                 const response = await fetch('/api/link-in-bio/all', {
@@ -91,9 +131,7 @@ export default function DashboardPage() {
                 setLoadingLinkInBio(false);
             }
         };
-        fetchLinkInBioProfiles();
 
-        // Fetch Menus
         const fetchMenus = async () => {
             try {
                 const response = await fetch('/api/menu', {
@@ -109,9 +147,33 @@ export default function DashboardPage() {
                 setLoadingMenus(false);
             }
         };
-        fetchMenus();
-    }, []);
 
+        const fetchCampaigns = async () => {
+            if (userPlan === 'pro') {
+                try {
+                    const response = await fetch('/api/campaign', {
+                        credentials: 'include',
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCampaigns(data);
+                    }
+                } catch (error) {
+                    setCampaigns([]);
+                } finally {
+                    setLoadingCampaigns(false);
+                }
+            } else {
+                setLoadingCampaigns(false);
+            }
+        };
+
+        fetchUserPlan();
+        fetchQRCodes();
+        fetchLinkInBioProfiles();
+        fetchMenus();
+        fetchCampaigns();
+    }, [userPlan]);
 
     return (
         <Container size="lg">
@@ -156,7 +218,7 @@ export default function DashboardPage() {
             </Card>
            
             <Card withBorder p="xl" radius="lg" mb="xl" style={{ background: '#fff', boxShadow: '0 4px 24px rgba(34, 139, 230, 0.08)', border: '1px solid #e3e8ee' }}>
-                <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
+                <SimpleGrid cols={{ base: 1, md: userPlan === 'pro' ? 3 : 2 }} spacing="xl">
                     {/* Link in Bio Widget */}
                     <Card withBorder radius="lg" p="xl" style={{ minWidth: 0, background: '#fff', boxShadow: '0 4px 24px rgba(230, 73, 128, 0.08)', border: '1px solid #f3d9e3' }}>
                         <Group gap="sm" align="center" mb="md">
@@ -219,26 +281,40 @@ export default function DashboardPage() {
                             <Text c="dimmed">Henüz menü oluşturulmamış.</Text>
                         )}
                     </Card>
+                    {/* Kampanya Widget - Sadece PRO kullanıcılar için */}
+                    {userPlan === 'pro' && (
+                        <Card withBorder radius="lg" p="xl" style={{ minWidth: 0, background: '#fff', boxShadow: '0 4px 24px rgba(230, 73, 128, 0.08)', border: '1px solid #f3d9e3' }}>
+                            <Group gap="sm" align="center" mb="md">
+                                <IconGift size={32} color="#e64980" />
+                                <Title order={4} style={{ color: '#e64980', fontWeight: 700 }}>Kampanya</Title>
+                            </Group>
+                            {loadingCampaigns ? (
+                                <Center style={{ minHeight: 80 }}><Loader size="md" color="pink" /></Center>
+                            ) : campaigns.length > 0 ? (
+                                (() => {
+                                    const latest = [...campaigns].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+                                    return (
+                                        <Stack gap="xs">
+                                            <Group align="center" gap="xs">
+                                                <Text size="sm" c="dimmed">Toplam:</Text>
+                                                <Title order={3} c="#e64980">{campaigns.length}</Title>
+                                            </Group>
+                                            <Divider my="xs" />
+                                            <Text size="sm" c="dimmed">Son Oluşturulan:</Text>
+                                            <Text size="lg" fw={600}>{latest.title}</Text>
+                                            <Text size="sm" c="dimmed">Oluşturulma: {new Date(latest.created_at).toLocaleString('tr-TR')}</Text>
+                                            <Button component="a" href={`/campaign/${latest.slug}`} target="_blank" color="pink" variant="light" size="sm" mt="xs">
+                                                Kampanyayı Görüntüle
+                                            </Button>
+                                        </Stack>
+                                    );
+                                })()
+                            ) : (
+                                <Text c="dimmed">Henüz kampanya oluşturulmamış.</Text>
+                            )}
+                        </Card>
+                    )}
                 </SimpleGrid>
-            </Card>
-            <Card withBorder p="xl" radius="md" mt="xl">
-                <Title order={4} mb="md">Aktif Özellikler</Title>
-                <Stack gap="sm">
-                    <Group>
-                        <Badge color="blue" leftSection={<IconQrcode size={16} />}>QR Kod Oluşturma</Badge>
-                        <Badge color="cyan" leftSection={<IconLink size={16} />}>Link in Bio</Badge>
-                        <Badge color="yellow" leftSection={<IconSettings size={16} />}>Menü Oluşturma</Badge>
-                        <Badge color="indigo" leftSection={<IconFileTypePdf size={16} />}>PDF Menü</Badge>
-                    </Group>
-                    <Group>
-                        <Badge color="green" leftSection={<IconWifi size={16} />}>WiFi QR Kod</Badge>
-                        <Badge color="orange" leftSection={<IconMail size={16} />}>E-posta QR Kod</Badge>
-                        <Badge color="red" leftSection={<IconMessage size={16} />}>SMS QR Kod</Badge>
-                        <Badge color="grape" leftSection={<IconAddressBook size={16} />}>vCard QR Kod</Badge>
-                        <Badge color="teal" leftSection={<IconLink size={16} />}>URL QR Kod</Badge>
-                        <Badge color="lime" leftSection={<IconFileTypePdf size={16} />}>Google Yorum QR Kod</Badge>
-                    </Group>
-                </Stack>
             </Card>
             <Modal opened={historyOpened} onClose={closeHistory} title="QR Kod Geçmişi" size="lg" centered>
                 {loading ? (

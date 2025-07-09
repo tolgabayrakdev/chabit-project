@@ -9,17 +9,32 @@ export default function LoginClient() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [captchaNumbers, setCaptchaNumbers] = useState({ num1: 0, num2: 0 });
   const router = useRouter();
+  
   const form = useForm({
     initialValues: {
       email: '',
       password: '',
+      captchaAnswer: '',
     },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Geçerli bir email adresi giriniz'),
       password: (value) => (value.length < 6 ? 'Şifre en az 6 karakter olmalıdır' : null),
     },
   });
+
+  // Captcha sayılarını oluştur
+  const generateCaptcha = () => {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    setCaptchaNumbers({ num1, num2 });
+    form.setFieldValue('captchaAnswer', '');
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
 
   useEffect(() => {
     // Giriş kontrolü
@@ -44,7 +59,12 @@ export default function LoginClient() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+          captchaAnswer: parseInt(values.captchaAnswer),
+          captchaSum: captchaNumbers.num1 + captchaNumbers.num2
+        }),
       })
 
       if (response.ok) {
@@ -53,10 +73,13 @@ export default function LoginClient() {
         const data = await response.json();
         setError(data.message || 'Giriş yapılamadı');
         setLoading(false);
+        // Hata durumunda yeni captcha oluştur
+        generateCaptcha();
       }
     } catch (error) {
       setError('Bir hata oluştu');
       setLoading(false);
+      generateCaptcha();
     }
   };
 
@@ -157,6 +180,40 @@ export default function LoginClient() {
                   size="md"
                   {...form.getInputProps('password')}
                 />
+                
+                {/* Captcha Bölümü */}
+                <Box style={{ 
+                  background: 'rgba(34, 139, 230, 0.05)', 
+                  borderRadius: 8, 
+                  padding: 16, 
+                  border: '1px solid rgba(34, 139, 230, 0.2)' 
+                }}>
+                  <Text size="sm" style={{ marginBottom: 8, fontWeight: 500, color: '#228be6' }}>
+                    Güvenlik Doğrulaması
+                  </Text>
+                  <Text size="sm" style={{ marginBottom: 12, color: '#666' }}>
+                    {captchaNumbers.num1} + {captchaNumbers.num2} = ?
+                  </Text>
+                  <TextInput
+                    label="Sonuç"
+                    placeholder="Toplamı giriniz"
+                    required
+                    radius="md"
+                    size="md"
+                    type="number"
+                    {...form.getInputProps('captchaAnswer')}
+                  />
+                  <Button
+                    type="button"
+                    variant="subtle"
+                    size="xs"
+                    style={{ marginTop: 8, color: '#228be6' }}
+                    onClick={generateCaptcha}
+                  >
+                    Yeni Soru
+                  </Button>
+                </Box>
+
                 <Anchor component={Link} href="/forgot-password" style={{ color: '#228be6', textAlign: 'right', display: 'block', marginBottom: 4, fontSize: 14, textDecoration: 'underline' }}>
                   Şifremi Unuttum?
                 </Anchor>
