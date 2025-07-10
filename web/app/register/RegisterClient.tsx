@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Box, Stack, Anchor, rem } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Box, Stack, Anchor, rem, Checkbox } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,12 +15,14 @@ export default function RegisterClient() {
       email: '',
       password: '',
       confirmPassword: '',
+      acceptTerms: false,
     },
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Geçerli bir email adresi giriniz'),
       password: (value) => (value.length < 6 ? 'Şifre en az 6 karakter olmalıdır' : null),
       confirmPassword: (value, values) =>
         value !== values.password ? 'Şifreler eşleşmiyor' : null,
+      acceptTerms: (value) => (!value ? 'Kullanım şartlarını ve gizlilik politikasını kabul etmelisiniz' : null),
     },
   });
 
@@ -172,10 +174,43 @@ export default function RegisterClient() {
                     size="md"
                     {...form.getInputProps('confirmPassword')}
                   />
+                  <Checkbox
+                    label={
+                      <Text size="sm">
+                        <Anchor component={Link} href="/terms" target="_blank" style={{ color: '#228be6' }}>
+                          Kullanım Şartları
+                        </Anchor>
+                        {' '}ve{' '}
+                        <Anchor component={Link} href="/privacy" target="_blank" style={{ color: '#228be6' }}>
+                          Gizlilik Politikası
+                        </Anchor>
+                        'nı kabul ediyorum
+                      </Text>
+                    }
+                    {...form.getInputProps('acceptTerms', { type: 'checkbox' })}
+                  />
+                  {form.errors.acceptTerms && (
+                    <div
+                      style={{
+                        background: 'rgba(255, 77, 77, 0.08)',
+                        color: '#e03131',
+                        borderRadius: 8,
+                        padding: '10px 0',
+                        marginBottom: 16,
+                        textAlign: 'center',
+                        fontSize: 14,
+                        fontWeight: 500,
+                        letterSpacing: 0.1,
+                        border: '1px solid #ffe3e3'
+                      }}
+                    >
+                      {form.errors.acceptTerms}
+                    </div>
+                  )}
                   <Button
                     loading={loading}
                     fullWidth
-                    mt="xl"
+                    mt="md"
                     type="submit"
                     radius="md"
                     size="md"
