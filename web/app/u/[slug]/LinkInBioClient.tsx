@@ -73,22 +73,69 @@ type Profile = {
   links: Link[];
   media: MediaItem[];
   profile_image: string;
+  theme?: BackgroundTheme;
   created_at: string;
   isOwner: boolean;
 };
 
+type BackgroundTheme = {
+  id: string;
+  name: string;
+  gradient: string;
+  preview: string;
+};
+
 const SOCIAL_PLATFORMS: Platform[] = [
   { value: 'instagram', label: 'Instagram', icon: FaInstagram, color: '#E4405F' },
-  { value: 'x', label: 'X (Twitter)', icon: FaXTwitter, color: '#000000' },
+  { value: 'x', label: 'X (Twitter)', icon: FaXTwitter, color: '#1DA1F2' },
   { value: 'youtube', label: 'YouTube', icon: FaYoutube, color: '#FF0000' },
   { value: 'linkedin', label: 'LinkedIn', icon: FaLinkedin, color: '#0A66C2' },
-  { value: 'github', label: 'GitHub', icon: FaGithub, color: '#181717' },
-  { value: 'tiktok', label: 'TikTok', icon: FaTiktok, color: '#000000' },
+  { value: 'github', label: 'GitHub', icon: FaGithub, color: '#333333' },
+  { value: 'tiktok', label: 'TikTok', icon: FaTiktok, color: '#FF0050' },
   { value: 'snapchat', label: 'Snapchat', icon: FaSnapchat, color: '#FFFC00' },
   { value: 'email', label: 'E-posta', icon: FaEnvelope, color: '#EA4335' },
   { value: 'phone', label: 'Telefon', icon: FaPhone, color: '#25D366' },
   { value: 'website', label: 'Web Sitesi', icon: FaGlobe, color: '#4285F4' },
   { value: 'other', label: 'Diğer', icon: FaLink, color: '#718096' }
+];
+
+const BACKGROUND_THEMES: BackgroundTheme[] = [
+  { 
+    id: 'blue', 
+    name: 'Mavi Okyanus', 
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%)',
+    preview: '#3b82f6'
+  },
+  { 
+    id: 'green', 
+    name: 'Yeşil Orman', 
+    gradient: 'linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%)',
+    preview: '#10b981'
+  },
+  { 
+    id: 'orange', 
+    name: 'Turuncu Gün Batımı', 
+    gradient: 'linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%)',
+    preview: '#f97316'
+  },
+  { 
+    id: 'purple', 
+    name: 'Mor Gece', 
+    gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%)',
+    preview: '#8b5cf6'
+  },
+  { 
+    id: 'pink', 
+    name: 'Pembe Çiçek', 
+    gradient: 'linear-gradient(135deg, #ec4899 0%, #db2777 50%, #be185d 100%)',
+    preview: '#ec4899'
+  },
+  { 
+    id: 'teal', 
+    name: 'Turkuaz Deniz', 
+    gradient: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%)',
+    preview: '#14b8a6'
+  }
 ];
 
 interface LinkCardProps {
@@ -131,12 +178,13 @@ const LinkCard: FC<LinkCardProps> = ({ link, onClick }) => {
     >
       <Group gap="md" align="center">
         <ThemeIcon 
-          variant="light" 
+          variant="filled" 
           radius="md" 
           size="lg"
           style={{ 
-            backgroundColor: `${platform.color}15`,
-            color: platform.color 
+            backgroundColor: platform.color,
+            color: platform.color === '#FFFC00' || platform.color === '#000000' ? '#000000' : '#ffffff',
+            border: platform.color === '#FFFC00' ? '1px solid #e0e0e0' : 'none'
           }}
         >
           <Icon size={20} />
@@ -144,7 +192,13 @@ const LinkCard: FC<LinkCardProps> = ({ link, onClick }) => {
         <Box style={{ flex: 1 }}>
           <Text size="lg" fw={600} c="dark">{platform.label}</Text>
         </Box>
-        <ActionIcon variant="subtle" style={{ color: platform.color }}>
+        <ActionIcon 
+          variant="subtle" 
+          style={{ 
+            color: platform.color === '#FFFC00' ? '#000000' : platform.color,
+            backgroundColor: platform.color === '#FFFC00' ? '#FFFC00' : 'transparent'
+          }}
+        >
           <IconExternalLink size={16} />
         </ActionIcon>
       </Group>
@@ -331,6 +385,9 @@ export default function LinkInBioPage() {
   const [rawImageUrl, setRawImageUrl] = useState<string | null>(null);
   const [linkErrors, setLinkErrors] = useState<{ label?: string; url?: string }[]>([]);
   const [mediaErrors, setMediaErrors] = useState<{ type?: string; url?: string }[]>([]);
+  const [selectedTheme, setSelectedTheme] = useState<string>('blue');
+  const [themeModalOpen, setThemeModalOpen] = useState(false);
+  const [tempSelectedTheme, setTempSelectedTheme] = useState<string>('blue');
 
   useEffect(() => {
     if (!slug) return;
@@ -348,6 +405,9 @@ export default function LinkInBioPage() {
         };
         setProfile(normalizedProfile);
         setIsOwner(!!profileData.isOwner);
+        const themeId = profileData.theme?.id || 'blue';
+        setSelectedTheme(themeId);
+        setTempSelectedTheme(themeId);
       })
       .catch((err: any) => setError(err.message))
       .finally(() => setLoading(false));
@@ -544,6 +604,8 @@ export default function LinkInBioPage() {
     }
   };
 
+
+
   // Crop helper
   async function getCroppedImg(imageSrc: string, croppedAreaPixels: any): Promise<Blob> {
     const image = await createImage(imageSrc);
@@ -621,30 +683,89 @@ export default function LinkInBioPage() {
         padding: '2rem',
       }}
     >
+      {/* Gradient Background with Floating Bubbles */}
       <Box
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          bottom: 0,
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '3rem',
-          padding: '3rem',
-          opacity: 0.1,
-          transform: 'rotate(-15deg) scale(1.2)',
-          pointerEvents: 'none',
+          height: '50vh',
+          background: (() => {
+            // Önce geçici tema varsa onu kullan (modal açıkken)
+            if (themeModalOpen && tempSelectedTheme) {
+              return BACKGROUND_THEMES.find(t => t.id === tempSelectedTheme)?.gradient;
+            }
+            // Sonra database'den gelen tema
+            if (profile?.theme?.gradient) {
+              return profile.theme.gradient;
+            }
+            // Son çare olarak varsayılan tema
+            return BACKGROUND_THEMES[0].gradient;
+          })(),
+          overflow: 'hidden',
           zIndex: 0,
-          color: '#2563eb',
-          fontSize: '24px',
-          fontWeight: 'bold',
         }}
       >
-        {Array(50).fill('vunqr').map((text, i) => (
-          <Text key={i} size="xl" fw={900} style={{ letterSpacing: '1px' }}>
-            {text}
-          </Text>
+        {/* Elegant Floating Bubbles */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Box
+            key={i}
+            style={{
+              position: 'absolute',
+              width: `${Math.random() * 60 + 40}px`,
+              height: `${Math.random() * 60 + 40}px`,
+              borderRadius: '50%',
+              background: `radial-gradient(circle at 35% 35%, rgba(255, 255, 255, ${Math.random() * 0.25 + 0.15}), rgba(255, 255, 255, ${Math.random() * 0.1 + 0.05}))`,
+              top: `${Math.random() * 80 + 10}%`,
+              left: `${Math.random() * 80 + 10}%`,
+              animation: `elegantFloat ${Math.random() * 15 + 12}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 8}s`,
+              boxShadow: `0 8px 32px rgba(255, 255, 255, 0.15)`,
+              backdropFilter: 'blur(2px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            }}
+          />
+        ))}
+        
+        {/* Subtle Medium Bubbles */}
+        {Array.from({ length: 12 }).map((_, i) => (
+          <Box
+            key={`medium-${i}`}
+            style={{
+              position: 'absolute',
+              width: `${Math.random() * 35 + 20}px`,
+              height: `${Math.random() * 35 + 20}px`,
+              borderRadius: '50%',
+              background: `radial-gradient(circle at 30% 30%, rgba(255, 255, 255, ${Math.random() * 0.2 + 0.1}), rgba(255, 255, 255, ${Math.random() * 0.08 + 0.03}))`,
+              top: `${Math.random() * 90 + 5}%`,
+              left: `${Math.random() * 90 + 5}%`,
+              animation: `gentleFloat ${Math.random() * 12 + 8}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 6}s`,
+              boxShadow: `0 4px 20px rgba(255, 255, 255, 0.1)`,
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+            }}
+          />
+        ))}
+        
+        {/* Delicate Sparkles */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <Box
+            key={`sparkle-${i}`}
+            style={{
+              position: 'absolute',
+              width: `${Math.random() * 6 + 2}px`,
+              height: `${Math.random() * 6 + 2}px`,
+              borderRadius: '50%',
+              background: `rgba(255, 255, 255, ${Math.random() * 0.4 + 0.2})`,
+              top: `${Math.random() * 95 + 2.5}%`,
+              left: `${Math.random() * 95 + 2.5}%`,
+              animation: `delicateSparkle ${Math.random() * 6 + 4}s ease-in-out infinite`,
+              animationDelay: `${Math.random() * 3}s`,
+              boxShadow: `0 0 12px rgba(255, 255, 255, 0.6)`,
+              backdropFilter: 'blur(1px)',
+            }}
+          />
         ))}
       </Box>
       
@@ -653,7 +774,7 @@ export default function LinkInBioPage() {
         align="center" 
         style={{ 
           position: 'relative', 
-          zIndex: 1,
+          zIndex: 10,
           maxWidth: '640px',
           margin: '0 auto',
           width: '100%',
@@ -661,27 +782,88 @@ export default function LinkInBioPage() {
         }}
       >
         {isOwner && (
-          <Button
-            leftSection={<IconPencil size={16} />}
-            variant="light"
-            onClick={openEditModal}
-          >
-            Profili Düzenle
-          </Button>
+          <Group gap="sm">
+            <Button
+              leftSection={<IconPencil size={16} />}
+              variant="filled"
+              color="white"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                color: '#1e40af',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+              }}
+              onClick={openEditModal}
+            >
+              Profili Düzenle
+            </Button>
+            <Button
+              variant="filled"
+              color="white"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                color: '#1e40af',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+              }}
+              onClick={() => {
+                const currentTheme = profile?.theme?.id || 'blue';
+                setSelectedTheme(currentTheme);
+                setTempSelectedTheme(currentTheme);
+                setThemeModalOpen(true);
+              }}
+            >
+              Tema Seç
+            </Button>
+          </Group>
         )}
         <Stack gap="md" align="center" style={{ textAlign: 'center' }}>
           <Avatar
             size={120}
-            radius="xl"
+            radius="50%"
             src={croppedImage ? URL.createObjectURL(croppedImage) : imageFile ? URL.createObjectURL(imageFile) : profile.profile_image || '/default-avatar.png'}
             alt={profile.username}
-            style={{ border: '4px solid #e9ecef', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}
+            style={{ 
+              border: '4px solid rgba(255, 255, 255, 0.3)', 
+              boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '50%'
+            }}
           />
           <Stack gap="xs" align="center">
             <Group gap="xs" align="center">
-              <Text size="xl" fw={700} c="dark">@{profile.username}</Text>
+              <Text 
+                size="xl" 
+                fw={700} 
+                style={{ 
+                  color: 'white',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                  padding: '4px 12px',
+                  borderRadius: '20px',
+                  backdropFilter: 'blur(10px)'
+                }}
+              >
+                @{profile.username}
+              </Text>
             </Group>
-            <Text size="md" c="dimmed" style={{ whiteSpace: 'pre-line', lineHeight: 1.6, maxWidth: '400px' }}>
+            <Text 
+              size="md" 
+              style={{ 
+                color: 'rgba(255, 255, 255, 0.9)',
+                whiteSpace: 'pre-line', 
+                lineHeight: 1.6, 
+                maxWidth: '400px',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                padding: '8px 16px',
+                borderRadius: '12px',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
               {profile.bio_text}
             </Text>
           </Stack>
@@ -689,13 +871,31 @@ export default function LinkInBioPage() {
         <Divider style={{ width: '100%' }} />
         <Stack gap="md" style={{ width: '100%' }}>
           <Group justify="space-between" align="center">
-            <Text size="lg" fw={600} c="dark">Bağlantılar</Text>
+            <Text 
+              size="lg" 
+              fw={600} 
+              style={{ 
+                color: '#1e293b',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                padding: '4px 16px',
+                borderRadius: '8px',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+              }}
+            >
+              Bağlantılar
+            </Text>
             {isOwner && (
               <Button
                 size="xs"
-                variant="subtle"
+                variant="filled"
                 leftSection={<IconPencil size={14} />}
                 onClick={openEditLinksModal}
+                style={{
+                  backgroundColor: profile?.theme?.preview || '#3b82f6',
+                  color: 'white',
+                  boxShadow: `0 2px 8px ${profile?.theme?.preview || '#3b82f6'}40`
+                }}
               >
                 Düzenle
               </Button>
@@ -711,16 +911,32 @@ export default function LinkInBioPage() {
         <Divider style={{ width: '100%' }} />
         <Stack gap="md" style={{ width: '100%' }}>
           <Group justify="space-between" align="center">
-            <Text size="lg" fw={600} c="dark">
+            <Text 
+              size="lg" 
+              fw={600} 
+              style={{ 
+                color: '#1e293b',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                padding: '4px 16px',
+                borderRadius: '8px',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+              }}
+            >
               Medya Galerisi
             </Text>
             <Group>
               {isOwner && (
                 <Button
                   size="xs"
-                  variant="subtle"
+                  variant="filled"
                   leftSection={<IconPencil size={14} />}
                   onClick={openEditMediaModal}
+                  style={{
+                    backgroundColor: profile?.theme?.preview || '#3b82f6',
+                    color: 'white',
+                    boxShadow: `0 2px 8px ${profile?.theme?.preview || '#3b82f6'}40`
+                  }}
                 >
                   Düzenle
                 </Button>
@@ -917,6 +1133,96 @@ export default function LinkInBioPage() {
         </Stack>
       </Modal>
 
+      {/* Theme Selection Modal */}
+      <Modal opened={themeModalOpen} onClose={() => {
+        setThemeModalOpen(false);
+        setTempSelectedTheme(profile?.theme?.id || 'blue');
+      }} title="Arka Plan Teması Seç" centered size="lg">
+        <Stack gap="lg">
+          <Text size="sm" c="dimmed" ta="center">
+            Profiliniz için bir arka plan teması seçin
+          </Text>
+          <SimpleGrid cols={{ base: 2, sm: 3 }} spacing="md">
+            {BACKGROUND_THEMES.map((theme) => (
+                              <Card
+                  key={theme.id}
+                  p="md"
+                  radius="md"
+                  style={{
+                    cursor: 'pointer',
+                    border: selectedTheme === theme.id ? `3px solid ${profile?.theme?.preview || '#3b82f6'}` : '1px solid #e9ecef',
+                    background: selectedTheme === theme.id ? `${profile?.theme?.preview || '#3b82f6'}15` : 'white',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onClick={() => {
+                    setSelectedTheme(theme.id);
+                    setTempSelectedTheme(theme.id);
+                  }}
+                  className="hover:shadow-md"
+                >
+                <Stack gap="sm" align="center">
+                  <Box
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      borderRadius: '12px',
+                      background: theme.gradient,
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Text size="sm" fw={500} ta="center">
+                    {theme.name}
+                  </Text>
+                </Stack>
+              </Card>
+            ))}
+          </SimpleGrid>
+          <Group justify="center" mt="md">
+            <Button variant="light" onClick={() => setThemeModalOpen(false)}>
+              İptal
+            </Button>
+            <Button 
+              onClick={async () => {
+                if (!profile) return;
+                setIsSaving(true);
+                try {
+                  const selectedThemeObj = BACKGROUND_THEMES.find(t => t.id === selectedTheme);
+                  if (!selectedThemeObj) {
+                    throw new Error('Tema bulunamadı');
+                  }
+                  const themeObj = selectedThemeObj;
+                  const response = await fetch('/api/link-in-bio', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                      theme: themeObj 
+                    }),
+                    credentials: 'include',
+                  });
+                  if (!response.ok) throw new Error('Tema güncellenemedi.');
+                  const updatedProfile = await response.json();
+                  const normalizedProfile: Profile = {
+                    ...updatedProfile,
+                    links: normalizeLinks(updatedProfile.links || [])
+                  };
+                  setProfile(normalizedProfile);
+                  setSelectedTheme(themeObj.id);
+                  setTempSelectedTheme(themeObj.id);
+                  setThemeModalOpen(false);
+                } catch (error) {
+                  console.error(error);
+                } finally {
+                  setIsSaving(false);
+                }
+              }} 
+              loading={isSaving}
+            >
+              Temayı Kaydet
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+
       {/* Crop Modal for profile image */}
       <Modal opened={cropModalOpen} onClose={() => setCropModalOpen(false)} title="Profil Fotoğrafını Kırp" centered size="lg">
         <div style={{ position: 'relative', width: '100%', height: 300, background: '#222' }}>
@@ -951,8 +1257,55 @@ export default function LinkInBioPage() {
         </Group>
       </Modal>
 
+
+
       {/* Responsive mobil için: Group'ları column yap */}
       <style jsx global>{`
+        @keyframes elegantFloat {
+          0%, 100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+            opacity: 0.8;
+          }
+          25% {
+            transform: translateY(-20px) translateX(12px) rotate(3deg) scale(1.02);
+            opacity: 0.9;
+          }
+          50% {
+            transform: translateY(-12px) translateX(-8px) rotate(-2deg) scale(0.98);
+            opacity: 0.7;
+          }
+          75% {
+            transform: translateY(-16px) translateX(16px) rotate(1deg) scale(1.01);
+            opacity: 0.85;
+          }
+        }
+        
+        @keyframes gentleFloat {
+          0%, 100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg);
+            opacity: 0.6;
+          }
+          33% {
+            transform: translateY(-15px) translateX(8px) rotate(2deg);
+            opacity: 0.8;
+          }
+          66% {
+            transform: translateY(-8px) translateX(-5px) rotate(-1deg);
+            opacity: 0.5;
+          }
+        }
+        
+        @keyframes delicateSparkle {
+          0%, 100% {
+            transform: scale(1) rotate(0deg);
+            opacity: 0.4;
+          }
+          50% {
+            transform: scale(1.3) rotate(90deg);
+            opacity: 0.8;
+          }
+        }
+        
         @media (max-width: 600px) {
           .link-edit-group, .media-edit-group {
             flex-direction: column !important;

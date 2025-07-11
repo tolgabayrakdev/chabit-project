@@ -113,81 +113,64 @@ export default function MenuViewer({ params }: { params: Promise<{ slug: string 
     }
 
     return (
-        <Container size="lg" py="xl">
+        <Container size={400} py={{ base: 'md', md: 'xl' }}>
             {/* Header */}
             <Paper 
                 radius="lg" 
-                p="sm" 
-                mb="xl"
+                p={{ base: 'xs', md: 'xs' }}
+                mb={{ base: 'sm', md: 'md' }}
                 style={{
                     background: 'linear-gradient(135deg, #fff 0%, #f8f9fa 100%)',
                 }}
             >
-                <Stack gap="sm">
-                    <Group justify="space-between" align="center">
-                        <Group gap="sm" align="center">
-                            <ThemeIcon size={28} radius="xl" color="#fab005" variant="light">
-                                <IconMenu2 size={16} />
-                            </ThemeIcon>
-                            <Text size="lg" fw={600} c="dark.8">{menu.name}</Text>
-                        </Group>
-                        <Group gap="xs">
-                            <Button
-                                variant="light"
-                                color="blue"
-                                size="xs"
-                                onClick={() => window.open(menu.url, '_blank')}
-                                leftSection={<IconFileTypePdf size={12} />}
-                            >
-                                PDF'i Aç
-                            </Button>
-                            <Button
-                                size="xs"
-                                leftSection={<IconDownload size={12} />}
-                                onClick={handleDownload}
-                                color="#fab005"
-                            >
-                                PDF İndir
-                            </Button>
-                        </Group>
-                    </Group>
-                </Stack>
+                <Center>
+                    <Text size="lg" fw={600} c="dark.8">{menu.name}</Text>
+                </Center>
             </Paper>
 
             {/* PDF Viewer */}
             <Paper 
                 withBorder 
-                radius="lg" 
-                p="md" 
+                radius="md" 
+                p={0}
                 mb="xl"
                 style={{
                     background: '#fff',
                     border: '1px solid #e9ecef'
                 }}
             >
-                <div style={{ 
-                    width: '100%', 
-                    height: '80vh', 
-                    borderRadius: '8px',
-                    overflow: 'hidden',
-                    border: '1px solid #e9ecef',
-                    position: 'relative',
-                    background: 'linear-gradient(45deg, #f8f9fa 25%, transparent 25%), linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f8f9fa 75%), linear-gradient(-45deg, transparent 75%, #f8f9fa 75%)',
-                    backgroundSize: '20px 20px',
-                    backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-                }}>
+                <Box
+                    style={{ 
+                        width: '100%', 
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        border: '1px solid #e9ecef',
+                        position: 'relative',
+                        margin: '0 auto',
+                        background: '#ffffff',
+                        cursor: 'pointer'
+                    }}
+                    h={{ base: 'calc(100vh - 350px)', md: 'calc(100vh - 400px)' }}
+                    mih={{ base: '200px', md: '250px' }}
+                    mah={{ base: '500px', md: '600px' }}
+                    onClick={() => window.open(menu.url, '_blank')}
+                >
                     <iframe
-                        src={menu.url}
+                        src={`${menu.url}#toolbar=0&navpanes=0&scrollbar=0&view=Fit&scrollbar=0&statusbar=0&messages=0&scrollbar=0&scrollbar=0&pagemode=none&viewrect=0,0,1000,800&bgcolor=ffffff&fgcolor=000000`}
                         width="100%"
                         height="100%"
                         style={{ 
                             border: 'none',
-                            background: 'transparent'
+                            background: '#ffffff',
+                            overflow: 'hidden',
+                            pointerEvents: 'none'
                         }}
                         title={menu.name}
                         onLoad={() => {
                             setIframeLoading(false);
                         }}
+                        scrolling="no"
+                        frameBorder="0"
                     />
                     {/* Loading overlay */}
                     {iframeLoading && (
@@ -210,21 +193,52 @@ export default function MenuViewer({ params }: { params: Promise<{ slug: string 
                             </Stack>
                         </div>
                     )}
-                </div>
+                </Box>
+            </Paper>
+
+            {/* PDF Actions */}
+            <Paper 
+                radius="lg" 
+                p={{ base: 'xs', md: 'sm' }}
+                mb={{ base: 'sm', md: 'md' }}
+                style={{
+                    background: 'transparent'
+                }}
+            >
+                <Center>
+                    <Group gap="md">
+                        <Button
+                            variant="light"
+                            color="blue"
+                            size="sm"
+                            onClick={() => window.open(menu.url, '_blank')}
+                            leftSection={<IconFileTypePdf size={16} />}
+                        >
+                            PDF'i Aç
+                        </Button>
+                        <Button
+                            size="sm"
+                            leftSection={<IconDownload size={16} />}
+                            onClick={handleDownload}
+                            color="#fab005"
+                        >
+                            PDF İndir
+                        </Button>
+                    </Group>
+                </Center>
             </Paper>
 
             {/* Footer */}
             <Paper 
                 withBorder 
-                radius="lg" 
-                p="sm"
+                radius="md" 
+                p={{ base: 'xs', md: 'xs' }}
                 style={{
                     background: 'linear-gradient(135deg, #f8f9fa 0%, #fff 100%)',
                     border: '1px solid #e9ecef'
                 }}
             >
                 <Stack gap="xs" align="center">
-                    <Divider w="100%" />
                     <Text size="sm" c="dimmed" ta="center">
                         Bu menü <Link href="https://vunqr.com" style={{ color: '#228be6', textDecoration: 'none', fontWeight: 600 }}>VunQR</Link> ile oluşturuldu
                     </Text>
