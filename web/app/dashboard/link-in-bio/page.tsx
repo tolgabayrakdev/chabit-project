@@ -172,7 +172,7 @@ export default function LinkInBioDashboardPage() {
         <div>
           <Text size="lg" fw={600} c="pink.8">Link in Bio nedir?</Text>
           <Text size="sm" c="pink.8">
-            Tüm önemli bağlantılarını tek bir sayfada topla, dijital kimliğini oluştur! Kendi <b>vunqr.com/u/kullaniciadi</b> adresinle sosyal medya, web sitesi ve iletişim bilgilerini kolayca paylaş.
+            Tüm önemli bağlantılarını tek bir sayfada topla, dijital kimliğini oluştur! Kendi <b>vunqr.com/u/kullaniciadi</b> adresinle sosyal medya, web sitesi ve iletişim bilgilerini kolayca paylaş. Hem kişisel kullanım için hem de işletmenizin dijital varlığını güçlendirmek için mükemmel bir çözüm!
           </Text>
         </div>
       </Paper>

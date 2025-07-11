@@ -682,6 +682,7 @@ export default function LinkInBioPage() {
         background: '#f8faff',
         padding: '2rem',
       }}
+      p={{ base: '1rem', md: '2rem' }}
     >
       {/* Gradient Background with Floating Bubbles */}
       <Box
@@ -778,8 +779,8 @@ export default function LinkInBioPage() {
           maxWidth: '640px',
           margin: '0 auto',
           width: '100%',
-          padding: '0 1rem'
         }}
+        px={{ base: '0.5rem', md: '1rem' }}
       >
         {isOwner && (
           <Group gap="sm">
@@ -856,13 +857,16 @@ export default function LinkInBioPage() {
                 color: 'rgba(255, 255, 255, 0.9)',
                 whiteSpace: 'pre-line', 
                 lineHeight: 1.6, 
-                maxWidth: '400px',
+                width: '100%',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word',
                 textShadow: '0 1px 2px rgba(0,0,0,0.3)',
                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                padding: '8px 16px',
                 borderRadius: '12px',
-                backdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(10px)',
               }}
+              maw={{ base: '100%', md: '400px' }}
+              p={{ base: '6px 12px', md: '8px 16px' }}
             >
               {profile.bio_text}
             </Text>
