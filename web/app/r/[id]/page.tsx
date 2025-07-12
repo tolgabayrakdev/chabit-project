@@ -2,9 +2,9 @@
 
 import QrRedirectClient from "./QrRedirect";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   console.log(params);
   
-  // Client component'e promise olarak sarmalayıp geçiriyoruz
-  return <QrRedirectClient params={Promise.resolve(params)} />;
+  // Next.js 15'te params zaten Promise olduğu için doğrudan geçiriyoruz
+  return <QrRedirectClient params={params} />;
 }
