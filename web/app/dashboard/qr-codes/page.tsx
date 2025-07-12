@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconEye } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -11,6 +11,7 @@ interface QRCode {
     label: string | null;
     created_at: string;
     qr_code_image: string;
+    scan_count: string;
 }
 
 const getTypeColor = (type: string) => {
@@ -180,6 +181,12 @@ export default function QRCodesPage() {
                                 <Text size="xs" c="dimmed">
                                     Oluşturulma: {new Date(qr.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
                                 </Text>
+                                <Group gap="xs" align="center">
+                                    <IconEye size={16} color="gray" />
+                                    <Text size="xs" c="dimmed">
+                                        {qr.scan_count} kez tarandı
+                                    </Text>
+                                </Group>
                             </Stack>
                             <Card.Section withBorder inheritPadding py="sm">
                                 <Group grow>
