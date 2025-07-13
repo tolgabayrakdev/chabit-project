@@ -3,11 +3,11 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://vunqr-backend-production-0a80.up.railway.app/api/:path*",
+        destination: "http://localhost:1234/api/:path*",
       },
       {
         source: "/uploads/:path*",
-        destination: "https://vunqr-backend-production-0a80.up.railway.app/uploads/:path*",
+        destination: "http://localhost:1234/uploads/:path*",
       },
     ];
   },

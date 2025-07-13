@@ -2,11 +2,42 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar, Menu } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome, IconStar, IconGift } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome, IconStar, IconGift, IconChartBar } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthProvider from '@/providers/auth-provider';
 import { useMediaQuery } from '@mantine/hooks';
+import { Inter, Outfit, Plus_Jakarta_Sans, Albert_Sans } from 'next/font/google';
+import './dashboard.css';
+import FontSelector from '@/components/FontSelector';
+
+// Font tanımlamaları
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-plus-jakarta',
+  display: 'swap',
+});
+
+const albertSans = Albert_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-albert',
+  display: 'swap',
+});
 
 // Nav item tipi tanımı
 interface NavChild {
@@ -30,6 +61,7 @@ export default function DashboardLayout({
     const [userPlan, setUserPlan] = useState<string>('free');
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [isLoadingUser, setIsLoadingUser] = useState(true);
+    const [selectedFont, setSelectedFont] = useState('outfit');
     const pathname = usePathname();
     const router = useRouter();
     const isMobile = useMediaQuery('(max-width: 48em)');
@@ -61,6 +93,16 @@ export default function DashboardLayout({
         fetchUserData();
     }, []);
 
+    // Font tercihini localStorage'dan yükle
+    useEffect(() => {
+        const savedFont = localStorage.getItem('dashboard-font') || 'outfit';
+        setSelectedFont(savedFont);
+        const dashboardContainer = document.querySelector('.dashboard-container');
+        if (dashboardContainer) {
+            dashboardContainer.setAttribute('data-font', savedFont);
+        }
+    }, []);
+
     const navGroups: { label: string; items: NavItem[] }[] = [
         {
             label: '',
@@ -84,6 +126,7 @@ export default function DashboardLayout({
                         { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
                         { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf' },
                         { icon: IconStar, label: 'Google Yorum QR Kod', href: '/dashboard/google-review', color: '#fab005' },
+                        { icon: IconChartBar, label: 'İstatistikler', href: '/dashboard/statistics', color: '#20c997' },
                     ]
                 },
             ],
@@ -100,6 +143,7 @@ export default function DashboardLayout({
                 { icon: IconSettings, label: 'Menü Oluştur', href: '/dashboard/menu', color: '#fab005' },
             ],
         },
+
         {
             label: 'Kampanyalar',
             items: [
@@ -134,17 +178,27 @@ export default function DashboardLayout({
         }
     };
 
+    const handleFontChange = (font: string) => {
+        setSelectedFont(font);
+        // CSS değişkenlerini güncelle
+        const dashboardContainer = document.querySelector('.dashboard-container');
+        if (dashboardContainer) {
+            dashboardContainer.setAttribute('data-font', font);
+        }
+    };
+
     return (
         <AuthProvider>
-            <AppShell
-                header={{ height: 70 }}
-                navbar={{
-                    width: 300,
-                    breakpoint: 'sm',
-                    collapsed: { mobile: !opened },
-                }}
-                padding="md"
-            >
+            <div className={`${inter.variable} ${outfit.variable} ${plusJakartaSans.variable} ${albertSans.variable} dashboard-container`}>
+                <AppShell
+                    header={{ height: 70 }}
+                    navbar={{
+                        width: 300,
+                        breakpoint: 'sm',
+                        collapsed: { mobile: !opened },
+                    }}
+                    padding="md"
+                >
                 <AppShell.Header style={{ background: 'white', borderBottom: `1px solid #e9ecef` }}>
                     <Group h="100%" px="md" justify="space-between">
                         <Group>
@@ -157,22 +211,27 @@ export default function DashboardLayout({
                             </Group>
                         </Group>
 
-                        <Menu shadow="md" width={240} position="bottom-end" withArrow>
-                            <Menu.Target>
-                                <Group gap="xs" style={{ cursor: 'pointer' }}>
-                                    <Avatar color="blue" radius="xl">
-                                        {isLoadingUser ? '' : (userEmail ? userEmail.charAt(0).toUpperCase() : '')}
-                                    </Avatar>
-                                    <Box visibleFrom="sm">
-                                        <Text size="sm" fw={600} truncate>
-                                            {isLoadingUser ? 'Yükleniyor...' : userEmail}
-                                        </Text>
-                                        <Text size="xs" c="dimmed">
-                                            {isLoadingUser ? 'Yükleniyor...' : (userPlan === 'free' ? 'Ücretsiz Plan' : userPlan === 'basic' ? 'Basit Plan' : userPlan === 'pro' ? 'Pro Plan' : 'Kullanıcı')}
-                                        </Text>
-                                    </Box>
-                                </Group>
-                            </Menu.Target>
+                        <Group gap="md">
+                            <FontSelector 
+                                onFontChange={handleFontChange}
+                                currentFont={selectedFont}
+                            />
+                            <Menu shadow="md" width={240} position="bottom-end" withArrow>
+                                <Menu.Target>
+                                    <Group gap="xs" style={{ cursor: 'pointer' }}>
+                                        <Avatar color="blue" radius="xl">
+                                            {isLoadingUser ? '' : (userEmail ? userEmail.charAt(0).toUpperCase() : '')}
+                                        </Avatar>
+                                        <Box visibleFrom="sm">
+                                            <Text size="sm" fw={600} truncate>
+                                                {isLoadingUser ? 'Yükleniyor...' : userEmail}
+                                            </Text>
+                                            <Text size="xs" c="dimmed">
+                                                {isLoadingUser ? 'Yükleniyor...' : (userPlan === 'free' ? 'Ücretsiz Plan' : userPlan === 'basic' ? 'Basit Plan' : userPlan === 'pro' ? 'Pro Plan' : 'Kullanıcı')}
+                                            </Text>
+                                        </Box>
+                                    </Group>
+                                </Menu.Target>
                             <Menu.Dropdown>
                                 <Menu.Label>Hesap</Menu.Label>
                                 <Menu.Item
@@ -192,7 +251,8 @@ export default function DashboardLayout({
                                     {isLoggingOut ? 'Çıkış yapılıyor...' : 'Çıkış Yap'}
                                 </Menu.Item>
                             </Menu.Dropdown>
-                        </Menu>
+                            </Menu>
+                        </Group>
                     </Group>
                 </AppShell.Header>
 
@@ -316,6 +376,7 @@ export default function DashboardLayout({
                     </Box>
                 </AppShell.Main>
             </AppShell>
+            </div>
         </AuthProvider>
     );
 }
