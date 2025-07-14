@@ -11,7 +11,7 @@ module.exports = {
   additionalPaths: async (config) => {
     const result = [];
     const baseApiUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://vunqr-backend-production.up.railway.app' 
+      ? 'https://vunqr-backend-production-0a80.up.railway.app' 
       : 'http://localhost:1234';
 
     try {
