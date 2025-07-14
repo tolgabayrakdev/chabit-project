@@ -123,21 +123,52 @@ export default function Home() {
   return (
     <Box>
       {/* Hero Section */}
-      <Box 
-        style={{ 
+      <Box
+        style={{
           background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)',
           padding: `${rem(100)} 0`,
-          color: 'white'
+          color: 'white',
+          position: 'relative',
+          overflow: 'hidden'
         }}
       >
-        <Container size="lg">
+        {/* Background decorations */}
+        <Box style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%)',
+        }} />
+
+        {/* Floating QR code icons */}
+        <Box style={{
+          position: 'absolute',
+          top: '10%',
+          left: '10%',
+          opacity: 0.1,
+          transform: 'rotate(-15deg)',
+        }}>
+          <IconQrcode size={60} color="white" />
+        </Box>
+        <Box style={{
+          position: 'absolute',
+          bottom: '15%',
+          right: '10%',
+          opacity: 0.1,
+          transform: 'rotate(15deg)',
+        }}>
+          <IconQrcode size={80} color="white" />
+        </Box>
+        <Container size="lg" style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', flexWrap: 'wrap' }}>
             {/* Sol: Başlık ve Açıklama */}
             <Box className="hero-title-center" style={{ flex: 1, minWidth: 280, maxWidth: 480, display: 'flex', flexDirection: 'column', justifyContent: 'center', zIndex: 2 }}>
-              <Title 
-                order={1} 
-                size={rem(48)} 
-                style={{ 
+              <Title
+                order={1}
+                size={rem(48)}
+                style={{
                   fontWeight: 900,
                   textAlign: 'left',
                   lineHeight: 1.2
@@ -145,10 +176,10 @@ export default function Home() {
               >
                 Dijital İletişim Çözümleri
               </Title>
-              <Text 
-                size="xl" 
-                maw={rem(680)} 
-                style={{ 
+              <Text
+                size="xl"
+                maw={rem(680)}
+                style={{
                   textAlign: 'left',
                   opacity: 0.9,
                   marginTop: rem(16)
@@ -158,10 +189,10 @@ export default function Home() {
                 işletmenizin dijital varlığını güçlendirin.
               </Text>
               <Group justify="flex-start" mt="xl" gap="xl">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   radius="md"
-                  component={Link} 
+                  component={Link}
                   href="/register"
                   style={{
                     backgroundColor: 'white',
@@ -175,11 +206,11 @@ export default function Home() {
                 >
                   Hemen Başla
                 </Button>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   radius="md"
-                  variant="outline" 
-                  component={Link} 
+                  variant="outline"
+                  component={Link}
                   href="/login"
                   style={{
                     borderColor: 'white',
@@ -292,11 +323,11 @@ export default function Home() {
 
       {/* Features Section */}
       <Container size="lg" py={80}>
-        <Title 
-          order={2} 
-          ta="center" 
+        <Title
+          order={2}
+          ta="center"
           mb={50}
-          style={{ 
+          style={{
             fontSize: rem(36),
             fontWeight: 800
           }}
@@ -305,10 +336,10 @@ export default function Home() {
         </Title>
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
           {features.map((feature) => (
-            <Card 
-              key={feature.title} 
-              padding="xl" 
-              radius="lg" 
+            <Card
+              key={feature.title}
+              padding="xl"
+              radius="lg"
               withBorder
               style={{
                 transition: 'all 0.2s ease',
@@ -347,11 +378,11 @@ export default function Home() {
       {/* QR Code Examples Section */}
       <Box style={{ background: '#f8f9fa', padding: `${rem(80)} 0` }}>
         <Container size="lg">
-          <Title 
-            order={2} 
-            ta="center" 
+          <Title
+            order={2}
+            ta="center"
             mb={50}
-            style={{ 
+            style={{
               fontSize: rem(36),
               fontWeight: 800
             }}
@@ -360,10 +391,10 @@ export default function Home() {
           </Title>
           <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">
             {features.map((feature) => (
-              <Paper 
-                key={feature.title} 
-                p="xl" 
-                radius="lg" 
+              <Paper
+                key={feature.title}
+                p="xl"
+                radius="lg"
                 withBorder
                 style={{
                   transition: 'all 0.2s ease',
@@ -417,9 +448,9 @@ export default function Home() {
       {/* Tasarımlar Section */}
       <Box style={{ background: '#f3f7fa', padding: `${rem(80)} 0` }}>
         <Container size="lg">
-          <Title 
-            order={2} 
-            ta="center" 
+          <Title
+            order={2}
+            ta="center"
             mb={30}
             style={{ fontSize: rem(36), fontWeight: 800 }}
           >
@@ -461,9 +492,9 @@ export default function Home() {
       {/* How It Works Section */}
       <Box style={{ background: '#f8f9fa', padding: `${rem(80)} 0` }}>
         <Container size="lg">
-          <Title 
-            order={2} 
-            ta="center" 
+          <Title
+            order={2}
+            ta="center"
             mb={30}
             style={{ fontSize: rem(36), fontWeight: 800 }}
           >
@@ -472,20 +503,20 @@ export default function Home() {
           <Text ta="center" size="lg" mb={50} c="dimmed" style={{ maxWidth: 600, margin: '0 auto' }}>
             4 basit adımda profesyonel QR kodlarınızı oluşturun. VunQR ile dijital dönüşümünüzü başlatın.
           </Text>
-          
+
           <div style={{ position: 'relative', marginBottom: rem(60) }}>
             {/* Bağlantı çizgileri için arka plan */}
-            <div style={{ 
-              position: 'absolute', 
-              top: '50%', 
-              left: 0, 
-              right: 0, 
-              height: 2, 
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              right: 0,
+              height: 2,
               background: 'linear-gradient(90deg, #228be6, #40c057, #fd7e14, #7950f2)',
               zIndex: 0,
               transform: 'translateY(-50%)'
             }} />
-            
+
             <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }} spacing="xl">
               {[
                 {
@@ -517,13 +548,13 @@ export default function Home() {
                   color: "#7950f2"
                 }
               ].map((step, index) => (
-                <Card 
-                  key={index} 
-                  shadow="lg" 
-                  radius="xl" 
-                  padding="xl" 
+                <Card
+                  key={index}
+                  shadow="lg"
+                  radius="xl"
+                  padding="xl"
                   withBorder
-                  style={{ 
+                  style={{
                     position: 'relative',
                     zIndex: 5,
                     background: 'white',
@@ -560,12 +591,12 @@ export default function Home() {
                     }}>
                       {step.step}
                     </div>
-                    
+
                     {/* İkon */}
-                    <ThemeIcon 
-                      size={rem(70)} 
-                      radius="xl" 
-                      style={{ 
+                    <ThemeIcon
+                      size={rem(70)}
+                      radius="xl"
+                      style={{
                         backgroundColor: `${step.color}15`,
                         color: step.color,
                         marginBottom: rem(16),
@@ -575,20 +606,20 @@ export default function Home() {
                       <step.icon size={rem(35)} />
                     </ThemeIcon>
                   </div>
-                  
-                  <Title order={3} size="h4" style={{ 
-                    marginBottom: rem(12), 
+
+                  <Title order={3} size="h4" style={{
+                    marginBottom: rem(12),
                     textAlign: 'center',
                     color: step.color,
                     fontWeight: 700
                   }}>
                     {step.title}
                   </Title>
-                  
-                  <Text 
-                    size="sm" 
-                    color="dimmed" 
-                    style={{ 
+
+                  <Text
+                    size="sm"
+                    color="dimmed"
+                    style={{
                       textAlign: 'center',
                       lineHeight: 1.6
                     }}
@@ -606,9 +637,9 @@ export default function Home() {
               radius="md"
               component={Link}
               href="/how-it-works"
-              style={{ 
-                background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', 
-                color: 'white', 
+              style={{
+                background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
+                color: 'white',
                 fontWeight: 600,
                 padding: '12px 32px'
               }}
@@ -642,11 +673,11 @@ export default function Home() {
 
       {/* FAQ Section */}
       <Container size="lg" py={80}>
-        <Title 
-          order={2} 
-          ta="center" 
+        <Title
+          order={2}
+          ta="center"
           mb={50}
-          style={{ 
+          style={{
             fontSize: rem(36),
             fontWeight: 800
           }}
@@ -668,14 +699,45 @@ export default function Home() {
       </Container>
 
       {/* Footer */}
-      <Box 
-        style={{ 
+      <Box
+        style={{
           background: 'linear-gradient(135deg, #228be6 0%, #4dabf7 100%)',
           color: 'white',
-          padding: `${rem(90)} 0 ${rem(30)} 0`
+          padding: `${rem(90)} 0 ${rem(30)} 0`,
+          position: 'relative',
+          overflow: 'hidden'
         }}
       >
-        <Container size="lg">
+        {/* Background decorations */}
+        <Box style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%)',
+        }} />
+
+        {/* Floating QR code icons */}
+        <Box style={{
+          position: 'absolute',
+          top: '15%',
+          left: '15%',
+          opacity: 0.1,
+          transform: 'rotate(-15deg)',
+        }}>
+          <IconQrcode size={50} color="white" />
+        </Box>
+        <Box style={{
+          position: 'absolute',
+          bottom: '20%',
+          right: '15%',
+          opacity: 0.1,
+          transform: 'rotate(15deg)',
+        }}>
+          <IconQrcode size={60} color="white" />
+        </Box>
+        <Container size="lg" style={{ position: 'relative', zIndex: 1 }}>
           <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="md">
             <Stack gap={4}>
               <Text fw={700} size="md">Hakkımızda</Text>

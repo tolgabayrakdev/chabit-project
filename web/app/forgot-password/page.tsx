@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { TextInput, Button, Paper, Title, Container, Text, Box, Stack, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Link from 'next/link';
+import { IconQrcode } from '@tabler/icons-react';
 
 
 export default function ForgotPasswordPage() {
@@ -52,10 +53,40 @@ export default function ForgotPasswordPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: rem(20)
+        padding: rem(20),
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      <Container size={420} style={{ width: '100%' }}>
+      {/* Background decorations */}
+      <Box style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%)',
+      }} />
+      {/* Floating QR code icons */}
+      <Box style={{
+        position: 'absolute',
+        top: '10%',
+        left: '10%',
+        opacity: 0.1,
+        transform: 'rotate(-15deg)',
+      }}>
+        <IconQrcode size={60} color="white" />
+      </Box>
+      <Box style={{
+        position: 'absolute',
+        bottom: '15%',
+        right: '10%',
+        opacity: 0.1,
+        transform: 'rotate(15deg)',
+      }}>
+        <IconQrcode size={80} color="white" />
+      </Box>
+      <Container size={420} style={{ width: '100%', position: 'relative', zIndex: 1 }}>
         <Stack align="center" gap="xs">
           <Title
             order={2}
