@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Title, Text, Button, Group, Card, SimpleGrid, Box, Stack, Badge, Image, Paper, rem, ThemeIcon, Divider, Anchor } from '@mantine/core';
 import { Accordion, AccordionItem, AccordionControl, AccordionPanel } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf, IconStar, IconRocket, IconTarget, IconBolt } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconClock, IconInfinity, IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop, IconBrandGithub, IconBrandTwitter, IconBrandLinkedin, IconBrandInstagram, IconLink, IconFileTypePdf, IconStar, IconRocket, IconTarget, IconBolt, IconChartBar } from '@tabler/icons-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -86,6 +86,15 @@ export default function Home() {
       limit: 'Sınırsız',
       devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
       color: '#fab005'
+    },
+    {
+      icon: IconChartBar,
+      title: 'QR Kod İstatistikleri',
+      description: 'QR kodlarınızın kaç kez, nerede ve hangi cihazdan tarandığını takip edin.',
+      detail: 'Her bir QR kodunuzun performansını analiz edin. Hangi şehirden, hangi cihazdan ve ne zaman tarandığını görün. Müşteri davranışlarını daha iyi anlayın ve kampanyalarınızı optimize edin.',
+      limit: 'Sınırsız',
+      devices: [IconDeviceMobile, IconDeviceLaptop, IconDeviceDesktop],
+      color: '#20c997'
     },
   ];
 
@@ -414,22 +423,25 @@ export default function Home() {
                       <Text fw={700} size="lg">{feature.title}</Text>
                     </Group>
                     <Text size="sm" c="dimmed">{feature.detail}</Text>
-                    <Group gap="xs">
-                      {feature.title !== 'Link in Bio' && (
-                        <Badge leftSection={<IconDownload size={14} />} color={feature.color} variant="light">
-                          PNG, JPG, SVG
-                        </Badge>
-                      )}
-                      {feature.limit === 'Sınırsız' ? (
-                        <Badge leftSection={<IconInfinity size={14} />} color="green" variant="light">
-                          Sınırsız
-                        </Badge>
-                      ) : (
-                        <Badge leftSection={<IconClock size={14} />} color="blue" variant="light">
-                          {feature.limit}
-                        </Badge>
-                      )}
-                    </Group>
+                    {/* Rozetler sadece QR Kod İstatistikleri dışındaki özelliklerde gösterilecek */}
+                    {feature.title !== 'QR Kod İstatistikleri' && (
+                      <Group gap="xs">
+                        {feature.title !== 'Link in Bio' && (
+                          <Badge leftSection={<IconDownload size={14} />} color={feature.color} variant="light">
+                            PNG, JPG, SVG
+                          </Badge>
+                        )}
+                        {feature.limit === 'Sınırsız' ? (
+                          <Badge leftSection={<IconInfinity size={14} />} color="green" variant="light">
+                            Sınırsız
+                          </Badge>
+                        ) : (
+                          <Badge leftSection={<IconClock size={14} />} color="blue" variant="light">
+                            {feature.limit}
+                          </Badge>
+                        )}
+                      </Group>
+                    )}
                     <Group gap="xs" mt="xs">
                       {feature.devices.map((Device, index) => (
                         <ThemeIcon key={index} size="sm" radius="xl" color={feature.color} variant="light">
@@ -442,6 +454,20 @@ export default function Home() {
               </Paper>
             ))}
           </SimpleGrid>
+          <Box ta="center" mt={40}>
+            <Text size="md" c="dimmed" mb={12}>
+              Buradan detaylı özelliklerimize ulaşabilir ve bilgi alabilirsiniz.
+            </Text>
+            <Button
+              size="lg"
+              radius="md"
+              component={Link}
+              href="/features"
+              style={{ background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', color: 'white', fontWeight: 600 }}
+            >
+              Detaylı Özelliklerimiz
+            </Button>
+          </Box>
         </Container>
       </Box>
 
