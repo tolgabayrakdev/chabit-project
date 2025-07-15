@@ -6,6 +6,76 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconQrcode, IconCheck, IconBrandChrome, IconBrandOpera, IconShield } from '@tabler/icons-react';
+import { IconStar, IconStarFilled } from '@tabler/icons-react';
+import { Carousel } from '@mantine/carousel';
+import '@mantine/carousel/styles.css';
+
+function CustomerCarousel() {
+  const comments = [
+    {
+      name: 'Ayşe K.',
+      comment: 'VunQR ile menümüzü dijitalleştirdik, müşterilerimiz çok memnun!',
+      title: 'Restoran Sahibi',
+      avatar: 'https://i.pravatar.cc/150?img=12',
+    },
+    {
+      name: 'Mehmet D.',
+      comment: 'QR kod ile wifi paylaşımı çok pratik, müşterilerimiz için harika bir deneyim.',
+      title: 'Kafe İşletmecisi',
+      avatar: 'https://i.pravatar.cc/150?img=24',
+    },
+    {
+      name: 'Elif S.',
+      comment: 'Google yorum ile QR kodları birleştirdik, harika oldu!',
+      title: 'Kafe Sahibi',
+      avatar: 'https://i.pravatar.cc/150?img=31',
+    },
+    {
+      name: 'Burak T.',
+      comment: 'Otelimizde QR ile oda servisi menüsüne geçtik, misafirlerimiz çok memnun.',
+      title: 'Otel Müdürü',
+      avatar: 'https://i.pravatar.cc/150?img=17',
+    },
+    {
+      name: 'Zeynep Y.',
+      comment: 'Kuaför salonumuzda kampanya QR kodları ile müşteri dönüşü arttı.',
+      title: 'Kuaför Sahibi',
+      avatar: 'https://i.pravatar.cc/150?img=36',
+    },
+  ];
+  return (
+    <Carousel
+      slideSize="100%"
+      height={180}
+      slideGap="md"
+      styles={{ indicator: { background: '#2563eb' } }}
+      draggable
+      controlSize={24}
+      style={{ maxWidth: 380, margin: '0 auto' }}
+    >
+      {comments.map((item, idx) => (
+        <Carousel.Slide key={idx}>
+          <div style={{ textAlign: 'center', padding: 12, minHeight: 180, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
+              <img src={item.avatar} alt={item.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover', border: '2px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 2, marginBottom: 12 }}>
+              {[...Array(5)].map((_, i) => (
+                <IconStarFilled key={i} size={18} color="#facc15" />
+              ))}
+            </div>
+            <div style={{ fontStyle: 'italic', color: '#fff', fontSize: 16, marginTop: 8, marginBottom: 4, minHeight: 44, lineHeight: 1.3 }}>
+              "{item.comment}"
+            </div>
+            <div style={{ marginTop: 4, fontWeight: 600, color: '#fff' }}>
+              {item.name} <span style={{ color: '#cbd5e1', fontWeight: 400 }}>- {item.title}</span>
+            </div>
+          </div>
+        </Carousel.Slide>
+      ))}
+    </Carousel>
+  );
+}
 
 export default function RegisterClient() {
   const [loading, setLoading] = useState(false);
@@ -136,9 +206,9 @@ export default function RegisterClient() {
 
             <Paper
               withBorder
-              shadow="xl"
+              shadow="lg"
               p={24}
-              radius="xl"
+              radius="lg"
               style={{
                 width: '100%',
                 backgroundColor: 'rgba(255, 255, 255, 0.98)',
@@ -373,11 +443,10 @@ export default function RegisterClient() {
                     backdropFilter: 'blur(10px)',
                     border: '1px solid rgba(255, 255, 255, 0.2)'
                   }}>
-                    <Text size="sm" style={{ color: 'white', opacity: 0.9 }}>
-                      <IconBrandChrome size={16} style={{ marginRight: 8, verticalAlign: 'middle' }} />
-                      <IconBrandOpera size={16} style={{ marginRight: 8, verticalAlign: 'middle' }} />
-                      En iyi deneyim için modern tarayıcılardan kayıt olmanızı öneririz.
+                    <Text size="sm" style={{ color: 'white', opacity: 0.9, fontWeight: 600, marginBottom: 8 }}>
+                      Kullanıcı Yorumları
                     </Text>
+                    <CustomerCarousel />
                   </Box>
                 </Stack>
               </Stack>
@@ -386,9 +455,9 @@ export default function RegisterClient() {
             {/* Right side - Register Form */}
             <Paper
               withBorder
-              shadow="xl"
+              shadow="lg"
               p={40}
-              radius="xl"
+              radius="lg"
               style={{
                 width: 420,
                 backgroundColor: 'rgba(255, 255, 255, 0.98)',

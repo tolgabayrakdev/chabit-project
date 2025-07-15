@@ -190,9 +190,9 @@ export default function LoginClient() {
 
             <Paper
               withBorder
-              shadow="xl"
+              shadow="lg"
               p={24}
-              radius="xl"
+              radius="lg"
               style={{
                 width: '100%',
                 backgroundColor: 'rgba(255, 255, 255, 0.98)',
@@ -375,11 +375,8 @@ export default function LoginClient() {
                 </Stack>
 
                 <Stack gap="md">
-                  <Text size="lg" style={{ opacity: 0.95, lineHeight: 1.6 }}>
-                    • Dinamik QR kodlar oluşturun ve yönetin<br />
-                    • Müşteri etkileşimini artırın<br />
-                    • Detaylı analitikler ile performansınızı takip edin<br />
-                    • Menü, WiFi, vCard ve daha fazlası
+                  <Text size="lg" style={{ opacity: 0.98, lineHeight: 1.5, fontWeight: 600, fontSize: 22 }}>
+                    Tekrar hoş geldin! <span role="img" aria-label="smile">😊</span> Senin için her zaman buradayız.
                   </Text>
 
                   <Box style={{
@@ -390,9 +387,7 @@ export default function LoginClient() {
                     border: '1px solid rgba(255, 255, 255, 0.2)'
                   }}>
                     <Text size="sm" style={{ color: 'white', opacity: 0.9 }}>
-                      <IconBrandChrome size={16} style={{ marginRight: 8, verticalAlign: 'middle' }} />
-                      <IconBrandOpera size={16} style={{ marginRight: 8, verticalAlign: 'middle' }} />
-                      En iyi deneyim için modern tarayıcılardan giriş yapmanızı öneririz.
+                      En iyi deneyim için Chrome ve Opera gibi modern tarayıcıları kullanmanızı öneririz.
                     </Text>
                   </Box>
                 </Stack>
@@ -402,9 +397,9 @@ export default function LoginClient() {
             {/* Right side - Login Form */}
             <Paper
               withBorder
-              shadow="xl"
+              shadow="lg"
               p={40}
-              radius="xl"
+              radius="lg"
               style={{
                 width: 420,
                 backgroundColor: 'rgba(255, 255, 255, 0.98)',
