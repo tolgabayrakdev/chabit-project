@@ -11,16 +11,32 @@ import {
   Stack,
   ThemeIcon,
   Loader,
+  Group,
+  ColorInput,
+  Select,
 } from "@mantine/core";
 import { IconQrcode, IconLink } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
+import { QrPreview } from "../sms/QrPreview";
 
 export default function UrlPage() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const router = useRouter();
+  const [logo, setLogo] = useState<File | null>(null);
+  const [designOptions, setDesignOptions] = useState({ style: "dot", darkColor: "#15aabf" });
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  React.useEffect(() => {
+    if (logo) {
+      const url = URL.createObjectURL(logo);
+      setLogoUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setLogoUrl(null);
+    }
+  }, [logo]);
 
   const form = useForm({
     initialValues: {
@@ -37,18 +53,21 @@ export default function UrlPage() {
     setLoading(true);
     setStatus("loading");
     try {
-      const body = { ...values };
-      if (!/^https?:\/\//.test(body.url)) {
-        body.url = `https://${body.url}`;
+      let urlValue = values.url;
+      if (!/^https?:\/\//.test(urlValue)) {
+        urlValue = `https://${urlValue}`;
       }
-
+      const formData = new FormData();
+      formData.append("label", values.label);
+      formData.append("url", urlValue);
+      formData.append("designOptions", JSON.stringify(designOptions));
+      if (logo) {
+        formData.append("logo", logo);
+      }
       const response = await fetch(`/api/qr/url`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        body: JSON.stringify(body),
+        body: formData,
       });
 
       if (response.ok) {
@@ -83,6 +102,8 @@ export default function UrlPage() {
     form.reset();
   };
 
+  const qrValue = form.values.url && form.values.url.trim().length > 0 ? (/^https?:\/\//.test(form.values.url) ? form.values.url : `https://${form.values.url}`) : "https://";
+
   return (
     <Container size="md" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start" }}>
       <Paper
@@ -114,7 +135,7 @@ export default function UrlPage() {
           URL QR Kod Oluştur
         </Title>
         {status === "idle" && (
-          <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: "100%" }}>
+          <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: "100%" }} encType="multipart/form-data">
             <Stack gap="md" style={{ width: "100%" }}>
               <TextInput
                 label="QR Kod İsmi"
@@ -133,6 +154,39 @@ export default function UrlPage() {
                 size="md"
                 style={{ width: "100%" }}
                 {...form.getInputProps("url")}
+              />
+              <Group grow>
+                <Select
+                  label="QR Stil"
+                  data={[
+                    { value: "dot", label: "Nokta" },
+                    { value: "square", label: "Kare" },
+                    { value: "rounded", label: "Yuvarlak" },
+                    { value: "diamond", label: "Elmas" },
+                    { value: "triangle", label: "Üçgen" },
+                  ]}
+                  value={designOptions.style}
+                  onChange={(value) => setDesignOptions((prev) => ({ ...prev, style: value || "dot" }))}
+                  required
+                />
+                <ColorInput
+                  label="QR Renk"
+                  value={designOptions.darkColor}
+                  onChange={(color) => setDesignOptions((prev) => ({ ...prev, darkColor: color }))}
+                  required
+                />
+              </Group>
+              <TextInput
+                label="Logo (PNG/JPG/SVG)"
+                type="file"
+                accept=".png,.jpg,.jpeg,.svg"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    setLogo(e.target.files[0]);
+                  } else {
+                    setLogo(null);
+                  }
+                }}
               />
               <Button
                 type="submit"
@@ -153,6 +207,22 @@ export default function UrlPage() {
               </Button>
             </Stack>
           </form>
+        )}
+        {/* QR Kod Önizleme */}
+        {status === "idle" && (
+          <Stack align="center" mt="xl" gap={4}>
+            <Text fw={600} size="md">QR Kod Önizleme</Text>
+            <div style={{ position: "relative", display: "inline-block", background: "#fff", padding: 16, borderRadius: 16, boxShadow: "0 2px 8px #0001" }}>
+              <QrPreview
+                value={qrValue}
+                size={180}
+                style={designOptions.style}
+                darkColor={designOptions.darkColor}
+                lightColor="#fff"
+                logoUrl={logoUrl}
+              />
+            </div>
+          </Stack>
         )}
         {status === "loading" && (
           <Stack align="center" gap="xl" mt="xl">
