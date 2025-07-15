@@ -82,7 +82,33 @@ export function QrPreview({ value, size = 180, style = 'square', darkColor = '#0
     let logoElem = null;
     if (logoUrl) {
         const logoSize = size * 0.2;
-        logoElem = <image href={logoUrl} x={(size - logoSize) / 2} y={(size - logoSize) / 2} width={logoSize} height={logoSize} style={{ borderRadius: 12, background: '#fff' }} />;
+        logoElem = (
+            <>
+                <rect
+                    x={(size - logoSize) / 2 - 6}
+                    y={(size - logoSize) / 2 - 6}
+                    width={logoSize + 12}
+                    height={logoSize + 12}
+                    rx={16}
+                    fill="#fff"
+                    style={{ filter: 'drop-shadow(0 1px 4px #0002)' }}
+                />
+                <foreignObject
+                    x={(size - logoSize) / 2}
+                    y={(size - logoSize) / 2}
+                    width={logoSize}
+                    height={logoSize}
+                >
+                    <img
+                        src={logoUrl}
+                        width={logoSize}
+                        height={logoSize}
+                        style={{ borderRadius: 12, background: 'transparent', width: '100%', height: '100%', display: 'block' }}
+                        alt="logo"
+                    />
+                </foreignObject>
+            </>
+        );
     }
     return (
         <svg width={size} height={size} style={{ background: lightColor, borderRadius: 16, boxShadow: '0 2px 8px #0001' }}>
