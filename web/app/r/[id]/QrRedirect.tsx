@@ -16,7 +16,7 @@ export default function QrRedirectClient({ params }: { params: Promise<{ id: str
 
     const fetchQrData = async () => {
       try {
-        const res = await fetch(`/api/qr-tracking/${uuid}`);
+        const res = await fetch(`/api/qr-tracking/scan/${uuid}`);
         if (!res.ok) throw new Error("QR kod bulunamadı veya geçersiz.");
         const data = await res.json();
 
