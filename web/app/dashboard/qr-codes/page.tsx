@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconEye } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -11,6 +11,7 @@ interface QRCode {
     label: string | null;
     created_at: string;
     qr_code_image: string;
+    scan_count: string;
 }
 
 const getTypeColor = (type: string) => {
@@ -58,6 +59,8 @@ export default function QRCodesPage() {
     const [loading, setLoading] = useState(true);
     const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
     const [opened, { open, close }] = useDisclosure(false);
+    // Her QR için resim yüklenme durumunu tutan state
+    const [imageLoading, setImageLoading] = useState<{ [id: string]: boolean }>({});
 
     useEffect(() => {
         const fetchQRCodes = async () => {
@@ -161,11 +164,20 @@ export default function QRCodesPage() {
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
                     {qrCodes.map((qr) => (
                         <Card key={qr.id} padding={0} radius="md" withBorder>
-                            <Card.Section>
+                            <Card.Section style={{ position: 'relative', minHeight: 200 }}>
+                                {/* Loader */}
+                                {imageLoading[qr.id] !== false && (
+                                    <Center style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 200, zIndex: 1, background: 'rgba(255,255,255,0.7)' }}>
+                                        <Loader size="lg" color="blue" />
+                                    </Center>
+                                )}
                                 <Image
                                     src={`${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
                                     height={200}
+                                    style={imageLoading[qr.id] !== false ? { opacity: 0 } : {}}
+                                    onLoad={() => setImageLoading(prev => ({ ...prev, [qr.id]: false }))}
+                                    onError={() => setImageLoading(prev => ({ ...prev, [qr.id]: false }))}
                                 />
                             </Card.Section>
                             <Stack p="md" gap="sm">
@@ -180,6 +192,12 @@ export default function QRCodesPage() {
                                 <Text size="xs" c="dimmed">
                                     Oluşturulma: {new Date(qr.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
                                 </Text>
+                                <Group gap="xs" align="center">
+                                    <IconEye size={16} color="gray" />
+                                    <Text size="xs" c="dimmed">
+                                        {qr.scan_count} kez tarandı
+                                    </Text>
+                                </Group>
                             </Stack>
                             <Card.Section withBorder inheritPadding py="sm">
                                 <Group grow>

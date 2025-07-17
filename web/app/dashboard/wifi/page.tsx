@@ -1,17 +1,30 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, ThemeIcon, SimpleGrid, Select, Checkbox, Loader } from '@mantine/core';
+import { Container, Title, Text, TextInput, PasswordInput, Button, Paper, Stack, Group, rem, ThemeIcon, SimpleGrid, Select, Checkbox, Loader, ColorInput } from '@mantine/core';
 import { IconWifi, IconQrcode } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
+import { QrPreview } from '../sms/QrPreview';
 
 export default function WifiPage() {
     const [loading, setLoading] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
     const router = useRouter();
+    const [logo, setLogo] = useState<File | null>(null);
+    const [designOptions, setDesignOptions] = useState({ style: 'dot', darkColor: '#40c057' });
+    const [logoUrl, setLogoUrl] = useState<string | null>(null);
+    React.useEffect(() => {
+        if (logo) {
+            const url = URL.createObjectURL(logo);
+            setLogoUrl(url);
+            return () => URL.revokeObjectURL(url);
+        } else {
+            setLogoUrl(null);
+        }
+    }, [logo]);
 
     const form = useForm({
         initialValues: {
@@ -33,13 +46,20 @@ export default function WifiPage() {
         setStatus('loading');
         setShowAnimation(true);
         try {
+            const formData = new FormData();
+            formData.append('label', values.label);
+            formData.append('ssid', values.ssid);
+            formData.append('password', values.password);
+            formData.append('encryption', values.encryption);
+            formData.append('hidden', values.hidden ? 'true' : 'false');
+            formData.append('designOptions', JSON.stringify(designOptions));
+            if (logo) {
+                formData.append('logo', logo);
+            }
             const response = await fetch(`/api/qr/wifi`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 credentials: 'include',
-                body: JSON.stringify(values),
+                body: formData,
             });
 
             if (response.ok) {
@@ -47,7 +67,7 @@ export default function WifiPage() {
                     setShowAnimation(false);
                     setStatus('success');
                     setLoading(false);
-                    router.push('/dashboard');
+                    router.push('/dashboard/qr-codes');
                 }, 5000);
             } else {
                 setShowAnimation(false);
@@ -76,6 +96,9 @@ export default function WifiPage() {
         setStatus('idle');
         form.reset();
     };
+
+    // QR value
+    const qrValue = `WIFI:T:${form.values.encryption};S:${form.values.ssid};P:${form.values.password};${form.values.hidden ? 'H:true;' : ''};`;
 
     return (
         <Container size="lg">
@@ -107,7 +130,7 @@ export default function WifiPage() {
                 <Paper withBorder radius="lg" p={32} style={{ width: '100%', maxWidth: 800, marginTop: 32, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <Title order={2} mb="xl" ta="center">WiFi QR Kod Oluştur</Title>
                     {status === 'idle' && (
-                        <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: '100%' }}>
+                        <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: '100%' }} encType="multipart/form-data">
                             <Stack gap="md">
                                 <TextInput
                                     label="QR Kod İsmi"
@@ -149,6 +172,39 @@ export default function WifiPage() {
                                     label="Gizli Ağ"
                                     {...form.getInputProps('hidden', { type: 'checkbox' })}
                                 />
+                                <Group grow>
+                                    <Select
+                                        label="QR Stil"
+                                        data={[
+                                            { value: 'dot', label: 'Nokta' },
+                                            { value: 'square', label: 'Kare' },
+                                            { value: 'rounded', label: 'Yuvarlak' },
+                                            { value: 'diamond', label: 'Elmas' },
+                                            { value: 'triangle', label: 'Üçgen' },
+                                        ]}
+                                        value={designOptions.style}
+                                        onChange={(value) => setDesignOptions((prev) => ({ ...prev, style: value || 'dot' }))}
+                                        required
+                                    />
+                                    <ColorInput
+                                        label="QR Renk"
+                                        value={designOptions.darkColor}
+                                        onChange={(color) => setDesignOptions((prev) => ({ ...prev, darkColor: color }))}
+                                        required
+                                    />
+                                </Group>
+                                <TextInput
+                                    label="Logo (PNG/JPG/SVG)"
+                                    type="file"
+                                    accept=".png,.jpg,.jpeg,.svg"
+                                    onChange={(e) => {
+                                        if (e.target.files && e.target.files[0]) {
+                                            setLogo(e.target.files[0]);
+                                        } else {
+                                            setLogo(null);
+                                        }
+                                    }}
+                                />
                                 <Button
                                     type="submit"
                                     loading={loading}
@@ -167,6 +223,22 @@ export default function WifiPage() {
                                 </Button>
                             </Stack>
                         </form>
+                    )}
+                    {/* QR Kod Önizleme */}
+                    {status === 'idle' && (
+                        <Stack align="center" mt="xl" gap={4}>
+                            <Text fw={600} size="md">QR Kod Önizleme</Text>
+                            <div style={{ position: 'relative', display: 'inline-block', background: '#fff', padding: 16, borderRadius: 16, boxShadow: '0 2px 8px #0001' }}>
+                                <QrPreview
+                                    value={qrValue}
+                                    size={180}
+                                    style={designOptions.style}
+                                    darkColor={designOptions.darkColor}
+                                    lightColor="#fff"
+                                    logoUrl={logoUrl}
+                                />
+                            </div>
+                        </Stack>
                     )}
                     {status === 'loading' && (
                         <Stack align="center" gap="xl" mt="xl">

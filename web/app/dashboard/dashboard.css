@@ -1,0 +1,256 @@
+/* Dashboard özel font stilleri - Dinamik font seçimi */
+
+/* Varsayılan font (Outfit) */
+.dashboard-container {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container h1, 
+.dashboard-container h2, 
+.dashboard-container h3, 
+.dashboard-container h4, 
+.dashboard-container h5, 
+.dashboard-container h6 {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+}
+
+.dashboard-container .mantine-Text-root {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-NavLink-label {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+}
+
+.dashboard-container .mantine-AppShell-header {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-Menu-item {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-Button-root {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+}
+
+/* Başlık için özel stil */
+.dashboard-container .mantine-Text-root[data-variant="gradient"] {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* Navbar başlıkları için */
+.dashboard-container .mantine-Text-root[data-size="xs"] {
+    font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+/* Plus Jakarta Sans font seçildiğinde */
+.dashboard-container[data-font="plus-jakarta"] {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] h1,
+.dashboard-container[data-font="plus-jakarta"] h2,
+.dashboard-container[data-font="plus-jakarta"] h3,
+.dashboard-container[data-font="plus-jakarta"] h4,
+.dashboard-container[data-font="plus-jakarta"] h5,
+.dashboard-container[data-font="plus-jakarta"] h6 {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] .mantine-NavLink-label {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] .mantine-AppShell-header {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] .mantine-Menu-item {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] .mantine-Button-root {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] .mantine-Text-root[data-variant="gradient"] {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="plus-jakarta"] .mantine-Text-root[data-size="xs"] {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Albert Sans font seçildiğinde */
+.dashboard-container[data-font="albert"] {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] h1,
+.dashboard-container[data-font="albert"] h2,
+.dashboard-container[data-font="albert"] h3,
+.dashboard-container[data-font="albert"] h4,
+.dashboard-container[data-font="albert"] h5,
+.dashboard-container[data-font="albert"] h6 {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] .mantine-NavLink-label {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] .mantine-AppShell-header {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] .mantine-Menu-item {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] .mantine-Button-root {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] .mantine-Text-root[data-variant="gradient"] {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="albert"] .mantine-Text-root[data-size="xs"] {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Inter font seçildiğinde */
+.dashboard-container[data-font="inter"] {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] h1,
+.dashboard-container[data-font="inter"] h2,
+.dashboard-container[data-font="inter"] h3,
+.dashboard-container[data-font="inter"] h4,
+.dashboard-container[data-font="inter"] h5,
+.dashboard-container[data-font="inter"] h6 {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] .mantine-NavLink-label {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] .mantine-AppShell-header {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] .mantine-Menu-item {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] .mantine-Button-root {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] .mantine-Text-root[data-variant="gradient"] {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container[data-font="inter"] .mantine-Text-root[data-size="xs"] {
+    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* SEÇENEK 2: Plus Jakarta Sans (Profesyonel ve Modern) */
+/* .dashboard-container {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container h1, 
+.dashboard-container h2, 
+.dashboard-container h3, 
+.dashboard-container h4, 
+.dashboard-container h5, 
+.dashboard-container h6 {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+}
+
+.dashboard-container .mantine-NavLink-label {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+}
+
+.dashboard-container .mantine-AppShell-header {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-Menu-item {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-Button-root {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+}
+
+.dashboard-container .mantine-Text-root[data-variant="gradient"] {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.dashboard-container .mantine-Text-root[data-size="xs"] {
+    font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+} */
+
+/* SEÇENEK 3: Albert Sans (Temiz ve Okunabilir) */
+/* .dashboard-container {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container h1, 
+.dashboard-container h2, 
+.dashboard-container h3, 
+.dashboard-container h4, 
+.dashboard-container h5, 
+.dashboard-container h6 {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+}
+
+.dashboard-container .mantine-NavLink-label {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+}
+
+.dashboard-container .mantine-AppShell-header {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-Menu-item {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-container .mantine-Button-root {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+}
+
+.dashboard-container .mantine-Text-root[data-variant="gradient"] {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.dashboard-container .mantine-Text-root[data-size="xs"] {
+    font-family: var(--font-albert), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+} */ 
