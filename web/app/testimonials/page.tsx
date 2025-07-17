@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Container, Title, Text, Paper, Group, Avatar, rem, Badge, SimpleGrid } from '@mantine/core';
-import { IconStarFilled, IconQuote } from '@tabler/icons-react';
+import { Box, Container, Title, Text, Paper, Group, Avatar, rem, Badge, SimpleGrid, Button } from '@mantine/core';
+import { IconStarFilled, IconQuote, IconQrcode } from '@tabler/icons-react';
 import Footer from '../components/Footer';
+import Link from 'next/link';
 
 const testimonialsData = [
   {
@@ -93,6 +94,20 @@ export default function TestimonialsPage() {
           text-align: center;
           padding: 0 8px;
         }
+        .vunqr-link {
+          display: inline-block;
+          margin-top: 24px;
+          color: white;
+          font-weight: 700;
+          font-size: 20px;
+          letter-spacing: 1px;
+          text-decoration: none;
+          border-bottom: 2px solid transparent;
+          transition: border 0.2s;
+        }
+        .vunqr-link:hover {
+          border-bottom: 2px solid #fff;
+        }
       `}</style>
       <Box>
         {/* Mavi Banner */}
@@ -103,6 +118,10 @@ export default function TestimonialsPage() {
           <Text size="lg" style={{ opacity: 0.92, maxWidth: 600, margin: '0 auto' }}>
             VunQR kullanıcılarının deneyimlerini ve görüşlerini burada bulabilirsiniz. Gerçek kullanıcı yorumları ile VunQR hakkında daha fazla bilgi edinin.
           </Text>
+         <Link href="/" className="vunqr-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 24 }}>
+            <IconQrcode size={22} color="white" style={{ flexShrink: 0 }} />
+            VunQR
+          </Link>
         </Box>
         <Container size="md" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '36px' }}>
           <SimpleGrid

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Box, Container, Title, Text, Accordion, AccordionItem, AccordionControl, AccordionPanel, Paper } from '@mantine/core';
+import { Box, Container, Title, Text, Accordion, AccordionItem, AccordionControl, AccordionPanel, Paper, Button } from '@mantine/core';
 import Footer from '../components/Footer';
+import Link from 'next/link';
+import { IconQrcode } from '@tabler/icons-react';
 
 const faqData = [
   {
@@ -85,6 +87,26 @@ export default function FAQPage() {
         <Text size="lg" style={{ opacity: 0.92, maxWidth: 600, margin: '0 auto' }}>
           VunQR hakkında en çok merak edilen soruların cevaplarını burada bulabilirsiniz. Dijital iletişim, QR kod, menü, Google yorum ve daha fazlası için detaylı bilgi alın.
         </Text>
+        <style>{`
+          .vunqr-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: border 0.2s;
+          }
+          .vunqr-link:hover {
+            border-bottom: 2px solid #fff;
+          }
+        `}</style>
+        <Link href="/" className="vunqr-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 24 }}>
+          <IconQrcode size={22} color="white" style={{ flexShrink: 0 }} />
+          VunQR
+        </Link>
       </Box>
       <Container size="sm" style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '36px' }}>
         <Paper shadow="xs" radius="md" p="md" style={{ width: '100%', maxWidth: 600 }}>
