@@ -74,7 +74,7 @@ export default function UrlPage() {
         setTimeout(() => {
           setStatus("success");
           setLoading(false);
-          router.push("/dashboard");
+          router.push("/dashboard/qr-codes");
         }, 5000);
       } else {
         setStatus("idle");

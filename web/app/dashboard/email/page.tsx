@@ -66,7 +66,7 @@ export default function EmailPage() {
                     setShowAnimation(false);
                     setStatus('success');
                     setLoading(false);
-                    router.push('/dashboard');
+                    router.push('/dashboard/qr-codes');
                 }, 5000);
             } else {
                 setShowAnimation(false);
