@@ -59,6 +59,8 @@ export default function QRCodesPage() {
     const [loading, setLoading] = useState(true);
     const [selectedQR, setSelectedQR] = useState<QRCode | null>(null);
     const [opened, { open, close }] = useDisclosure(false);
+    // Her QR için resim yüklenme durumunu tutan state
+    const [imageLoading, setImageLoading] = useState<{ [id: string]: boolean }>({});
 
     useEffect(() => {
         const fetchQRCodes = async () => {
@@ -162,11 +164,20 @@ export default function QRCodesPage() {
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="xl">
                     {qrCodes.map((qr) => (
                         <Card key={qr.id} padding={0} radius="md" withBorder>
-                            <Card.Section>
+                            <Card.Section style={{ position: 'relative', minHeight: 200 }}>
+                                {/* Loader */}
+                                {imageLoading[qr.id] !== false && (
+                                    <Center style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 200, zIndex: 1, background: 'rgba(255,255,255,0.7)' }}>
+                                        <Loader size="lg" color="blue" />
+                                    </Center>
+                                )}
                                 <Image
                                     src={`${qr.qr_code_image}`}
                                     alt={qr.label || qr.type}
                                     height={200}
+                                    style={imageLoading[qr.id] !== false ? { opacity: 0 } : {}}
+                                    onLoad={() => setImageLoading(prev => ({ ...prev, [qr.id]: false }))}
+                                    onError={() => setImageLoading(prev => ({ ...prev, [qr.id]: false }))}
                                 />
                             </Card.Section>
                             <Stack p="md" gap="sm">
