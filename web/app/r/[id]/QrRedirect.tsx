@@ -16,11 +16,15 @@ export default function QrRedirectClient({ params }: QrRedirectClientProps) {
 
     async function fetchQrRedirect() {
       try {
-        const res = await fetch(`/api/qr-tracking/scan/${uuid}`);
+        const res = await fetch(`/api/qr-tracking/scan/${uuid}`, { redirect: "manual" });
 
-        if (res.redirected) {
-          // Backend 302 redirect yaptıysa, tarayıcı zaten yönlendi
-          return;
+        if (res.status === 302) {
+          // Redirect varsa, fetch ile takip etme, direkt pencereyi yönlendir
+          const redirectUrl = res.headers.get("Location");
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
         }
 
         if (!res.ok) {
@@ -30,7 +34,6 @@ export default function QrRedirectClient({ params }: QrRedirectClientProps) {
         const data = await res.json();
 
         if (data.original_content) {
-          // Özel protokol (smsto, mailto, vb.) için JS ile yönlendir
           window.location.href = data.original_content;
         } else {
           throw new Error("Yönlendirme URL'si bulunamadı.");
