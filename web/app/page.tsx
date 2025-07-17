@@ -710,18 +710,25 @@ export default function Home() {
         >
           Sıkça Sorulan Sorular
         </Title>
-        <Accordion variant="separated" radius="md">
-          {faqData.map((faq, index) => (
-            <AccordionItem key={index} value={`faq-${index}`}>
-              <AccordionControl>
-                <Text fw={500}>{faq.question}</Text>
-              </AccordionControl>
-              <AccordionPanel>
-                <Text c="dimmed">{faq.answer}</Text>
-              </AccordionPanel>
-            </AccordionItem>
+        <Box style={{ maxWidth: 600, margin: '0 auto' }}>
+          {faqData.slice(0, 3).map((faq, index) => (
+            <Box key={index} mb={32}>
+              <Text fw={600} size="lg" mb={6}>{faq.question}</Text>
+              <Text c="dimmed">{faq.answer}</Text>
+            </Box>
           ))}
-        </Accordion>
+          <Box ta="center" mt={32}>
+            <Button
+              size="md"
+              radius="md"
+              component={Link}
+              href="/faq"
+              style={{ background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)', color: 'white', fontWeight: 600 }}
+            >
+              Daha fazla soru için tıklayın
+            </Button>
+          </Box>
+        </Box>
       </Container>
 
       {/* Footer */}
