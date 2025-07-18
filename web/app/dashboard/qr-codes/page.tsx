@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconEye } from '@tabler/icons-react';
+import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, Tooltip, ActionIcon } from '@mantine/core';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconEye, IconInfoCircle } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 interface QRCode {
@@ -12,6 +12,7 @@ interface QRCode {
     created_at: string;
     qr_code_image: string;
     scan_count: string;
+    is_tracking_enabled: boolean;
 }
 
 const getTypeColor = (type: string) => {
@@ -144,6 +145,20 @@ export default function QRCodesPage() {
     return (
         <Container size="lg">
             <Title order={2} mb="xl">Tüm QR Kodlarım</Title>
+            <Card withBorder radius="md" p="sm" mb="md" style={{ background: '#f8f9fa' }}>
+                <Group gap={6} align="center" mb={2}>
+                    <IconInfoCircle size={16} color="#228be6" />
+                    <Text fw={600} size="sm">Dinamik ve Statik QR Kod Nedir?</Text>
+                </Group>
+                <ul style={{ margin: 0, paddingLeft: 18 }}>
+                    <li style={{ marginBottom: 2 }}>
+                        <Text size="sm"><b>Dinamik QR Kod:</b> Takip edilebilir, tarama verileri ve istatistikleri sizin için tutulur.</Text>
+                    </li>
+                    <li>
+                        <Text size="sm"><b>Statik QR Kod:</b> Sadece yönlendirme yapar, istatistik veya tarama verisi tutmaz.</Text>
+                    </li>
+                </ul>
+            </Card>
             <Modal opened={opened} onClose={close} title="QR Kodu Sil" centered>
                 <Text>Bu QR kodu silmek istediğinizden emin misiniz?</Text>
                 <Text size="sm" c="dimmed" mt="xs">
@@ -193,10 +208,18 @@ export default function QRCodesPage() {
                                     Oluşturulma: {new Date(qr.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
                                 </Text>
                                 <Group gap="xs" align="center">
-                                    <IconEye size={16} color="gray" />
-                                    <Text size="xs" c="dimmed">
-                                        {qr.scan_count} kez tarandı
-                                    </Text>
+                                    {qr.is_tracking_enabled ? (
+                                        <>
+                                            <IconEye size={16} color="gray" />
+                                            <Text size="xs" c="dimmed">
+                                                {qr.scan_count} kez tarandı
+                                            </Text>
+                                        </>
+                                    ) : (
+                                        <Text size="xs" c="dimmed">
+                                            Statik Kod
+                                        </Text>
+                                    )}
                                 </Group>
                             </Stack>
                             <Card.Section withBorder inheritPadding py="sm">
