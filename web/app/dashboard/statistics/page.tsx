@@ -14,6 +14,7 @@ interface QRCounts {
     label: string | null;
     id: string;
     count: string;
+    is_tracking_enabled?: boolean;
 }
 
 interface TopCities {
@@ -198,7 +199,7 @@ export default function StatisticsPage() {
                     <Stack gap="xs" align="center" style={{ textAlign: 'center' }}>
                         <IconQrcode size={24} color="#28c76f" />
                         <Text size="xs" c="dimmed">Aktif QR Kod</Text>
-                        <Title order={3} c="#28c76f">{data.qr_counts.filter(qr => parseInt(qr.count) > 0).length}</Title>
+                        <Title order={3} c="#28c76f">{data.qr_counts.filter(qr => String(qr.is_tracking_enabled) === "true").length}</Title>
                     </Stack>
                 </Card>
 
@@ -329,9 +330,9 @@ export default function StatisticsPage() {
                 </Card>
 
                 {/* Operating System Distribution */}
-                {osPieData.length > 0 && (
-                    <Card withBorder p="md" radius="md" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(255, 159, 67, 0.06)' }}>
-                        <Title order={4} mb="sm">İşletim Sistemi Dağılımı</Title>
+                <Card withBorder p="md" radius="md" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(255, 159, 67, 0.06)' }}>
+                    <Title order={4} mb="sm">İşletim Sistemi Dağılımı</Title>
+                    {osPieData.length > 0 ? (
                         <Stack gap="md">
                             <PieChart
                                 h={200}
@@ -354,13 +355,17 @@ export default function StatisticsPage() {
                                 })}
                             </Stack>
                         </Stack>
-                    </Card>
-                )}
+                    ) : (
+                        <Center style={{ height: 250 }}>
+                            <Text c="dimmed">Henüz işletim sistemi verisi bulunmuyor</Text>
+                        </Center>
+                    )}
+                </Card>
             </SimpleGrid>
 
             {/* Detailed QR Codes Table */}
             <Card withBorder p="md" radius="md" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(34, 139, 230, 0.06)' }}>
-                <Title order={4} mb="sm">QR Kod Detayları</Title>
+                <Title order={4} mb="sm">QR Kod Detaylarıtü</Title>
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
@@ -380,16 +385,22 @@ export default function StatisticsPage() {
                                             <Text size="xs" c="dimmed">ID: {qr.id.slice(0, 8)}...</Text>
                                         </td>
                                         <td style={{ padding: '8px', textAlign: 'center' }}>
-                                            <Badge size="sm" variant="light" color={parseInt(qr.count) > 0 ? 'green' : 'gray'}>
-                                                {parseInt(qr.count).toLocaleString('tr-TR')}
-                                            </Badge>
+                                            {String(qr.is_tracking_enabled) === "true"
+                                                ? (
+                                                    <Badge size="sm" variant="light" color={parseInt(qr.count) > 0 ? 'green' : 'gray'}>
+                                                        {parseInt(qr.count).toLocaleString('tr-TR')}
+                                                    </Badge>
+                                                )
+                                                : null}
                                         </td>
                                         <td style={{ padding: '8px', textAlign: 'center' }}>
-                                            {parseInt(qr.count) > 0 ? (
-                                                <Badge color="green" variant="light" size="sm">Aktif</Badge>
-                                            ) : (
-                                                <Badge color="gray" variant="light" size="sm">Pasif</Badge>
-                                            )}
+                                            {String(qr.is_tracking_enabled) === "true"
+                                                ? (
+                                                    <Badge color="green" variant="light" size="sm">Dinamik Kod</Badge>
+                                                )
+                                                : (
+                                                    <Badge color="gray" variant="light" size="sm">Statik Kod</Badge>
+                                                )}
                                         </td>
                                     </tr>
                                 ))}

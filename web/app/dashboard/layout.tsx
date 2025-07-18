@@ -46,6 +46,7 @@ interface NavChild {
     href: string;
     color: string;
     disabled?: boolean;
+    group?: string; // Yeni eklenen grup özelliği
 }
 interface NavItem extends NavChild {
     children?: NavChild[];
@@ -113,20 +114,26 @@ export default function DashboardLayout({
         {
             label: 'QR Kodlarım',
             items: [
+                { icon: IconList, label: 'Tüm QR Kodlar', href: '/dashboard/qr-codes', color: '#228be6' },
+            ],
+        },
+        {
+            label: 'QR Kod Oluştur',
+            items: [
                 {
                     icon: IconQrcode,
-                    label: 'QR Kodlarım',
-                    href: '/dashboard',
+                    label: 'QR Kod Oluştur',
+                    href: '#',
                     color: '#228be6',
                     children: [
-                        { icon: IconList, label: 'Tüm QR Kodlar', href: '/dashboard/qr-codes', color: '#228be6' },
-                        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi', color: '#40c057' },
-                        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14' },
-                        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252' },
-                        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2' },
-                        { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf' },
-                        { icon: IconStar, label: 'Google Yorum QR Kod', href: '/dashboard/google-review', color: '#fab005' },
-                        { icon: IconChartBar, label: 'İstatistikler', href: '/dashboard/statistics', color: '#20c997' },
+                        // Statik QR Kodlar
+                        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi', color: '#40c057', group: 'statik' },
+                        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14', group: 'statik' },
+                        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252', group: 'statik' },
+                        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2', group: 'statik' },
+                        // Dinamik QR Kodlar
+                        { icon: IconStar, label: 'Google Yorum QR Kod', href: '/dashboard/google-review', color: '#fab005', group: 'dinamik' },
+                        { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf', group: 'dinamik' },
                     ]
                 },
             ],
@@ -143,7 +150,6 @@ export default function DashboardLayout({
                 { icon: IconSettings, label: 'Menü Oluştur', href: '/dashboard/menu', color: '#fab005' },
             ],
         },
-
         {
             label: 'Kampanyalar',
             items: [
@@ -273,13 +279,13 @@ export default function DashboardLayout({
                                                                 <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
                                                             </ThemeIcon>
                                                         }
-                                                        active={pathname !== '/dashboard' && (pathname === item.href || item.children.some((child: { href: string }) => pathname === child.href))}
+                                                        active={item.children.some((child: { href: string }) => pathname === child.href)}
                                                         style={{
                                                             borderRadius: 'md',
                                                             marginBottom: '0.5rem',
                                                             transition: 'all 0.2s ease',
-                                                            backgroundColor: pathname !== '/dashboard' && (pathname === item.href || item.children.some((child: { href: string }) => pathname === child.href)) ? `${item.color}15` : 'transparent',
-                                                            color: pathname !== '/dashboard' && (pathname === item.href || item.children.some((child: { href: string }) => pathname === child.href)) ? item.color : 'inherit',
+                                                            backgroundColor: item.children.some((child: { href: string }) => pathname === child.href) ? `${item.color}15` : 'transparent',
+                                                            color: item.children.some((child: { href: string }) => pathname === child.href) ? item.color : 'inherit',
                                                             overflow: 'hidden',
                                                             whiteSpace: 'nowrap',
                                                             textOverflow: 'ellipsis',
@@ -291,7 +297,41 @@ export default function DashboardLayout({
                                                         }}
                                                         defaultOpened={item.children.some((child: { href: string }) => pathname === child.href)}
                                                     >
-                                                        {item.children.map((child: { icon: any; label: string; href: string; color: string }) => (
+                                                        {/* Statik QR Kodlar */}
+                                                        <Text size="xs" fw={700} c="dimmed" mb={2} pl={12}>Statik QR Kodlar</Text>
+                                                        {item.children.filter(child => child.group === 'statik').map((child) => (
+                                                            <NavLink
+                                                                key={child.href}
+                                                                component={Link}
+                                                                href={child.href}
+                                                                label={child.label}
+                                                                leftSection={
+                                                                    <ThemeIcon size={28} radius="md" color={child.color}>
+                                                                        <child.icon style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                                                                    </ThemeIcon>
+                                                                }
+                                                                active={pathname === child.href}
+                                                                style={{
+                                                                    borderRadius: 'md',
+                                                                    marginBottom: '0.3rem',
+                                                                    marginLeft: '1.5rem',
+                                                                    backgroundColor: pathname === child.href ? `${child.color}15` : 'transparent',
+                                                                    color: pathname === child.href ? child.color : 'inherit',
+                                                                    overflow: 'hidden',
+                                                                    whiteSpace: 'nowrap',
+                                                                    textOverflow: 'ellipsis',
+                                                                    maxWidth: '90%',
+                                                                    '&:hover': {
+                                                                        backgroundColor: `${child.color}15`,
+                                                                        color: child.color,
+                                                                    }
+                                                                }}
+                                                                onClick={() => { if (isMobile) setOpened(false); }}
+                                                            />
+                                                        ))}
+                                                        {/* Dinamik QR Kodlar */}
+                                                        <Text size="xs" fw={700} c="dimmed" mb={2} pl={12} mt={8}>Dinamik QR Kodlar</Text>
+                                                        {item.children.filter(child => child.group === 'dinamik').map((child) => (
                                                             <NavLink
                                                                 key={child.href}
                                                                 component={Link}
