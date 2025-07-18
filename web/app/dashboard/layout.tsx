@@ -118,6 +118,12 @@ export default function DashboardLayout({
             ],
         },
         {
+            label: 'İstatistikler',
+            items: [
+                { icon: IconChartBar, label: 'İstatistikler', href: '/dashboard/statistics', color: '#40c057' },
+            ],
+        },
+        {
             label: 'QR Kod Oluştur',
             items: [
                 {
