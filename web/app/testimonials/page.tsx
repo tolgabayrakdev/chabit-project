@@ -29,15 +29,29 @@ const testimonialsData = [
 
 export const metadata = {
   title: 'Kullanıcı Yorumları | VunQR',
-  description: 'VunQR kullanıcılarının deneyimlerini ve yorumlarını okuyun. QR kod, dijital menü ve daha fazlası hakkında gerçek kullanıcı görüşleri.',
+  description: 'VunQR kullanıcılarının kişisel veya kurumsal deneyimlerini ve yorumlarını okuyun. QR kod, dijital menü ve daha fazlası hakkında gerçek kullanıcı görüşleri. VunQR hem bireyler hem de işletmeler için dijital iletişimin akıllı yoludur.',
   alternates: {
     canonical: '/testimonials',
   },
   openGraph: {
     title: 'Kullanıcı Yorumları | VunQR',
-    description: 'VunQR kullanıcılarının deneyimlerini ve yorumlarını okuyun. QR kod, dijital menü ve daha fazlası hakkında gerçek kullanıcı görüşleri.',
+    description: 'VunQR kullanıcılarının kişisel veya kurumsal deneyimlerini ve yorumlarını okuyun. QR kod, dijital menü ve daha fazlası hakkında gerçek kullanıcı görüşleri. VunQR hem bireyler hem de işletmeler için dijital iletişimin akıllı yoludur.',
     url: '/testimonials',
     type: 'website',
+    images: [
+      {
+        url: 'https://vunqr.com/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'VunQR - Dijital İletişim Çözümleri',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Kullanıcı Yorumları | VunQR',
+    description: 'VunQR kullanıcılarının kişisel veya kurumsal deneyimlerini ve yorumlarını okuyun. QR kod, dijital menü ve daha fazlası hakkında gerçek kullanıcı görüşleri. VunQR hem bireyler hem de işletmeler için dijital iletişimin akıllı yoludur.',
+    images: ['https://vunqr.com/twitter-image.jpg'],
   },
   other: {
     'script:type': 'application/ld+json',
@@ -46,7 +60,8 @@ export const metadata = {
       '@type': 'Review',
       'itemReviewed': {
         '@type': 'Product',
-        'name': 'VunQR'
+        'name': 'VunQR',
+        'description': 'VunQR, kişisel veya kurumsal kullanım için dijital iletişimin akıllı yoludur. Bireyler ve işletmeler için gelişmiş QR kod çözümleri sunar.'
       },
       'review': testimonialsData.map(testimonial => ({
         '@type': 'Review',
@@ -116,7 +131,7 @@ export default function TestimonialsPage() {
             Kullanıcı Yorumları
           </Title>
           <Text size="lg" style={{ opacity: 0.92, maxWidth: 600, margin: '0 auto' }}>
-            VunQR kullanıcılarının deneyimlerini ve görüşlerini burada bulabilirsiniz. Gerçek kullanıcı yorumları ile VunQR hakkında daha fazla bilgi edinin.
+            VunQR kullanıcılarının kişisel veya kurumsal deneyimlerini ve görüşlerini burada bulabilirsiniz. Gerçek kullanıcı yorumları ile VunQR hakkında daha fazla bilgi edinin.
           </Text>
          <Link href="/" className="vunqr-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 24 }}>
             <IconQrcode size={22} color="white" style={{ flexShrink: 0 }} />
