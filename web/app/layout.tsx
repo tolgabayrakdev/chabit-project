@@ -21,9 +21,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dijital İletişim Çözümleri | VunQR",
-  description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle işletmenizin dijital varlığını güçlendirin. Türkiye'nin en kapsamlı dijital iletişim platformu.",
+  title: "Kişisel veya kurumsal, dijital iletişimin akıllı yolu - VunQR.",
+  description: "Kişisel veya kurumsal kullanım için QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle dijital iletişiminizi güçlendirin. VunQR, dijital iletişimin akıllı yoludur.",
   keywords: [
+    "kişisel kullanım",
+    "kurumsal kullanım",
+    "bireysel dijital iletişim",
     "QR kod",
     "QR code generator",
     "WiFi paylaşımı",
@@ -70,8 +73,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "tr_TR",
     url: "https://vunqr.com",
-    title: "Dijital İletişim Çözümleri | VunQR",
-    description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle işletmenizin dijital varlığını güçlendirin.",
+    title: "Kişisel veya kurumsal, dijital iletişimin akıllı yolu - VunQR.",
+    description: "Kişisel veya kurumsal kullanım için QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle dijital iletişiminizi güçlendirin. VunQR, dijital iletişimin akıllı yoludur.",
     siteName: "VunQR",
     images: [
       {
@@ -84,8 +87,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dijital İletişim Çözümleri | VunQR",
-    description: "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle işletmenizin dijital varlığını güçlendirin.",
+    title: "Kişisel veya kurumsal, dijital iletişimin akıllı yolu - VunQR.",
+    description: "Kişisel veya kurumsal kullanım için QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle dijital iletişiminizi güçlendirin. VunQR, dijital iletişimin akıllı yoludur.",
     creator: "@vunqr",
     site: "@vunqr",
     images: ["https://vunqr.com/twitter-image.jpg"],
@@ -163,9 +166,9 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
               "name": "VunQR",
-              "description": "QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle işletmenizin dijital varlığını güçlendirin.",
+              "description": "Kişisel veya kurumsal, dijital iletişimin akıllı yolu. Kişisel veya kurumsal kullanım için QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle dijital iletişiminizi güçlendirin.",
               "url": "https://vunqr.com",
-              "applicationCategory": "BusinessApplication",
+              "applicationCategory": "CommunicationApplication",
               "operatingSystem": "Web",
               "offers": {
                 "@type": "Offer",

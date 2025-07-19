@@ -183,7 +183,7 @@ export default function Home() {
                   lineHeight: 1.2
                 }}
               >
-                Dijital İletişim Çözümleri
+                Kişisel veya kurumsal, dijital iletişimin akıllı yolu
               </Title>
               <Text
                 size="xl"
@@ -194,8 +194,7 @@ export default function Home() {
                   marginTop: rem(16)
                 }}
               >
-                QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle
-                işletmenizin dijital varlığını güçlendirin.
+                VunQR ile kişisel veya kurumsal kullanım için QR kodlar, WiFi paylaşımı, e-posta ve SMS gönderimi, vCard yönetimi, PDF menü, Link in Bio ve Google Yorum gibi gelişmiş özelliklerle dijital iletişiminizi güçlendirin.
               </Text>
               <Group justify="flex-start" mt="xl" gap="xl">
                 <Button

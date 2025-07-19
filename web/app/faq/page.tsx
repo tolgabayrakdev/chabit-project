@@ -7,11 +7,11 @@ import { IconQrcode } from '@tabler/icons-react';
 const faqData = [
   {
     question: 'VunQR nedir?',
-    answer: 'VunQR, işletmeler ve bireyler için gelişmiş QR kod çözümleri sunan, dijital iletişim ve bağlantı platformudur.'
+    answer: 'VunQR, kişisel veya kurumsal kullanım için gelişmiş QR kod çözümleri sunan, dijital iletişimin akıllı yoludur. Bireyler ve işletmeler için hızlı, güvenli ve özelleştirilebilir dijital bağlantı ve iletişim imkanı sağlar.'
   },
   {
     question: 'VunQR ile hangi tür QR kodlar oluşturabilirim?',
-    answer: 'WiFi, vCard, URL, e-posta, SMS, Google Yorum, PDF menü, Link in Bio ve daha birçok farklı QR kod türünü kolayca oluşturabilirsiniz.'
+    answer: 'WiFi, vCard, URL, e-posta, SMS, Google Yorum, PDF menü, Link in Bio ve daha birçok farklı QR kod türünü hem kişisel hem de kurumsal ihtiyaçlarınız için kolayca oluşturabilirsiniz.'
   },
   {
     question: 'VunQR ücretsiz mi?',
@@ -27,7 +27,7 @@ const faqData = [
   },
   {
     question: 'QR kodlarımı nasıl özelleştirebilirim? Logo ve tasarım ekleyebilir miyim?',
-    answer: 'VunQR ile QR kodlarınızı markanıza uygun şekilde özelleştirebilirsiniz. Kendi logonuzu ekleyebilir, renkleri ve çerçeve tasarımını değiştirebilir, farklı QR kod stilleriyle dikkat çekici ve profesyonel görünümler oluşturabilirsiniz.'
+    answer: 'VunQR ile QR kodlarınızı markanıza veya kişisel tercihinize uygun şekilde özelleştirebilirsiniz. Kendi logonuzu ekleyebilir, renkleri ve çerçeve tasarımını değiştirebilir, farklı QR kod stilleriyle dikkat çekici ve profesyonel görünümler oluşturabilirsiniz.'
   },
   {
     question: 'QR kod istatistikleri sunuyor musunuz?',
@@ -50,6 +50,7 @@ const faqData = [
 export const metadata = {
   title: 'Sıkça Sorulan Sorular | VunQR',
   description: 'VunQR hakkında en çok merak edilen soruların cevaplarını burada bulabilirsiniz. QR kod, dijital menü, Google yorum, vCard ve daha fazlası hakkında detaylı bilgi alın.',
+  keywords: 'VunQR, sıkça sorulan sorular, QR kod, dijital menü, Google yorum, vCard, dijital iletişim, müşteri etkileşimi, güvenli QR kod, kampanya yönetimi, kişisel ve kurumsal QR kod',
   alternates: {
     canonical: '/faq',
   },
@@ -58,6 +59,20 @@ export const metadata = {
     description: 'VunQR hakkında en çok merak edilen soruların cevaplarını burada bulabilirsiniz. QR kod, dijital menü, Google yorum, vCard ve daha fazlası hakkında detaylı bilgi alın.',
     url: '/faq',
     type: 'website',
+    images: [
+      {
+        url: 'https://vunqr.com/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'VunQR - Dijital İletişim Çözümleri',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sıkça Sorulan Sorular | VunQR',
+    description: 'VunQR hakkında en çok merak edilen soruların cevaplarını burada bulabilirsiniz. QR kod, dijital menü, Google yorum, vCard ve daha fazlası hakkında detaylı bilgi alın.',
+    images: ['https://vunqr.com/twitter-image.jpg'],
   },
   other: {
     'script:type': 'application/ld+json',

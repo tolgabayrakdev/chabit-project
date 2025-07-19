@@ -6,12 +6,57 @@ import Link from 'next/link';
 export const metadata = {
   title: "VunQR Nasıl Çalışır? | Adım Adım Rehber ve Kullanım Kılavuzu",
   description: "VunQR sistemini nasıl kullanacağınızı öğrenin. QR kod oluşturma, WiFi paylaşımı, menü yükleme, Link in Bio kurulumu ve daha fazlası için detaylı rehber. Kimin işine yarar? Hangi sektörler için ideal?",
-  keywords: "VunQR nasıl kullanılır, QR kod oluşturma rehberi, WiFi QR kodu nasıl yapılır, dijital menü nasıl yüklenir, Link in Bio nasıl kurulur, vCard QR kodu, SMS QR kodu, e-posta QR kodu, Google yorum QR kodu, restoran dijital çözümleri, kafe QR kod sistemi, işletme dijitalleşme",
+  keywords: "VunQR nasıl kullanılır, QR kod oluşturma rehberi, WiFi QR kodu nasıl yapılır, dijital menü nasıl yüklenir, Link in Bio nasıl kurulur, vCard QR kodu, SMS QR kodu, e-posta QR kodu, Google yorum QR kodu, restoran dijital çözümleri, kafe QR kod sistemi, işletme dijitalleşme, kişisel dijital iletişim, kurumsal dijital iletişim, dijital dönüşüm, dijital rehber, QR kod avantajları, QR kod sektörleri, dijital kartvizit, müşteri etkileşimi, kampanya yönetimi",
   openGraph: {
     title: "VunQR Nasıl Çalışır? | Adım Adım Rehber ve Kullanım Kılavuzu",
     description: "VunQR sistemini nasıl kullanacağınızı öğrenin. QR kod oluşturma, WiFi paylaşımı, menü yükleme, Link in Bio kurulumu ve daha fazlası için detaylı rehber.",
     type: "article",
+    images: [
+      {
+        url: "https://vunqr.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "VunQR - Dijital İletişim Çözümleri",
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "VunQR Nasıl Çalışır? | Adım Adım Rehber ve Kullanım Kılavuzu",
+    description: "VunQR sistemini nasıl kullanacağınızı öğrenin. QR kod oluşturma, WiFi paylaşımı, menü yükleme, Link in Bio kurulumu ve daha fazlası için detaylı rehber.",
+    images: ["https://vunqr.com/twitter-image.jpg"],
+  },
+  other: {
+    'script:type': 'application/ld+json',
+    'script:dangerouslySetInnerHTML': JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      'name': 'VunQR Nasıl Çalışır?',
+      'description': 'VunQR ile QR kod oluşturma, WiFi paylaşımı, menü yükleme, Link in Bio kurulumu ve daha fazlası için adım adım rehber.',
+      'step': [
+        {
+          '@type': 'HowToStep',
+          'name': 'Hesap Oluşturun',
+          'text': 'Ücretsiz hesabınızı oluşturun.'
+        },
+        {
+          '@type': 'HowToStep',
+          'name': 'QR Kod Türünü Seçin',
+          'text': 'WiFi, vCard, URL, E-posta, SMS veya Google Yorum türlerinden birini seçin.'
+        },
+        {
+          '@type': 'HowToStep',
+          'name': 'İçeriğinizi Girin',
+          'text': 'Gerekli bilgileri doldurun.'
+        },
+        {
+          '@type': 'HowToStep',
+          'name': 'QR Kodunuzu Oluşturun',
+          'text': 'İndirin ve kullanmaya başlayın.'
+        }
+      ]
+    })
+  }
 };
 
 const steps = [
