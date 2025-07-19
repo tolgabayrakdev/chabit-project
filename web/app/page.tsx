@@ -410,45 +410,47 @@ export default function Home() {
                     transform: 'translateY(-5px)',
                     boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
                     borderColor: feature.color
-                  }
+                  },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center'
                 }}
               >
-                <Group align="flex-start" wrap="nowrap">
-                  <ThemeIcon size={80} radius="lg" color={feature.color} style={{ flexShrink: 0 }}>
-                    <feature.icon style={{ width: rem(40), height: rem(40) }} stroke={1.5} />
-                  </ThemeIcon>
-                  <Stack gap="xs" style={{ flex: 1 }}>
-                    <Group>
-                      <Text fw={700} size="lg">{feature.title}</Text>
-                    </Group>
-                    <Text size="sm" c="dimmed">{feature.detail}</Text>
-                    {/* Rozetler sadece QR Kod İstatistikleri dışındaki özelliklerde gösterilecek */}
-                    {feature.title !== 'QR Kod İstatistikleri' && (
-                      <Group gap="xs">
-                        {feature.title !== 'Link in Bio' && (
-                          <Badge leftSection={<IconDownload size={14} />} color={feature.color} variant="light">
-                            PNG, JPG, SVG
-                          </Badge>
-                        )}
-                        {feature.limit === 'Sınırsız' ? (
-                          <Badge leftSection={<IconInfinity size={14} />} color="green" variant="light">
-                            Sınırsız
-                          </Badge>
-                        ) : (
-                          <Badge leftSection={<IconClock size={14} />} color="blue" variant="light">
-                            {feature.limit}
-                          </Badge>
-                        )}
-                      </Group>
+                {/* En üstte ortalanmış büyük özellik ikonu */}
+                <ThemeIcon size={80} radius="lg" color={feature.color} style={{ marginBottom: 16 }}>
+                  <feature.icon style={{ width: rem(40), height: rem(40) }} stroke={1.5} />
+                </ThemeIcon>
+                {/* Ortalanmış başlık */}
+                <Text fw={700} size="lg" mb={4}>{feature.title}</Text>
+                {/* Ortalanmış açıklama */}
+                <Text size="sm" c="dimmed" mb={12}>{feature.detail}</Text>
+                {/* Ortalanmış rozetler */}
+                {feature.title !== 'QR Kod İstatistikleri' && (
+                  <Group gap="xs" justify="center" mb={12}>
+                    {feature.title !== 'Link in Bio' && (
+                      <Badge leftSection={<IconDownload size={14} />} color={feature.color} variant="light">
+                        PNG, JPG, SVG
+                      </Badge>
                     )}
-                    <Group gap="xs" mt="xs">
-                      {feature.devices.map((Device, index) => (
-                        <ThemeIcon key={index} size="sm" radius="xl" color={feature.color} variant="light">
-                          <Device size={14} />
-                        </ThemeIcon>
-                      ))}
-                    </Group>
-                  </Stack>
+                    {feature.limit === 'Sınırsız' ? (
+                      <Badge leftSection={<IconInfinity size={14} />} color="green" variant="light">
+                        Sınırsız
+                      </Badge>
+                    ) : (
+                      <Badge leftSection={<IconClock size={14} />} color="blue" variant="light">
+                        {feature.limit}
+                      </Badge>
+                    )}
+                  </Group>
+                )}
+                {/* En altta ortalanmış cihaz ikonları */}
+                <Group gap="xs" justify="center" mt="auto">
+                  {feature.devices.map((Device, index) => (
+                    <ThemeIcon key={index} size="sm" radius="xl" color={feature.color} variant="light">
+                      <Device size={14} />
+                    </ThemeIcon>
+                  ))}
                 </Group>
               </Paper>
             ))}
