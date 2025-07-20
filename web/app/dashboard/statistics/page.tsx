@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Group, Badge, Stack, Center, Loader, Paper, RingProgress, Divider } from '@mantine/core';
+import { Container, Title, SimpleGrid, Card, Text, rem, Group, Badge, Stack, Center, Loader, Paper, RingProgress, Divider, Pagination } from '@mantine/core';
 import { LineChart, BarChart, PieChart, AreaChart } from '@mantine/charts';
 import { IconQrcode, IconMapPin, IconGlobe, IconTrendingUp, IconUsers, IconEye } from '@tabler/icons-react';
 
@@ -68,10 +68,72 @@ const getTypeLabel = (type: string) => {
     }
 };
 
+// En yüksek nüfusa sahip 50 ülkenin tüm varyasyonlarını normalize eden eşleme
+const countryNameMap: Record<string, string> = {
+    'India': 'Hindistan', 'Hindistan': 'Hindistan',
+    'China': 'Çin', 'Çin': 'Çin',
+    'United States of America': 'Amerika Birleşik Devletleri', 'Amerika Birleşik Devletleri': 'Amerika Birleşik Devletleri',
+    'USA': 'Amerika Birleşik Devletleri', 'ABD': 'Amerika Birleşik Devletleri',
+    'Indonesia': 'Endonezya', 'Endonezya': 'Endonezya',
+    'Pakistan': 'Pakistan',
+    'Nigeria': 'Nijerya', 'Nijerya': 'Nijerya',
+    'Brazil': 'Brezilya', 'Brezilya': 'Brezilya',
+    'Bangladesh': 'Bangladeş', 'Bangladeş': 'Bangladeş',
+    'Russia': 'Rusya', 'Rusya': 'Rusya',
+    'Ethiopia': 'Etiyopya', 'Etiyopya': 'Etiyopya',
+    'Mexico': 'Meksika', 'Meksika': 'Meksika',
+    'Japan': 'Japonya', 'Japonya': 'Japonya',
+    'Egypt': 'Mısır', 'Mısır': 'Mısır',
+    'Philippines': 'Filipinler', 'Filipinler': 'Filipinler',
+    'Democratic Republic of the Congo': 'Demokratik Kongo Cumhuriyeti', 'Demokratik Kongo Cumhuriyeti': 'Demokratik Kongo Cumhuriyeti',
+    'Vietnam': 'Vietnam',
+    'Iran': 'İran', 'Iran (Islamic Republic of)': 'İran', 'İran': 'İran',
+    'Turkey': 'Türkiye', 'Türkiye': 'Türkiye',
+    'Germany': 'Almanya', 'Almanya': 'Almanya',
+    'Thailand': 'Tayland', 'Tayland': 'Tayland',
+    'Tanzania': 'Tanzanya', 'Tanzanya': 'Tanzanya',
+    'United Kingdom': 'Birleşik Krallık', 'Birleşik Krallık': 'Birleşik Krallık',
+    'France': 'Fransa', 'Fransa': 'Fransa',
+    'South Africa': 'Güney Afrika', 'Güney Afrika': 'Güney Afrika',
+    'Italy': 'İtalya', 'İtalya': 'İtalya',
+    'Kenya': 'Kenya',
+    'Myanmar': 'Myanmar',
+    'Colombia': 'Kolombiya', 'Kolombiya': 'Kolombiya',
+    'Republic of Korea': 'Güney Kore', 'South Korea': 'Güney Kore', 'Güney Kore': 'Güney Kore',
+    'Sudan': 'Sudan',
+    'Uganda': 'Uganda',
+    'Spain': 'İspanya', 'İspanya': 'İspanya',
+    'Algeria': 'Cezayir', 'Cezayir': 'Cezayir',
+    'Iraq': 'Irak', 'Irak': 'Irak',
+    'Argentina': 'Arjantin', 'Arjantin': 'Arjantin',
+    'Afghanistan': 'Afganistan', 'Afganistan': 'Afganistan',
+    'Yemen': 'Yemen',
+    'Canada': 'Kanada', 'Kanada': 'Kanada',
+    'Angola': 'Angola',
+    'Ukraine': 'Ukrayna', 'Ukrayna': 'Ukrayna',
+    'Morocco': 'Fas', 'Fas': 'Fas',
+    'Poland': 'Polonya', 'Polonya': 'Polonya',
+    'Uzbekistan': 'Özbekistan', 'Özbekistan': 'Özbekistan',
+    'Malaysia': 'Malezya', 'Malezya': 'Malezya',
+    'Mozambique': 'Mozambik', 'Mozambik': 'Mozambik',
+    'Ghana': 'Gana', 'Gana': 'Gana',
+    'Peru': 'Peru',
+    'Saudi Arabia': 'Suudi Arabistan', 'Suudi Arabistan': 'Suudi Arabistan',
+    'Madagascar': 'Madagaskar', 'Madagaskar': 'Madagaskar',
+    "Ivory Coast": 'Fildişi Sahili', "Côte d'Ivoire": 'Fildişi Sahili', 'Fildişi Sahili': 'Fildişi Sahili',
+};
+
+function normalizeCountryName(name: string): string {
+    return countryNameMap[name] || name;
+}
+
 export default function StatisticsPage() {
     const [data, setData] = useState<StatisticsData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    // Pagination state for QR table
+    const [qrPage, setQrPage] = useState(1);
+    const QR_PER_PAGE = 12;
 
     useEffect(() => {
         const fetchStatistics = async () => {
@@ -144,10 +206,17 @@ export default function StatisticsPage() {
         tarama: parseInt(city.count)
     }));
 
-    const countriesChartData = data.top_countries.map(country => ({
-        name: country.country,
-        tarama: parseInt(country.count)
-    }));
+    // --- countriesChartData yerine normalize edilmiş ve birleştirilmiş veriyi kullan ---
+    // Önce normalize edip aynı ülkeye ait verileri topluyoruz
+    const countryCountMap: Record<string, number> = {};
+    data.top_countries.forEach(country => {
+        const normalized = normalizeCountryName(country.country);
+        // Sadece countryNameMap'te olanlar birleştirilecek, diğerleri eklenmeyecek
+        if (countryNameMap[country.country]) {
+            countryCountMap[normalized] = (countryCountMap[normalized] || 0) + parseInt(country.count);
+        }
+    });
+    const countriesChartData = Object.entries(countryCountMap).map(([name, tarama]) => ({ name, tarama }));
 
     // Calculate percentages for cities and countries
     const totalCityScans = citiesChartData.reduce((sum, city) => sum + city.tarama, 0);
@@ -180,6 +249,11 @@ export default function StatisticsPage() {
         value: os.tarama,
         color: ['#ff9f43', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'][index % 6]
     }));
+
+    // QR Kod Detayları için pagination
+    const sortedQRCodes = data.qr_counts.sort((a, b) => parseInt(b.count) - parseInt(a.count));
+    const totalQrPages = Math.ceil(sortedQRCodes.length / QR_PER_PAGE);
+    const paginatedQRCodes = sortedQRCodes.slice((qrPage - 1) * QR_PER_PAGE, qrPage * QR_PER_PAGE);
 
     return (
         <Container size="lg">
@@ -365,7 +439,7 @@ export default function StatisticsPage() {
 
             {/* Detailed QR Codes Table */}
             <Card withBorder p="md" radius="md" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(34, 139, 230, 0.06)' }}>
-                <Title order={4} mb="sm">QR Kod Detaylarıtü</Title>
+                <Title order={4} mb="sm">QR Kod Detayları (Toplam: {sortedQRCodes.length})</Title>
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
@@ -376,37 +450,48 @@ export default function StatisticsPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.qr_counts
-                                .sort((a, b) => parseInt(b.count) - parseInt(a.count))
-                                .map((qr, index) => (
-                                    <tr key={qr.id} style={{ borderBottom: '1px solid #f8f9fa' }}>
-                                        <td style={{ padding: '8px' }}>
-                                            <Text fw={500} size="sm">{qr.label || 'Etiket Yok'}</Text>
-                                            <Text size="xs" c="dimmed">ID: {qr.id.slice(0, 8)}...</Text>
-                                        </td>
-                                        <td style={{ padding: '8px', textAlign: 'center' }}>
-                                            {String(qr.is_tracking_enabled) === "true"
-                                                ? (
-                                                    <Badge size="sm" variant="light" color={parseInt(qr.count) > 0 ? 'green' : 'gray'}>
-                                                        {parseInt(qr.count).toLocaleString('tr-TR')}
-                                                    </Badge>
-                                                )
-                                                : null}
-                                        </td>
-                                        <td style={{ padding: '8px', textAlign: 'center' }}>
-                                            {String(qr.is_tracking_enabled) === "true"
-                                                ? (
-                                                    <Badge color="green" variant="light" size="sm">Dinamik Kod</Badge>
-                                                )
-                                                : (
-                                                    <Badge color="gray" variant="light" size="sm">Statik Kod</Badge>
-                                                )}
-                                        </td>
-                                    </tr>
-                                ))}
+                            {paginatedQRCodes.map((qr, index) => (
+                                <tr key={qr.id} style={{ borderBottom: '1px solid #f8f9fa' }}>
+                                    <td style={{ padding: '8px' }}>
+                                        <Text fw={500} size="sm">{qr.label || 'Etiket Yok'}</Text>
+                                        <Text size="xs" c="dimmed">ID: {qr.id.slice(0, 8)}...</Text>
+                                    </td>
+                                    <td style={{ padding: '8px', textAlign: 'center' }}>
+                                        {String(qr.is_tracking_enabled) === "true"
+                                            ? (
+                                                <Badge size="sm" variant="light" color={parseInt(qr.count) > 0 ? 'green' : 'gray'}>
+                                                    {parseInt(qr.count).toLocaleString('tr-TR')}
+                                                </Badge>
+                                            )
+                                            : null}
+                                    </td>
+                                    <td style={{ padding: '8px', textAlign: 'center' }}>
+                                        {String(qr.is_tracking_enabled) === "true"
+                                            ? (
+                                                <Badge color="green" variant="light" size="sm">Dinamik Kod</Badge>
+                                            )
+                                            : (
+                                                <Badge color="gray" variant="light" size="sm">Statik Kod</Badge>
+                                            )}
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
+                {sortedQRCodes.length > QR_PER_PAGE && (
+                    <Center mt="md">
+                        <Pagination
+                            value={qrPage}
+                            onChange={setQrPage}
+                            total={totalQrPages}
+                            color="blue"
+                            size="md"
+                            radius="md"
+                            withEdges
+                        />
+                    </Center>
+                )}
             </Card>
         </Container>
     );

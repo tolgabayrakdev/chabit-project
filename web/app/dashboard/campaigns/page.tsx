@@ -706,10 +706,11 @@ export default function CampaignsPage() {
                     </Title>
                     <Button
                         onClick={openCreate}
-                        radius="md"
-                        size="md"
+                        radius="sm"
+                        size="sm"
                         color="#e64980"
-                        leftSection={<IconPlus size={16} />}
+                        leftSection={<IconPlus size={14} />}
+                        style={{ minHeight: 32, fontSize: 14, padding: '0 12px' }}
                     >
                         Yeni Kampanya Oluştur
                     </Button>
@@ -723,30 +724,30 @@ export default function CampaignsPage() {
                     {campaigns.map(campaign => {
                         const status = getCampaignStatus(campaign);
                         return (
-                            <Paper key={campaign.id} p="md" radius="md" withBorder>
-                                <Stack gap="sm">
-                                    <Group justify="space-between" align="flex-start">
-                                        <Text fw={500} size="md" truncate style={{ flex: 1 }}>{campaign.title}</Text>
-                                        <Badge color={status.color} size="sm">{status.status}</Badge>
+                            <Paper key={campaign.id} p="sm" radius="md" withBorder>
+                                <Stack gap="xs">
+                                    <Group justify="space-between" align="flex-start" gap="xs">
+                                        <Text fw={500} size="sm" truncate style={{ flex: 1 }}>{campaign.title}</Text>
+                                        <Badge color={status.color} size="xs">{status.status}</Badge>
                                     </Group>
-                                                                            <Text size="sm" c="dimmed" style={{ fontFamily: 'monospace' }}>
-                                            vunqr.com/campaign/{campaign.slug}
+                                    <Text size="xs" c="dimmed" style={{ fontFamily: 'monospace' }} lineClamp={1}>
+                                        vunqr.com/campaign/{campaign.slug}
+                                    </Text>
+                                    <Text size="xs" c="dimmed" lineClamp={1}>
+                                        {campaign.description}
+                                    </Text>
+                                    <Group gap="xs" c="dimmed">
+                                        <IconCalendar size={12} />
+                                        <Text size="xs">
+                                            {new Date(campaign.start_date).toLocaleDateString('tr-TR')} - {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
                                         </Text>
-                                        <Text size="sm" c="dimmed" lineClamp={2}>
-                                            {campaign.description}
-                                        </Text>
+                                    </Group>
+                                    {campaign.entries_count !== undefined && (
                                         <Group gap="xs" c="dimmed">
-                                            <IconCalendar size={14} />
-                                            <Text size="sm">
-                                                {new Date(campaign.start_date).toLocaleDateString('tr-TR')} - {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
-                                            </Text>
+                                            <IconUsers size={12} />
+                                            <Text size="xs">{campaign.entries_count} katılımcı</Text>
                                         </Group>
-                                        {campaign.entries_count !== undefined && (
-                                            <Group gap="xs" c="dimmed">
-                                                <IconUsers size={14} />
-                                                <Text size="sm">{campaign.entries_count} katılımcı</Text>
-                                            </Group>
-                                        )}
+                                    )}
                                     {campaign.winners && campaign.winners.length > 0 && (
                                         <Stack gap="xs">
                                             {campaign.winners.map((winner, index) => {
@@ -758,7 +759,6 @@ export default function CampaignsPage() {
                                                         default: return `${rank}.`;
                                                     }
                                                 };
-                                                
                                                 const getRankText = (rank: number) => {
                                                     switch (rank) {
                                                         case 1: return 'Asıl Kazanan';
@@ -767,14 +767,13 @@ export default function CampaignsPage() {
                                                         default: return `${rank}. Yedek`;
                                                     }
                                                 };
-                                                
-                                                                                                    return (
-                                                        <Group key={winner.id} gap="xs">
-                                                            <Text size="sm" fw={500}>
-                                                                {getRankIcon(winner.rank)} {getRankText(winner.rank)}: <Text span c="green" fw={500}>{winner.name} ({winner.email})</Text>
-                                                            </Text>
-                                                        </Group>
-                                                    );
+                                                return (
+                                                    <Group key={winner.id} gap="xs">
+                                                        <Text size="xs" fw={500}>
+                                                            {getRankIcon(winner.rank)} {getRankText(winner.rank)}: <Text span c="green" fw={500}>{winner.name} ({winner.email})</Text>
+                                                        </Text>
+                                                    </Group>
+                                                );
                                             })}
                                         </Stack>
                                     )}
@@ -785,7 +784,7 @@ export default function CampaignsPage() {
                                             target="_blank" 
                                             variant="subtle" 
                                             color="#e64980" 
-                                            leftSection={<IconExternalLink size={14} />}
+                                            leftSection={<IconExternalLink size={12} />}
                                             size="sm"
                                             fullWidth
                                         >
@@ -796,33 +795,33 @@ export default function CampaignsPage() {
                                                 color="blue" 
                                                 variant="subtle" 
                                                 onClick={() => handleEdit(campaign)}
-                                                size="md"
+                                                size="sm"
                                             >
-                                                <IconEdit size={16} />
+                                                <IconEdit size={14} />
                                             </ActionIcon>
                                             <ActionIcon 
                                                 color="purple" 
                                                 variant="subtle" 
                                                 onClick={() => handleViewEntries(campaign)}
-                                                size="md"
+                                                size="sm"
                                             >
-                                                <IconUsers size={16} />
+                                                <IconUsers size={14} />
                                             </ActionIcon>
                                             <ActionIcon 
                                                 color="orange" 
                                                 variant="subtle" 
                                                 onClick={() => copyExistingCampaignUrl(campaign.slug)}
-                                                size="md"
+                                                size="sm"
                                             >
-                                                {copiedCampaignId === campaign.slug ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                                                {copiedCampaignId === campaign.slug ? <IconCheck size={14} /> : <IconCopy size={14} />}
                                             </ActionIcon>
                                             <ActionIcon 
                                                 color="red" 
                                                 variant="subtle" 
                                                 onClick={() => handleDelete(campaign)}
-                                                size="md"
+                                                size="sm"
                                             >
-                                                <IconTrash size={16} />
+                                                <IconTrash size={14} />
                                             </ActionIcon>
                                         </Group>
                                         {status.status === 'Aktif' && campaign.is_active && (
@@ -830,7 +829,7 @@ export default function CampaignsPage() {
                                                 variant="outline"
                                                 color="green"
                                                 size="sm"
-                                                leftSection={<IconTrophy size={14} />}
+                                                leftSection={<IconTrophy size={12} />}
                                                 onClick={() => handleSelectWinner(campaign)}
                                                 fullWidth
                                             >

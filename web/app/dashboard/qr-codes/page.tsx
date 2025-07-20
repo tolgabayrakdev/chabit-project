@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, Tooltip, ActionIcon } from '@mantine/core';
 import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconDownload, IconTrash, IconFileTypePng, IconFileTypeJpg, IconFileTypeSvg, IconEye, IconInfoCircle } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
+import { showNotification } from '@mantine/notifications';
 
 interface QRCode {
     id: string;
@@ -134,10 +135,26 @@ export default function QRCodesPage() {
             if (response.ok) {
                 setQRCodes(qrCodes.filter(qr => qr.id !== selectedQR.id));
                 close();
+                showNotification({
+                    title: 'Başarılı',
+                    message: 'QR kod başarıyla silindi.',
+                    color: 'green',
+                });
             } else {
-                console.error('QR kod silme hatası:', await response.text());
+                const errorText = await response.text();
+                showNotification({
+                    title: 'Hata',
+                    message: `QR kod silinemedi: ${errorText}`,
+                    color: 'red',
+                });
+                console.error('QR kod silme hatası:', errorText);
             }
-        } catch (error) {
+        } catch (error: any) {
+            showNotification({
+                title: 'Hata',
+                message: `QR kod silinemedi: ${error?.message || ''}`,
+                color: 'red',
+            });
             console.error('QR kod silme hatası:', error);
         }
     };
