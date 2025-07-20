@@ -270,7 +270,7 @@ export default function DashboardLayout({
 
                 <AppShell.Navbar p="md" style={{ background: 'white' }}>
                     <Stack h="100%" justify="space-between">
-                        <div>
+                        <div style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}>
                             {navGroups.map((group, idx) => (
                                 <Box key={group.label} mb="sm">
                                     <Text size="xs" fw={700} c="dimmed" mb={4} pl={4}>{group.label}</Text>
