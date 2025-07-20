@@ -16,11 +16,25 @@ import { IconQrcode, IconStar } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
+import { QrPreview } from "../sms/QrPreview";
+import { ColorInput, Select, Group } from "@mantine/core";
 
 export default function GoogleReviewQrPage() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const router = useRouter();
+  const [logo, setLogo] = useState<File | null>(null);
+  const [designOptions, setDesignOptions] = useState({ style: "dot", darkColor: "#fab005" });
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  React.useEffect(() => {
+    if (logo) {
+      const url = URL.createObjectURL(logo);
+      setLogoUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setLogoUrl(null);
+    }
+  }, [logo]);
 
   const form = useForm({
     initialValues: {
@@ -37,14 +51,18 @@ export default function GoogleReviewQrPage() {
     setLoading(true);
     setStatus("loading");
     try {
-      const body = { ...values };
+      let placeIdValue = values.placeId;
+      const formData = new FormData();
+      formData.append("label", values.label);
+      formData.append("placeId", placeIdValue);
+      formData.append("designOptions", JSON.stringify(designOptions));
+      if (logo) {
+        formData.append("logo", logo);
+      }
       const response = await fetch(`/api/qr/google-review`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        body: JSON.stringify(body),
+        body: formData,
       });
 
       if (response.ok) {
@@ -79,6 +97,10 @@ export default function GoogleReviewQrPage() {
     form.reset();
   };
 
+  const qrValue = form.values.placeId && form.values.placeId.trim().length > 0
+    ? `https://search.google.com/local/writereview?placeid=${form.values.placeId}`
+    : "https://search.google.com/local/writereview?placeid=";
+
   return (
     <Container size="md" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start" }}>
       <Paper
@@ -110,7 +132,7 @@ export default function GoogleReviewQrPage() {
           Google Yorum QR Kod Oluştur
         </Title>
         {status === "idle" && (
-          <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: "100%" }}>
+          <form onSubmit={form.onSubmit(handleSubmit)} style={{ width: "100%" }} encType="multipart/form-data">
             <Stack gap="md" style={{ width: "100%" }}>
               <TextInput
                 label="QR Kod İsmi"
@@ -129,6 +151,39 @@ export default function GoogleReviewQrPage() {
                 size="md"
                 style={{ width: "100%" }}
                 {...form.getInputProps("placeId")}
+              />
+              <Group grow>
+                <Select
+                  label="QR Stil"
+                  data={[
+                    { value: "dot", label: "Nokta" },
+                    { value: "square", label: "Kare" },
+                    { value: "rounded", label: "Yuvarlak" },
+                    { value: "diamond", label: "Elmas" },
+                    { value: "triangle", label: "Üçgen" },
+                  ]}
+                  value={designOptions.style}
+                  onChange={(value) => setDesignOptions((prev) => ({ ...prev, style: value || "dot" }))}
+                  required
+                />
+                <ColorInput
+                  label="QR Renk"
+                  value={designOptions.darkColor}
+                  onChange={(color) => setDesignOptions((prev) => ({ ...prev, darkColor: color }))}
+                  required
+                />
+              </Group>
+              <TextInput
+                label="Logo (PNG/JPG/SVG)"
+                type="file"
+                accept=".png,.jpg,.jpeg,.svg"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    setLogo(e.target.files[0]);
+                  } else {
+                    setLogo(null);
+                  }
+                }}
               />
               <Paper p="sm" radius="md" withBorder style={{ background: '#fffbe6', marginTop: 4, marginBottom: 8 }}>
                 <Text size="xs" c="yellow.8" fw={600} mb={4}>Google Place ID nedir?</Text>
@@ -160,6 +215,22 @@ export default function GoogleReviewQrPage() {
               </Button>
             </Stack>
           </form>
+        )}
+        {/* QR Kod Önizleme */}
+        {status === "idle" && (
+          <Stack align="center" mt="xl" gap={4}>
+            <Text fw={600} size="md">QR Kod Önizleme</Text>
+            <div style={{ position: "relative", display: "inline-block", background: "#fff", padding: 16, borderRadius: 16, boxShadow: "0 2px 8px #0001" }}>
+              <QrPreview
+                value={qrValue}
+                size={180}
+                style={designOptions.style}
+                darkColor={designOptions.darkColor}
+                lightColor="#fff"
+                logoUrl={logoUrl}
+              />
+            </div>
+          </Stack>
         )}
         {status === "loading" && (
           <Stack align="center" gap="xl" mt="xl">
