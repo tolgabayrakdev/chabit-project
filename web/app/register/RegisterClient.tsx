@@ -16,19 +16,19 @@ function CustomerCarousel() {
       name: 'Ayşe K.',
       comment: 'VunQR ile menümüzü dijitalleştirdik, müşterilerimiz çok memnun!',
       title: 'Restoran Sahibi',
-      avatar: 'https://i.pravatar.cc/150?img=12',
+      avatar: 'https://i.pravatar.cc/150?img=5',
     },
     {
       name: 'Mehmet D.',
       comment: 'QR kod ile wifi paylaşımı çok pratik, müşterilerimiz için harika bir deneyim.',
       title: 'Kafe İşletmecisi',
-      avatar: 'https://i.pravatar.cc/150?img=24',
+      avatar: 'https://i.pravatar.cc/150?img=13',
     },
     {
       name: 'Elif S.',
       comment: 'Google yorum ile QR kodları birleştirdik, harika oldu!',
       title: 'Kafe Sahibi',
-      avatar: 'https://i.pravatar.cc/150?img=31',
+      avatar: 'https://i.pravatar.cc/150?img=32',
     },
     {
       name: 'Burak T.',
@@ -40,7 +40,7 @@ function CustomerCarousel() {
       name: 'Zeynep Y.',
       comment: 'Kuaför salonumuzda kampanya QR kodları ile müşteri dönüşü arttı.',
       title: 'Kuaför Sahibi',
-      avatar: 'https://i.pravatar.cc/150?img=36',
+      avatar: 'https://i.pravatar.cc/150?img=45',
     },
   ];
   return (

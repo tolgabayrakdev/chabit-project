@@ -112,8 +112,22 @@ export default function DashboardLayout({
             ],
         },
         {
-            label: 'QR Kodlarım',
+            label: 'QR Kodlar',
             items: [
+                {
+                    icon: IconQrcode,
+                    label: 'QR Kod Oluştur',
+                    href: '#',
+                    color: '#228be6',
+                    children: [
+                        { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf', group: 'dinamik' },
+                        { icon: IconStar, label: 'Google Yorum QR', href: '/dashboard/google-review', color: '#fab005', group: 'dinamik' },
+                        { icon: IconWifi, label: 'WiFi QR', href: '/dashboard/wifi', color: '#40c057', group: 'statik' },
+                        { icon: IconMail, label: 'E-posta QR', href: '/dashboard/email', color: '#fd7e14', group: 'statik' },
+                        { icon: IconMessage, label: 'SMS QR', href: '/dashboard/sms', color: '#fa5252', group: 'statik' },
+                        { icon: IconAddressBook, label: 'vCard QR', href: '/dashboard/vcard', color: '#7950f2', group: 'statik' },
+                    ]
+                },
                 { icon: IconList, label: 'Tüm QR Kodlar', href: '/dashboard/qr-codes', color: '#228be6' },
             ],
         },
@@ -124,41 +138,10 @@ export default function DashboardLayout({
             ],
         },
         {
-            label: 'QR Kod Oluştur',
-            items: [
-                {
-                    icon: IconQrcode,
-                    label: 'QR Kod Oluştur',
-                    href: '#',
-                    color: '#228be6',
-                    children: [
-                        // Statik QR Kodlar
-                        { icon: IconWifi, label: 'WiFi QR Kod', href: '/dashboard/wifi', color: '#40c057', group: 'statik' },
-                        { icon: IconMail, label: 'E-posta QR Kod', href: '/dashboard/email', color: '#fd7e14', group: 'statik' },
-                        { icon: IconMessage, label: 'SMS QR Kod', href: '/dashboard/sms', color: '#fa5252', group: 'statik' },
-                        { icon: IconAddressBook, label: 'vCard QR Kod', href: '/dashboard/vcard', color: '#7950f2', group: 'statik' },
-                        // Dinamik QR Kodlar
-                        { icon: IconStar, label: 'Google Yorum QR Kod', href: '/dashboard/google-review', color: '#fab005', group: 'dinamik' },
-                        { icon: IconLink, label: 'URL QR Kod', href: '/dashboard/url', color: '#15aabf', group: 'dinamik' },
-                    ]
-                },
-            ],
-        },
-        {
-            label: 'Link in Bio',
+            label: 'Dijital İçerikler',
             items: [
                 { icon: IconLink, label: 'Link in Bio', href: '/dashboard/link-in-bio', color: '#e64980' },
-            ],
-        },
-        {
-            label: 'Menü Oluşturma',
-            items: [
                 { icon: IconSettings, label: 'Menü Oluştur', href: '/dashboard/menu', color: '#fab005' },
-            ],
-        },
-        {
-            label: 'Kampanyalar',
-            items: [
                 { 
                     icon: IconGift, 
                     label: userPlan === 'free' ? 'Kampanya Yönetimi (PRO)' : 'Kampanya Yönetimi', 
@@ -166,6 +149,14 @@ export default function DashboardLayout({
                     color: '#e64980',
                     disabled: false
                 },
+            ],
+        },
+        {
+            label: 'Yeni Modüller',
+            items: [
+                { icon: IconList, label: 'Form QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
+                { icon: IconList, label: 'Rezervasyon QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
+                { icon: IconList, label: 'Etkinlik QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
             ],
         },
     ];
@@ -309,7 +300,7 @@ export default function DashboardLayout({
                                                             <NavLink
                                                                 key={child.href}
                                                                 component={Link}
-                                                                href={child.href}
+                                                                href={child.href!}
                                                                 label={child.label}
                                                                 leftSection={
                                                                     <ThemeIcon size={28} radius="md" color={child.color}>
@@ -341,7 +332,7 @@ export default function DashboardLayout({
                                                             <NavLink
                                                                 key={child.href}
                                                                 component={Link}
-                                                                href={child.href}
+                                                                href={child.href!}
                                                                 label={child.label}
                                                                 leftSection={
                                                                     <ThemeIcon size={28} radius="md" color={child.color}>
@@ -371,40 +362,68 @@ export default function DashboardLayout({
                                                 </React.Fragment>
                                             );
                                         } else {
-                                            return (
-                                                <NavLink
-                                                    key={item.href}
-                                                    component={Link}
-                                                    href={item.href}
-                                                    label={item.label}
-                                                    leftSection={
-                                                        <ThemeIcon size={34} radius="md" color={item.color}>
-                                                            <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
-                                                        </ThemeIcon>
-                                                    }
-                                                    active={pathname === item.href}
-                                                    style={{
-                                                        borderRadius: 'md',
-                                                        marginBottom: '0.5rem',
-                                                        transition: 'all 0.2s ease',
-                                                        backgroundColor: pathname === item.href ? `${item.color}15` : 'transparent',
-                                                        color: pathname === item.href ? item.color : 'inherit',
-                                                        overflow: 'hidden',
-                                                        whiteSpace: 'nowrap',
-                                                        textOverflow: 'ellipsis',
-                                                        maxWidth: '100%',
-                                                        opacity: userPlan === 'free' && item.label.includes('(PRO)') ? 0.6 : 1,
-                                                        cursor: 'pointer',
-                                                        '&:hover': {
-                                                            backgroundColor: `${item.color}15`,
-                                                            color: item.color,
+                                            if (!item.disabled && item.href) {
+                                                return (
+                                                    <NavLink
+                                                        key={item.href + '-' + item.label}
+                                                        component={Link}
+                                                        href={item.href!}
+                                                        label={item.label}
+                                                        leftSection={
+                                                            <ThemeIcon size={34} radius="md" color={item.color}>
+                                                                <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                            </ThemeIcon>
                                                         }
-                                                    }}
-                                                    onClick={() => { 
-                                                        if (isMobile) setOpened(false); 
-                                                    }}
-                                                />
-                                            );
+                                                        active={pathname === item.href}
+                                                        style={{
+                                                            borderRadius: 'md',
+                                                            marginBottom: '0.5rem',
+                                                            transition: 'all 0.2s ease',
+                                                            backgroundColor: pathname === item.href ? `${item.color}15` : 'transparent',
+                                                            color: pathname === item.href ? item.color : 'inherit',
+                                                            overflow: 'hidden',
+                                                            whiteSpace: 'nowrap',
+                                                            textOverflow: 'ellipsis',
+                                                            maxWidth: '100%',
+                                                            opacity: userPlan === 'free' && item.label.includes('(PRO)') ? 0.6 : 1,
+                                                            cursor: 'pointer',
+                                                            '&:hover': {
+                                                                backgroundColor: `${item.color}15`,
+                                                                color: item.color,
+                                                            }
+                                                        }}
+                                                        onClick={() => { 
+                                                            if (isMobile) setOpened(false); 
+                                                        }}
+                                                    />
+                                                );
+                                            } else {
+                                                return (
+                                                    <NavLink
+                                                        key={item.href + '-' + item.label}
+                                                        label={item.label}
+                                                        leftSection={
+                                                            <ThemeIcon size={34} radius="md" color={item.color}>
+                                                                <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                            </ThemeIcon>
+                                                        }
+                                                        style={{
+                                                            borderRadius: 'md',
+                                                            marginBottom: '0.5rem',
+                                                            transition: 'all 0.2s ease',
+                                                            backgroundColor: 'transparent',
+                                                            color: 'inherit',
+                                                            overflow: 'hidden',
+                                                            whiteSpace: 'nowrap',
+                                                            textOverflow: 'ellipsis',
+                                                            maxWidth: '100%',
+                                                            opacity: 0.5,
+                                                            cursor: 'not-allowed',
+                                                        }}
+                                                        disabled
+                                                    />
+                                                );
+                                            }
                                         }
                                     })}
                                     {idx < navGroups.length - 1 && <Divider my="xs" />}
