@@ -94,7 +94,7 @@ export default function BlogPostQuickRequest() {
                 </Text>
 
                 <Image
-                    src="https://images.unsplash.com/photo-1584433144859-c18e7915539b?q=80&w=1600"
+                    src="https://images.unsplash.com/photo-1583969358187-29fcae5265d1?q=80&w=2062&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     alt="Hızlı Talep Formu"
                     width={500}
                     height={300}
