@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, TextInput, Paper, Divider, ActionIcon, Tooltip, ThemeIcon, Textarea, NumberInput, Table, Popover } from '@mantine/core';
+import { Container, Title, SimpleGrid, Card, Text, rem, Button, Group, Badge, Stack, Image, Modal, Menu, Center, Loader, TextInput, Paper, Divider, ActionIcon, Tooltip, ThemeIcon, Textarea, NumberInput, Table, Popover, Notification } from '@mantine/core';
 
-import { IconGift, IconUpload, IconTrash, IconEye, IconDownload, IconPlus, IconFile, IconEdit, IconExternalLink, IconQrcode, IconCopy, IconCheck, IconUsers, IconTrophy, IconCalendar, IconInfoCircle, IconSearch } from '@tabler/icons-react';
+import { IconGift, IconUpload, IconTrash, IconEye, IconDownload, IconPlus, IconFile, IconEdit, IconExternalLink, IconQrcode, IconCopy, IconCheck, IconUsers, IconTrophy, IconCalendar, IconInfoCircle, IconSearch, IconAlertCircle } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
@@ -87,6 +87,9 @@ export default function CampaignsPage() {
         thank_you_message: '',
         contact_email: ''
     });
+
+    const [successMsg, setSuccessMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     useEffect(() => {
         fetchUserPlan();
@@ -576,9 +579,9 @@ export default function CampaignsPage() {
     if (userPlan === 'free') {
         return (
             <Container size="lg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
-                <Paper withBorder radius="lg" p="xl" style={{ width: "100%", maxWidth: 500, textAlign: "center" }}>
+                <Paper withBorder radius="md" p="xl" style={{ width: "100%", maxWidth: 500, textAlign: "center" }}>
                     <Stack gap="lg" align="center">
-                        <ThemeIcon size={80} radius="xl" color="gray" variant="light">
+                        <ThemeIcon size={80} radius="md" color="gray" variant="light">
                             <IconGift size={40} />
                         </ThemeIcon>
                         
@@ -610,321 +613,337 @@ export default function CampaignsPage() {
     }
 
     return (
-        <Container size="lg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start" }}>
-            <Paper
-                p="md"
-                radius="md"
-                withBorder
-                style={{
-                    background: '#fff',
-                    marginBottom: 24,
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 16,
-                    flexDirection: 'row',
-                    width: '100%',
-                    maxWidth: 800,
-                }}
-                styles={{
-                    root: {
-                        '@media (maxWidth: 768px)': {
-                            flexDirection: 'column',
-                            textAlign: 'center',
-                            gap: 16,
-                            padding: '20px 16px',
-                        }
-                    }
-                }}
-            >
-                <ThemeIcon 
-                    color="#e64980" 
-                    size={36} 
-                    radius="xl" 
-                    variant="light"
-                    style={{
-                        '@media (maxWidth: 768px)': {
-                            alignSelf: 'center',
-                            marginBottom: 8,
-                        }
-                    }}
+        <Container size="xl" py="xl">
+            {/* Global Notifications */}
+            {(successMsg || errorMsg) && (
+                <Notification
+                    color={successMsg ? "green" : "red"}
+                    onClose={() => { setSuccessMsg(""); setErrorMsg(""); }}
+                    mb="lg"
+                    icon={successMsg ? <IconCheck size={16} /> : <IconAlertCircle size={16} />}
                 >
-                    <IconGift size={20} />
-                </ThemeIcon>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <Group gap="xs" align="center" wrap="nowrap">
-                        <Text size="md" fw={600} c="#e64980" style={{ wordBreak: 'break-word' }}>
-                            Kampanya Yönetimi nedir?
-                        </Text>
-                        <Popover width={300} position="bottom" withArrow shadow="md">
-                            <Popover.Target>
-                                <ActionIcon 
-                                    variant="subtle" 
-                                    color="#e64980" 
-                                    size="sm"
-                                    style={{ cursor: 'pointer', flexShrink: 0 }}
-                                >
-                                    <IconInfoCircle size={16} />
-                                </ActionIcon>
-                            </Popover.Target>
-                            <Popover.Dropdown>
-                                <Stack gap="sm">
-                                    <Text size="sm" fw={600} c="#e64980">Kampanya Sistemi Nasıl Çalışır?</Text>
-                                    <Text size="xs" c="dimmed">
-                                        Kampanya sistemimiz otomatik olarak <strong>3 kişi seçer</strong>:
-                                    </Text>
-                                    <Stack gap="xs">
-                                        <Group gap="xs">
-                                            <Text size="xs" fw={600}>🥇 Asıl Kazanan:</Text>
-                                            <Text size="xs">Otomatik olarak e-posta gönderilir</Text>
-                                        </Group>
-                                        <Group gap="xs">
-                                            <Text size="xs" fw={600}>🥈 1. Yedek:</Text>
-                                            <Text size="xs">Asıl kazanan iletişime geçmezse devreye girer</Text>
-                                        </Group>
-                                        <Group gap="xs">
-                                            <Text size="xs" fw={600}>🥉 2. Yedek:</Text>
-                                            <Text size="xs">İlk iki kişi iletişime geçmezse devreye girer</Text>
-                                        </Group>
-                                    </Stack>
-                                    <Text size="xs" c="dimmed" mt="xs">
-                                        Bu sistem sayesinde kampanyanızın başarısı garanti altına alınır!
-                                    </Text>
-                                </Stack>
-                            </Popover.Dropdown>
-                        </Popover>
-                    </Group>
-                    <Text size="sm" c="#e64980" style={{ wordBreak: 'break-word', lineHeight: 1.5 }}>
-                        Müşterilerinizle etkileşimi artırın! Çekiliş ve kampanyalar oluşturun, katılımcıları yönetin ve <b>vunqr.com/campaign/slug</b> adresiyle paylaşın.
-                    </Text>
-                </div>
-            </Paper>
+                    {successMsg || errorMsg}
+                </Notification>
+            )}
 
-            <Paper withBorder radius="lg" p={24} style={{ width: "100%", maxWidth: 800, marginTop: 24 }}>
-                <Group justify="space-between" align="center" mb="lg">
-                    <Title order={2} c="#e64980">
-                        Kampanyalarım
-                    </Title>
+            {/* Header Section */}
+            <Card withBorder radius="md" p="md" mb="lg" shadow="sm">
+                <Group gap="lg" align="center">
+                    <Group gap="md">
+                        <ThemeIcon size={42} radius="md" variant="gradient" gradient={{ from: '#e64980', to: '#be4bdb' }}>
+                            <IconGift size={24} />
+                        </ThemeIcon>
+                        <Stack gap={2}>
+                            <Group gap="xs" align="center">
+                                <Title order={2} size="h3">
+                                    Kampanya Yönetimi
+                                </Title>
+                            </Group>
+                            <Text size="sm" c="dimmed">
+                                Müşterilerinizle etkileşimi artırın! Çekiliş ve kampanyalar oluşturun, katılımcıları yönetin.
+                            </Text>
+                        </Stack>
+                    </Group>
                     <Button
                         onClick={openCreate}
-                        radius="sm"
+                        leftSection={<IconPlus size={16} />}
                         size="sm"
-                        color="#e64980"
-                        leftSection={<IconPlus size={14} />}
-                        style={{ minHeight: 32, fontSize: 14, padding: '0 12px' }}
+                        radius="md"
+                        variant="gradient"
+                        gradient={{ from: '#e64980', to: '#be4bdb' }}
+                        ml="auto"
                     >
                         Yeni Kampanya Oluştur
                     </Button>
                 </Group>
+            </Card>
 
-            {/* Mevcut Kampanyalar Listesi */}
-            {loading ? (
-                <Center mt="xl"><Loader color="#e64980" /></Center>
-            ) : campaigns.length > 0 ? (
-                <Stack gap="md" mt="lg">
-                    {campaigns.map(campaign => {
-                        const status = getCampaignStatus(campaign);
-                        return (
-                            <Paper key={campaign.id} p="sm" radius="md" withBorder>
-                                <Stack gap="xs">
-                                    <Group justify="space-between" align="flex-start" gap="xs">
-                                        <Text fw={500} size="sm" truncate style={{ flex: 1 }}>{campaign.title}</Text>
-                                        <Badge color={status.color} size="xs">{status.status}</Badge>
-                                    </Group>
-                                    <Text size="xs" c="dimmed" style={{ fontFamily: 'monospace' }} lineClamp={1}>
-                                        vunqr.com/campaign/{campaign.slug}
-                                    </Text>
-                                    <Text size="xs" c="dimmed" lineClamp={1}>
-                                        {campaign.description}
-                                    </Text>
-                                    <Group gap="xs" c="dimmed">
-                                        <IconCalendar size={12} />
-                                        <Text size="xs">
-                                            {new Date(campaign.start_date).toLocaleDateString('tr-TR')} - {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
+            {/* Campaigns Grid */}
+            <Stack gap="xl">
+                <Group justify="space-between" align="center">
+                    <Title order={2} size="h3">
+                        Kampanyalarım
+                    </Title>
+                    <Badge variant="light" size="lg">
+                        {campaigns.length} kampanya
+                    </Badge>
+                </Group>
+
+                {loading ? (
+                    <Group justify="center" py="xl">
+                        <Loader size="xl" />
+                    </Group>
+                ) : campaigns.length === 0 ? (
+                    <Card withBorder radius="md" p="xl" shadow="sm">
+                        <Stack align="center" gap="lg" py="xl">
+                            <ThemeIcon size={100} radius="md" color="gray" variant="light">
+                                <IconGift size={50} />
+                            </ThemeIcon>
+                            <Stack align="center" gap="sm">
+                                <Title order={3} c="dimmed">
+                                    Henüz hiç kampanya oluşturmadınız
+                                </Title>
+                                <Text size="md" c="dimmed" ta="center">
+                                    İlk kampanyanızı oluşturmak için yukarıdaki butonu kullanın
+                                </Text>
+                            </Stack>
+                            <Button
+                                onClick={openCreate}
+                                leftSection={<IconPlus size={18} />}
+                                size="lg"
+                                radius="md"
+                                variant="gradient"
+                                gradient={{ from: '#e64980', to: '#be4bdb' }}
+                            >
+                                İlk Kampanyamı Oluştur
+                            </Button>
+                        </Stack>
+                    </Card>
+                ) : (
+                    <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
+                        {campaigns.map(campaign => {
+                            const status = getCampaignStatus(campaign);
+                            return (
+                                <Card
+                                    key={campaign.id}
+                                    withBorder
+                                    radius="md"
+                                    p="lg"
+                                    shadow="sm"
+                                    style={{
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: 'var(--mantine-shadow-md)'
+                                        }
+                                    }}
+                                    onClick={() => openCampaignInNewTab(campaign)}
+                                >
+                                    <Stack gap="md">
+                                        {/* Header */}
+                                        <Group justify="space-between" align="start">
+                                            <Stack gap={4} style={{ flex: 1 }}>
+                                                <Group gap="xs">
+                                                    <Title order={4} size="h5" lineClamp={1}>
+                                                        {campaign.title}
+                                                    </Title>
+                                                    <Badge color={status.color} size="sm">
+                                                        {status.status}
+                                                    </Badge>
+                                                </Group>
+                                                <Text size="xs" c="dimmed" style={{ fontFamily: 'monospace' }}>
+                                                    vunqr.com/campaign/{campaign.slug}
+                                                </Text>
+                                            </Stack>
+                                        </Group>
+
+                                        {/* Description */}
+                                        <Text size="sm" c="dimmed" lineClamp={2}>
+                                            {campaign.description}
                                         </Text>
-                                    </Group>
-                                    {campaign.entries_count !== undefined && (
-                                        <Group gap="xs" c="dimmed">
-                                            <IconUsers size={12} />
-                                            <Text size="xs">{campaign.entries_count} katılımcı</Text>
+
+                                        {/* Stats */}
+                                        <Group gap="xs">
+                                            <Group gap={4}>
+                                                <ThemeIcon size="xs" variant="light" color="blue">
+                                                    <IconCalendar size={10} />
+                                                </ThemeIcon>
+                                                <Text size="xs" c="dimmed">
+                                                    {new Date(campaign.start_date).toLocaleDateString('tr-TR')} - {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
+                                                </Text>
+                                            </Group>
+                                            {campaign.entries_count !== undefined && (
+                                                <Group gap={4}>
+                                                    <ThemeIcon size="xs" variant="light" color="grape">
+                                                        <IconUsers size={10} />
+                                                    </ThemeIcon>
+                                                    <Text size="xs" c="dimmed">
+                                                        {campaign.entries_count} katılımcı
+                                                    </Text>
+                                                </Group>
+                                            )}
                                         </Group>
-                                    )}
-                                    {campaign.winners && campaign.winners.length > 0 && (
-                                        <Stack gap="xs">
-                                            {campaign.winners.map((winner, index) => {
-                                                const getRankIcon = (rank: number) => {
-                                                    switch (rank) {
-                                                        case 1: return '🥇';
-                                                        case 2: return '🥈';
-                                                        case 3: return '🥉';
-                                                        default: return `${rank}.`;
-                                                    }
-                                                };
-                                                const getRankText = (rank: number) => {
-                                                    switch (rank) {
-                                                        case 1: return 'Asıl Kazanan';
-                                                        case 2: return '1. Yedek';
-                                                        case 3: return '2. Yedek';
-                                                        default: return `${rank}. Yedek`;
-                                                    }
-                                                };
-                                                return (
-                                                    <Group key={winner.id} gap="xs">
-                                                        <Text size="xs" fw={500}>
-                                                            {getRankIcon(winner.rank)} {getRankText(winner.rank)}: <Text span c="green" fw={500}>{winner.name} ({winner.email})</Text>
-                                                        </Text>
-                                                    </Group>
-                                                );
-                                            })}
-                                        </Stack>
-                                    )}
-                                    <Stack gap="xs">
-                                        <Button 
-                                            component="a" 
-                                            href={`/campaign/${campaign.slug}`} 
-                                            target="_blank" 
-                                            variant="subtle" 
-                                            color="#e64980" 
-                                            leftSection={<IconExternalLink size={12} />}
-                                            size="sm"
-                                            fullWidth
-                                        >
-                                            Görüntüle
-                                        </Button>
-                                        <Group gap="xs" justify="center">
-                                            <ActionIcon 
-                                                color="blue" 
-                                                variant="subtle" 
-                                                onClick={() => handleEdit(campaign)}
-                                                size="sm"
+
+                                        {/* Winners */}
+                                        {campaign.winners && campaign.winners.length > 0 && (
+                                            <Stack gap="xs">
+                                                {campaign.winners.map((winner, index) => {
+                                                    const getRankIcon = (rank: number) => {
+                                                        switch (rank) {
+                                                            case 1: return '🥇';
+                                                            case 2: return '🥈';
+                                                            case 3: return '🥉';
+                                                            default: return `${rank}.`;
+                                                        }
+                                                    };
+                                                    const getRankText = (rank: number) => {
+                                                        switch (rank) {
+                                                            case 1: return 'Asıl Kazanan';
+                                                            case 2: return '1. Yedek';
+                                                            case 3: return '2. Yedek';
+                                                            default: return `${rank}. Yedek`;
+                                                        }
+                                                    };
+                                                    return (
+                                                        <Group key={winner.id} gap="xs">
+                                                            <Text size="xs" fw={500}>
+                                                                {getRankIcon(winner.rank)} {getRankText(winner.rank)}: <Text span c="green" fw={500}>{winner.name}</Text>
+                                                            </Text>
+                                                        </Group>
+                                                    );
+                                                })}
+                                            </Stack>
+                                        )}
+
+                                        <Divider />
+
+                                        {/* Actions */}
+                                        <Group justify="space-between">
+                                            <Group gap="xs">
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="blue"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleViewEntries(campaign);
+                                                    }}
+                                                    radius="md"
+                                                >
+                                                    <IconUsers size={16} />
+                                                </ActionIcon>
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="gray"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleEdit(campaign);
+                                                    }}
+                                                    radius="md"
+                                                >
+                                                    <IconEdit size={16} />
+                                                </ActionIcon>
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="orange"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        copyExistingCampaignUrl(campaign.slug);
+                                                    }}
+                                                    radius="md"
+                                                >
+                                                    {copiedCampaignId === campaign.slug ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                                                </ActionIcon>
+                                                <ActionIcon
+                                                    variant="subtle"
+                                                    color="red"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDelete(campaign);
+                                                    }}
+                                                    radius="md"
+                                                >
+                                                    <IconTrash size={16} />
+                                                </ActionIcon>
+                                            </Group>
+
+                                            <Button
+                                                variant="light"
+                                                size="xs"
+                                                radius="md"
+                                                color="#e64980"
+                                                leftSection={<IconExternalLink size={14} />}
+                                                component="a"
+                                                href={`/campaign/${campaign.slug}`}
+                                                target="_blank"
+                                                onClick={(e) => e.stopPropagation()}
                                             >
-                                                <IconEdit size={14} />
-                                            </ActionIcon>
-                                            <ActionIcon 
-                                                color="purple" 
-                                                variant="subtle" 
-                                                onClick={() => handleViewEntries(campaign)}
-                                                size="sm"
-                                            >
-                                                <IconUsers size={14} />
-                                            </ActionIcon>
-                                            <ActionIcon 
-                                                color="orange" 
-                                                variant="subtle" 
-                                                onClick={() => copyExistingCampaignUrl(campaign.slug)}
-                                                size="sm"
-                                            >
-                                                {copiedCampaignId === campaign.slug ? <IconCheck size={14} /> : <IconCopy size={14} />}
-                                            </ActionIcon>
-                                            <ActionIcon 
-                                                color="red" 
-                                                variant="subtle" 
-                                                onClick={() => handleDelete(campaign)}
-                                                size="sm"
-                                            >
-                                                <IconTrash size={14} />
-                                            </ActionIcon>
+                                                Görüntüle
+                                            </Button>
                                         </Group>
+
                                         {status.status === 'Aktif' && campaign.is_active && (
                                             <Button
-                                                variant="outline"
+                                                variant="light"
                                                 color="green"
                                                 size="sm"
-                                                leftSection={<IconTrophy size={12} />}
-                                                onClick={() => handleSelectWinner(campaign)}
+                                                leftSection={<IconTrophy size={16} />}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSelectWinner(campaign);
+                                                }}
                                                 fullWidth
+                                                radius="md"
                                             >
                                                 Kazananları Seç
                                             </Button>
                                         )}
                                     </Stack>
-                                </Stack>
-                            </Paper>
-                        );
-                    })}
-                </Stack>
-            ) : (
-                <Center py="xl">
-                    <Stack gap="md" align="center">
-                        <ThemeIcon size={60} radius="xl" color="gray" variant="light">
-                            <IconGift size={30} />
-                        </ThemeIcon>
-                        <Text ta="center" c="dimmed">
-                            Henüz hiç kampanya oluşturmadınız.
-                        </Text>
-                        <Text size="sm" ta="center" c="dimmed">
-                            İlk kampanyanızı oluşturmak için yukarıdaki butonu kullanın.
-                        </Text>
-                    </Stack>
-                </Center>
-            )}
-        </Paper>
+                                </Card>
+                            );
+                        })}
+                    </SimpleGrid>
+                )}
+            </Stack>
 
             {/* Create Campaign Modal */}
-            <Modal 
-                opened={createOpened} 
-                onClose={closeCreate} 
+            <Modal
+                opened={createOpened}
+                onClose={closeCreate}
                 title={
                     <Group gap="sm">
-                        <IconPlus size={20} />
+                        <ThemeIcon size="sm" variant="light" color="#e64980">
+                            <IconPlus size={16} />
+                        </ThemeIcon>
                         <Text fw={600}>Yeni Kampanya Oluştur</Text>
                     </Group>
-                } 
-                centered 
-                size="lg"
-                styles={{ 
-                    root: { '@media (maxWidth: 768px)': { width: '95%' } },
-                    title: { fontSize: '1.1rem' }
-                }}
+                }
+                centered
+                size="md"
+                radius="md"
             >
-                <Stack gap="md">
+                <Stack gap="lg">
                     <TextInput
-                        label="Kampanya Başlığı"
-                        placeholder="Kampanya başlığını girin"
-                        value={formData.title}
-                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                        size="md"
-                        radius="md"
-                        required
-                    />
-                    <TextInput
-                        label="Slug (URL)"
-                        placeholder="kampanya-adi"
+                        label="Slug"
+                        placeholder="Benzersiz kısa ad (örn: yilbasi-cekilisi)"
                         value={formData.slug}
                         onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                        size="md"
-                        radius="md"
                         required
+                        radius="md"
+                    />
+                    <TextInput
+                        label="Kampanya Başlığı"
+                        placeholder="Yılbaşı Çekilişi"
+                        value={formData.title}
+                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        required
+                        radius="md"
                     />
                     <Textarea
                         label="Açıklama"
-                        placeholder="Kampanya açıklamasını girin"
+                        placeholder="Kampanya açıklaması"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        size="md"
-                        radius="md"
                         required
                         minRows={3}
+                        radius="md"
                     />
-                    <Group gap="md" grow>
+                    <Group grow>
                         <TextInput
                             label="Başlangıç Tarihi"
-                            placeholder="YYYY-MM-DD"
+                            type="date"
                             value={formData.start_date}
                             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                            size="md"
-                            radius="md"
                             required
-                            type="date"
+                            radius="md"
                         />
                         <TextInput
                             label="Bitiş Tarihi"
-                            placeholder="YYYY-MM-DD"
+                            type="date"
                             value={formData.end_date}
                             onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                            size="md"
-                            radius="md"
                             required
-                            type="date"
+                            radius="md"
                         />
                     </Group>
                     <Textarea
@@ -932,63 +951,191 @@ export default function CampaignsPage() {
                         placeholder="Katılım sonrası gösterilecek mesaj"
                         value={formData.thank_you_message}
                         onChange={(e) => setFormData({ ...formData, thank_you_message: e.target.value })}
-                        size="md"
-                        radius="md"
                         required
                         minRows={2}
+                        radius="md"
                     />
                     <TextInput
                         label="İletişim E-posta"
                         placeholder="iletisim@firmaadi.com"
                         value={formData.contact_email}
                         onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
-                        size="md"
-                        radius="md"
                         required
                         type="email"
+                        radius="md"
                     />
-                    <Group justify="flex-end" mt="md" gap="xs">
-                        <Button variant="default" onClick={closeCreate} size="sm">İptal</Button>
-                        <Button 
-                            onClick={handleCreate} 
-                            disabled={!formData.title || !formData.description || !formData.slug || !formData.thank_you_message || !formData.contact_email}
-                            radius="md"
-                            size="sm"
-                            color="#e64980"
-                            leftSection={<IconPlus size={16} />}
+                    <Group justify="end" gap="sm" mt="md">
+                        <Button variant="default" onClick={closeCreate} radius="md">
+                            İptal
+                        </Button>
+                        <Button
+                            onClick={handleCreate}
                             loading={uploading}
+                            leftSection={<IconPlus size={16} />}
+                            radius="md"
                         >
-                            Kampanya Oluştur
+                            Oluştur
+                        </Button>
+                    </Group>
+                </Stack>
+            </Modal>
+
+            {/* Edit Campaign Modal */}
+            <Modal
+                opened={editOpened}
+                onClose={closeEdit}
+                title={
+                    <Group gap="sm">
+                        <ThemeIcon size="sm" variant="light" color="#e64980">
+                            <IconEdit size={16} />
+                        </ThemeIcon>
+                        <Text fw={600}>Kampanyayı Düzenle</Text>
+                    </Group>
+                }
+                centered
+                size="md"
+                radius="md"
+            >
+                <Stack gap="lg">
+                    <TextInput
+                        label="Slug"
+                        value={editFormData.slug}
+                        onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value })}
+                        required
+                        radius="md"
+                    />
+                    <TextInput
+                        label="Kampanya Başlığı"
+                        value={editFormData.title}
+                        onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                        required
+                        radius="md"
+                    />
+                    <Textarea
+                        label="Açıklama"
+                        value={editFormData.description}
+                        onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
+                        required
+                        minRows={3}
+                        radius="md"
+                    />
+                    <Group grow>
+                        <TextInput
+                            label="Başlangıç Tarihi"
+                            type="date"
+                            value={editFormData.start_date}
+                            onChange={(e) => setEditFormData({ ...editFormData, start_date: e.target.value })}
+                            required
+                            radius="md"
+                        />
+                        <TextInput
+                            label="Bitiş Tarihi"
+                            type="date"
+                            value={editFormData.end_date}
+                            onChange={(e) => setEditFormData({ ...editFormData, end_date: e.target.value })}
+                            required
+                            radius="md"
+                        />
+                    </Group>
+                    <Textarea
+                        label="Teşekkür Mesajı"
+                        value={editFormData.thank_you_message}
+                        onChange={(e) => setEditFormData({ ...editFormData, thank_you_message: e.target.value })}
+                        required
+                        minRows={2}
+                        radius="md"
+                    />
+                    <TextInput
+                        label="İletişim E-posta"
+                        value={editFormData.contact_email}
+                        onChange={(e) => setEditFormData({ ...editFormData, contact_email: e.target.value })}
+                        required
+                        type="email"
+                        radius="md"
+                    />
+                    <Group justify="end" gap="sm" mt="md">
+                        <Button variant="default" onClick={closeEdit} radius="md">
+                            İptal
+                        </Button>
+                        <Button
+                            onClick={handleUpdate}
+                            loading={uploading}
+                            leftSection={<IconCheck size={16} />}
+                            radius="md"
+                        >
+                            Güncelle
+                        </Button>
+                    </Group>
+                </Stack>
+            </Modal>
+
+            {/* Delete Campaign Modal */}
+            <Modal
+                opened={opened}
+                onClose={close}
+                title={
+                    <Group gap="sm">
+                        <ThemeIcon size="sm" variant="light" color="red">
+                            <IconTrash size={16} />
+                        </ThemeIcon>
+                        <Text fw={600}>Kampanyayı Sil</Text>
+                    </Group>
+                }
+                centered
+                size="sm"
+                radius="md"
+            >
+                <Stack gap="lg">
+                    <Text>Bu kampanyayı kalıcı olarak silmek istediğinizden emin misiniz?</Text>
+                    <Card withBorder p="md" radius="md" bg="red.0">
+                        <Stack gap="xs">
+                            <Text fw={500} c="red">
+                                {selectedCampaign?.title}
+                            </Text>
+                            <Text size="sm" c="dimmed">
+                                {selectedCampaign?.description}
+                            </Text>
+                        </Stack>
+                    </Card>
+                    <Group justify="end" gap="sm">
+                        <Button variant="default" onClick={close} radius="md">
+                            İptal
+                        </Button>
+                        <Button
+                            color="red"
+                            onClick={confirmDelete}
+                            loading={uploading}
+                            leftSection={<IconTrash size={16} />}
+                            radius="md"
+                        >
+                            Sil
                         </Button>
                     </Group>
                 </Stack>
             </Modal>
 
             {/* Success Modal */}
-            <Modal 
-                opened={successOpened} 
-                onClose={closeSuccess} 
+            <Modal
+                opened={successOpened}
+                onClose={closeSuccess}
                 title={
                     <Group gap="sm">
-                        <ThemeIcon color="green" size="sm" radius="xl">
+                        <ThemeIcon color="green" size="sm" radius="md">
                             <IconCheck size={16} />
                         </ThemeIcon>
                         <Text fw={600}>Kampanya Başarıyla Oluşturuldu!</Text>
                     </Group>
-                } 
-                centered 
+                }
+                centered
                 size="md"
-                styles={{ 
-                    root: { '@media (maxWidth: 768px)': { width: '95%' } },
-                    title: { fontSize: '1.1rem' }
-                }}
+                radius="md"
             >
                 <Stack gap="lg">
                     <Text size="sm" c="dimmed">
-                        <strong>{newlyCreatedCampaign?.title}</strong> kampanyanız başarıyla oluşturuldu. 
+                        <strong>{newlyCreatedCampaign?.title}</strong> kampanyanız başarıyla oluşturuldu.
                         Müşterilerinizle paylaşmak için aşağıdaki seçenekleri kullanabilirsiniz:
                     </Text>
-                    
+
                     <Paper p="md" radius="md" withBorder style={{ background: '#f8f9fa' }}>
                         <Text size="xs" fw={600} c="dimmed" mb="xs">Kampanya URL'si:</Text>
                         <Text size="sm" style={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
@@ -1003,6 +1150,7 @@ export default function CampaignsPage() {
                             onClick={copyCampaignUrl}
                             size="sm"
                             color={copied ? "green" : "blue"}
+                            radius="md"
                         >
                             {copied ? 'Kopyalandı!' : 'URL Kopyala'}
                         </Button>
@@ -1011,6 +1159,7 @@ export default function CampaignsPage() {
                             onClick={goToQrCreation}
                             size="sm"
                             color="#fab005"
+                            radius="md"
                         >
                             QR Kod Oluştur
                         </Button>
@@ -1023,99 +1172,103 @@ export default function CampaignsPage() {
                     </Text>
 
                     <Group justify="center" mt="md">
-                        <Button variant="default" onClick={closeSuccess} size="sm">
+                        <Button variant="default" onClick={closeSuccess} size="sm" radius="md">
                             Tamam
                         </Button>
                     </Group>
                 </Stack>
             </Modal>
 
-            {/* Edit Modal */}
-            <Modal opened={editOpened} onClose={closeEdit} title="Kampanya Düzenle" centered size="md" styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}>
-                <Stack gap="md">
-                    <TextInput
-                        label="Kampanya Başlığı"
-                        placeholder="Kampanya başlığını girin"
-                        value={editFormData.title}
-                        onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
-                        required
-                    />
-                    <TextInput
-                        label="Slug (URL)"
-                        placeholder="kampanya-adi"
-                        value={editFormData.slug}
-                        onChange={(e) => setEditFormData({ ...editFormData, slug: e.target.value })}
-                        required
-                    />
-                    <Textarea
-                        label="Açıklama"
-                        placeholder="Kampanya açıklamasını girin"
-                        value={editFormData.description}
-                        onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
-                        required
-                        minRows={3}
-                    />
-                    <Group gap="md" grow>
-                        <TextInput
-                            label="Başlangıç Tarihi"
-                            placeholder="YYYY-MM-DD"
-                            value={editFormData.start_date}
-                            onChange={(e) => setEditFormData({ ...editFormData, start_date: e.target.value })}
-                            required
-                            type="date"
-                        />
-                        <TextInput
-                            label="Bitiş Tarihi"
-                            placeholder="YYYY-MM-DD"
-                            value={editFormData.end_date}
-                            onChange={(e) => setEditFormData({ ...editFormData, end_date: e.target.value })}
-                            required
-                            type="date"
-                        />
+            {/* Winner Selection Modal */}
+            <Modal
+                opened={winnerOpened}
+                onClose={closeWinner}
+                title={
+                    <Group gap="sm">
+                        <ThemeIcon size="sm" variant="light" color="green">
+                            <IconTrophy size={16} />
+                        </ThemeIcon>
+                        <Text fw={600}>Kazanan Seç</Text>
                     </Group>
-                    <Textarea
-                        label="Teşekkür Mesajı"
-                        placeholder="Katılım sonrası gösterilecek mesaj"
-                        value={editFormData.thank_you_message}
-                        onChange={(e) => setEditFormData({ ...editFormData, thank_you_message: e.target.value })}
-                        required
-                        minRows={2}
-                    />
-                    <TextInput
-                        label="İletişim E-posta"
-                        placeholder="iletisim@firmaadi.com"
-                        value={editFormData.contact_email}
-                        onChange={(e) => setEditFormData({ ...editFormData, contact_email: e.target.value })}
-                        required
-                        type="email"
-                    />
-                    <Group justify="flex-end" mt="md" gap="xs">
-                        <Button variant="default" onClick={closeEdit} size="sm">İptal</Button>
-                        <Button 
-                            onClick={handleUpdate} 
-                            loading={uploading}
-                            disabled={!editFormData.title || !editFormData.description || !editFormData.slug || !editFormData.thank_you_message || !editFormData.contact_email}
-                            size="sm"
-                        >
-                            Güncelle
-                        </Button>
-                    </Group>
+                }
+                centered
+                size="md"
+                radius="md"
+            >
+                <Stack gap="lg">
+                    <Text size="sm" c="dimmed">
+                        <strong>{selectedCampaign?.title}</strong> kampanyası için rastgele kazananlar seçilecek.
+                        Bu işlem geri alınamaz.
+                    </Text>
+
+                    <Paper p="md" radius="md" withBorder style={{ background: '#f8f9fa' }}>
+                        <Stack gap="sm">
+                            <Group gap="xs" align="center">
+                                <IconInfoCircle size={16} color="#e64980" />
+                                <Text size="sm" fw={600} c="#e64980">Kazanan Seçim Sistemi</Text>
+                            </Group>
+                            <Text size="xs" c="dimmed">
+                                Sistem otomatik olarak <strong>3 kişi seçer</strong>:
+                            </Text>
+                            <Stack gap="xs">
+                                <Group gap="xs">
+                                    <Text size="xs" fw={600}>🥇 Asıl Kazanan:</Text>
+                                    <Text size="xs">Otomatik olarak e-posta gönderilir</Text>
+                                </Group>
+                                <Group gap="xs">
+                                    <Text size="xs" fw={600}>🥈 1. Yedek:</Text>
+                                    <Text size="xs">Asıl kazanan iletişime geçmezse devreye girer</Text>
+                                </Group>
+                                <Group gap="xs">
+                                    <Text size="xs" fw={600}>🥉 2. Yedek:</Text>
+                                    <Text size="xs">İlk iki kişi iletişime geçmezse devreye girer</Text>
+                                </Group>
+                            </Stack>
+                            <Text size="xs" c="dimmed" mt="xs">
+                                Bu sistem sayesinde kampanyanızın başarısı garanti altına alınır!
+                            </Text>
+                        </Stack>
+                    </Paper>
+
+                    {winnerLoading ? (
+                        <Center py="xl">
+                            <Stack gap="sm" align="center">
+                                <Loader color="#e64980" />
+                                <Text size="sm">Kazanan seçiliyor...</Text>
+                            </Stack>
+                        </Center>
+                    ) : (
+                        <Group justify="center" mt="md" gap="sm">
+                            <Button variant="default" onClick={closeWinner} radius="md">
+                                İptal
+                            </Button>
+                            <Button
+                                color="green"
+                                onClick={confirmSelectWinner}
+                                leftSection={<IconTrophy size={16} />}
+                                loading={winnerLoading}
+                                radius="md"
+                            >
+                                {winnerLoading ? 'Seçiliyor...' : 'Kazananları Seç'}
+                            </Button>
+                        </Group>
+                    )}
                 </Stack>
             </Modal>
 
             {/* Entries Modal */}
-            <Modal 
-                opened={entriesOpened} 
-                onClose={closeEntries} 
+            <Modal
+                opened={entriesOpened}
+                onClose={closeEntries}
                 title={
                     <Group gap="sm">
                         <IconUsers size={20} />
                         <Text fw={600}>Katılımcılar - {selectedCampaign?.title}</Text>
                     </Group>
-                } 
-                centered 
+                }
+                centered
                 size="xl"
-                styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}
+                radius="md"
             >
                 {entriesLoading ? (
                     <Center py="xl"><Loader color="#e64980" /></Center>
@@ -1127,18 +1280,25 @@ export default function CampaignsPage() {
                                 {new Date().toLocaleDateString('tr-TR')}
                             </Badge>
                         </Group>
-                        
+
                         <TextInput
-                            placeholder="Ad, e-posta veya telefon ile ara..."
+                            placeholder="Ad, email, telefon veya mesajda ara..."
+                            leftSection={<IconSearch size={16} />}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            leftSection={<IconSearch size={16} />}
-                            size="sm"
                             radius="md"
                         />
-                        
+
                         <Paper withBorder radius="md" style={{ overflow: 'hidden' }}>
-                            <Table striped highlightOnHover>
+                            <Table
+                                striped
+                                highlightOnHover
+                                withTableBorder
+                                withColumnBorders
+                                verticalSpacing="sm"
+                                horizontalSpacing="md"
+                                style={{ minWidth: 800 }}
+                            >
                                 <Table.Thead>
                                     <Table.Tr>
                                         <Table.Th>#</Table.Th>
@@ -1150,7 +1310,7 @@ export default function CampaignsPage() {
                                 </Table.Thead>
                                 <Table.Tbody>
                                     {entries
-                                        .filter(entry => 
+                                        .filter(entry =>
                                             entry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                             entry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                             (entry.phone && entry.phone.includes(searchTerm))
@@ -1158,12 +1318,12 @@ export default function CampaignsPage() {
                                         .map((entry, index) => (
                                             <Table.Tr key={entry.id}>
                                                 <Table.Td>
-                                                    <Text size="sm" fw={500} c="dimmed">
+                                                    <Text size="sm" c="dimmed">
                                                         {index + 1}
                                                     </Text>
                                                 </Table.Td>
                                                 <Table.Td>
-                                                    <Text size="sm" fw={600}>
+                                                    <Text size="sm" fw={500}>
                                                         {entry.name}
                                                     </Text>
                                                 </Table.Td>
@@ -1197,246 +1357,16 @@ export default function CampaignsPage() {
                 ) : (
                     <Center py="xl">
                         <Stack gap="md" align="center">
-                            <ThemeIcon size={50} radius="xl" color="gray" variant="light">
-                                <IconUsers size={25} />
+                            <ThemeIcon size={80} radius="md" color="gray" variant="light">
+                                <IconUsers size={40} />
                             </ThemeIcon>
-                            <Text ta="center" c="dimmed">
-                                Henüz katılımcı bulunmuyor.
-                            </Text>
-                            <Text size="sm" ta="center" c="dimmed">
-                                {selectedCampaign && getCampaignStatus(selectedCampaign).status === 'Aktif' 
-                                    ? 'Kampanya aktif durumda, katılımcılar burada görünecek.'
-                                    : 'Kampanya aktif olduğunda katılımcılar burada görünecek.'
-                                }
+                            <Text size="lg" c="dimmed">
+                                Henüz katılımcı bulunmuyor
                             </Text>
                         </Stack>
                     </Center>
                 )}
             </Modal>
-
-            {/* Winner Selection Modal */}
-            <Modal 
-                opened={winnerOpened} 
-                onClose={closeWinner} 
-                title={
-                    <Group gap="sm">
-                        <IconTrophy size={20} />
-                        <Text fw={600}>Kazanan Seç</Text>
-                    </Group>
-                } 
-                centered 
-                size="md"
-                styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}
-            >
-                <Stack gap="md">
-                    <Text size="sm" c="dimmed">
-                        <strong>{selectedCampaign?.title}</strong> kampanyası için rastgele kazananlar seçilecek.
-                        Bu işlem geri alınamaz.
-                    </Text>
-                    
-                    <Paper p="md" radius="md" withBorder style={{ background: '#f8f9fa' }}>
-                        <Stack gap="sm">
-                            <Group gap="xs" align="center">
-                                <IconInfoCircle size={16} color="#e64980" />
-                                <Text size="sm" fw={600} c="#e64980">Kazanan Seçim Sistemi</Text>
-                            </Group>
-                            <Text size="xs" c="dimmed">
-                                Sistem otomatik olarak <strong>3 kişi seçer</strong>:
-                            </Text>
-                            <Stack gap="xs">
-                                <Group gap="xs">
-                                    <Text size="xs" fw={600}>🥇 Asıl Kazanan:</Text>
-                                    <Text size="xs">Otomatik olarak e-posta gönderilir</Text>
-                                </Group>
-                                <Group gap="xs">
-                                    <Text size="xs" fw={600}>🥈 1. Yedek:</Text>
-                                    <Text size="xs">Asıl kazanan iletişime geçmezse devreye girer</Text>
-                                </Group>
-                                <Group gap="xs">
-                                    <Text size="xs" fw={600}>🥉 2. Yedek:</Text>
-                                    <Text size="xs">İlk iki kişi iletişime geçmezse devreye girer</Text>
-                                </Group>
-                            </Stack>
-                            <Text size="xs" c="dimmed" mt="xs">
-                                Bu sistem sayesinde kampanyanızın başarısı garanti altına alınır!
-                            </Text>
-                        </Stack>
-                    </Paper>
-                    
-                    {winnerLoading ? (
-                        <Center py="xl">
-                            <Stack gap="sm" align="center">
-                                <Loader color="#e64980" />
-                                <Text size="sm">Kazanan seçiliyor...</Text>
-                            </Stack>
-                        </Center>
-                    ) : (
-                        <Group justify="center" mt="md" gap="xs">
-                            <Button variant="default" onClick={closeWinner} size="sm">İptal</Button>
-                            <Button 
-                                color="green" 
-                                onClick={confirmSelectWinner}
-                                size="sm"
-                                leftSection={<IconTrophy size={16} />}
-                                loading={winnerLoading}
-                            >
-                                {winnerLoading ? 'Seçiliyor...' : 'Kazananları Seç'}
-                            </Button>
-                        </Group>
-                    )}
-                </Stack>
-            </Modal>
-
-            {/* Delete Confirmation Modal */}
-            <Modal opened={opened} onClose={close} title="Kampanya Sil" centered size="sm" styles={{ root: { '@media (maxWidth: 768px)': { width: '95%' } } }}>
-                <Text>Bu kampanyayı silmek istediğinizden emin misiniz?</Text>
-                <Text size="sm" c="dimmed" mt="xs">
-                    {selectedCampaign?.title}
-                </Text>
-                <Group justify="flex-end" mt="xl" gap="xs">
-                    <Button variant="default" onClick={close} size="sm">İptal</Button>
-                    <Button color="red" onClick={confirmDelete} size="sm">Sil</Button>
-                </Group>
-            </Modal>
-
-            <style jsx global>{`
-                @media (max-width: 600px) {
-                    /* Mobil için form düzenlemeleri */
-                    .mantine-Container-root {
-                        padding: 0 8px !important;
-                    }
-                    
-                    .mantine-Paper-root {
-                        padding: 16px !important;
-                        margin: 8px 0 !important;
-                    }
-                    
-                    .mantine-TextInput-root,
-                    .mantine-PasswordInput-root,
-                    .mantine-Select-root,
-                    .mantine-Textarea-root,
-                    .mantine-FileInput-root,
-                    .mantine-DateInput-root {
-                        margin-bottom: 12px !important;
-                    }
-                    
-                    .mantine-TextInput-label,
-                    .mantine-PasswordInput-label,
-                    .mantine-Select-label,
-                    .mantine-Textarea-label,
-                    .mantine-FileInput-label,
-                    .mantine-DateInput-label {
-                        font-size: 14px !important;
-                        margin-bottom: 4px !important;
-                    }
-                    
-                    .mantine-TextInput-input,
-                    .mantine-PasswordInput-input,
-                    .mantine-Select-input,
-                    .mantine-Textarea-input,
-                    .mantine-FileInput-input,
-                    .mantine-DateInput-input {
-                        font-size: 16px !important;
-                        padding: 8px 12px !important;
-                        min-height: 44px !important;
-                    }
-                    
-                    .mantine-Stack-root {
-                        gap: 8px !important;
-                    }
-                    
-                    .mantine-Button-root {
-                        min-height: 44px !important;
-                        font-size: 16px !important;
-                    }
-                    
-                    .mantine-Title-root {
-                        font-size: 20px !important;
-                        margin-bottom: 16px !important;
-                    }
-                    
-                    .mantine-Checkbox-root {
-                        margin-top: 8px !important;
-                    }
-
-                    /* Campaign sayfasına özel düzenlemeler */
-                    .mantine-Paper-root:first-child {
-                        flex-direction: column !important;
-                        gap: 16px !important;
-                        text-align: center;
-                        padding: 20px 16px !important;
-                    }
-                    
-                    .mantine-Paper-root:first-child .mantine-ThemeIcon-root {
-                        align-self: center !important;
-                        margin-bottom: 8px !important;
-                    }
-                    
-                    .mantine-Paper-root:first-child .mantine-Text-root {
-                        font-size: 15px !important;
-                        word-break: break-word !important;
-                        line-height: 1.5 !important;
-                    }
-                    
-                    .mantine-Paper-root:first-child .mantine-Group-root {
-                        justify-content: center !important;
-                        flex-wrap: nowrap !important;
-                    }
-                    
-                    .mantine-Paper-root:first-child .mantine-ActionIcon-root {
-                        flex-shrink: 0 !important;
-                    }
-
-                    /* SimpleGrid mobil düzenlemesi */
-                    .mantine-SimpleGrid-root {
-                        grid-template-columns: 1fr !important;
-                    }
-
-                    /* Card içindeki butonlar */
-                    .mantine-Group-root {
-                        gap: 4px !important;
-                    }
-
-                    .mantine-ActionIcon-root {
-                        min-width: 36px !important;
-                        min-height: 36px !important;
-                    }
-
-                    /* DateInput mobil düzenlemeleri */
-                    .mantine-DateInput-root {
-                        width: 100% !important;
-                    }
-                }
-                
-                @media (max-width: 480px) {
-                    .mantine-Container-root {
-                        padding: 0 4px !important;
-                    }
-                    
-                    .mantine-Paper-root {
-                        padding: 12px !important;
-                    }
-                    
-                    .mantine-TextInput-input,
-                    .mantine-PasswordInput-input,
-                    .mantine-Select-input,
-                    .mantine-Textarea-input,
-                    .mantine-FileInput-input,
-                    .mantine-DateInput-input {
-                        font-size: 16px !important;
-                        padding: 10px 12px !important;
-                    }
-
-                    /* Modal mobil düzenlemeleri */
-                    .mantine-Modal-root {
-                        margin: 8px !important;
-                    }
-
-                    .mantine-Modal-content {
-                        padding: 16px !important;
-                    }
-                }
-            `}</style>
         </Container>
     );
 }

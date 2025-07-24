@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppShell, Burger, Group, NavLink, rem, Text, Button, Stack, Divider, Box, ThemeIcon, Paper, Avatar, Menu } from '@mantine/core';
-import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome, IconStar, IconGift, IconChartBar } from '@tabler/icons-react';
+import { IconQrcode, IconWifi, IconMail, IconMessage, IconAddressBook, IconLogout, IconSettings, IconLink, IconList, IconHome, IconStar, IconGift, IconChartBar, IconUsers, IconClipboardList } from '@tabler/icons-react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AuthProvider from '@/providers/auth-provider';
@@ -154,6 +154,7 @@ export default function DashboardLayout({
         {
             label: 'Yeni Modüller',
             items: [
+                { icon: IconClipboardList, label: 'Hızlı Talep', href: '/dashboard/quick-request', color: '#228be6' },
                 { icon: IconList, label: 'Form QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
                 { icon: IconList, label: 'Rezervasyon QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
                 { icon: IconList, label: 'Etkinlik QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
@@ -198,20 +199,22 @@ export default function DashboardLayout({
                     navbar={{
                         width: 300,
                         breakpoint: 'sm',
-                        collapsed: { mobile: !opened },
+                        collapsed: { mobile: !opened, desktop: !opened },
                     }}
                     padding="md"
                 >
                 <AppShell.Header style={{ background: 'white', borderBottom: `1px solid #e9ecef` }}>
                     <Group h="100%" px="md" justify="space-between">
                         <Group>
-                            <Burger opened={opened} onClick={() => setOpened(!opened)} hiddenFrom="sm" size="sm" />
-                            <Group gap="xs" align="center">
-                                <ThemeIcon size={40} radius="md" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                                    <IconQrcode size={24} />
-                                </ThemeIcon>
-                                <Text fw={800} size="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 45 }}>VunQR</Text>
-                            </Group>
+                            <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" />
+                            <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+                                <Group gap="xs" align="center" style={{ cursor: 'pointer' }}>
+                                    <ThemeIcon size={40} radius="md" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
+                                        <IconQrcode size={24} />
+                                    </ThemeIcon>
+                                    <Text fw={800} size="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 45 }}>VunQR</Text>
+                                </Group>
+                            </Link>
                         </Group>
 
                         <Group gap="md">

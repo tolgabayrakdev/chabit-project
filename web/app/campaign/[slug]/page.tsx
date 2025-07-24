@@ -151,7 +151,7 @@ export default function CampaignPage() {
     if (loading) {
         return (
             <Container size="sm" py="xl">
-                <Center>
+                <Center style={{ minHeight: '60vh' }}>
                     <Stack align="center" gap="md">
                         <Loader color="#e64980" size="lg" />
                         <Text c="dimmed">Kampanya yükleniyor...</Text>
@@ -164,9 +164,19 @@ export default function CampaignPage() {
     if (!campaign) {
         return (
             <Container size="sm" py="xl">
-                <Alert icon={<IconAlertCircle size={16} />} title="Kampanya Bulunamadı" color="red">
-                    Aradığınız kampanya bulunamadı veya artık mevcut değil.
-                </Alert>
+                <Center style={{ minHeight: '60vh' }}>
+                    <Alert 
+                        icon={<IconAlertCircle size={20} />} 
+                        title="Kampanya Bulunamadı" 
+                        color="red"
+                        radius="md"
+                        variant="light"
+                        w="100%"
+                        maw={400}
+                    >
+                        Aradığınız kampanya bulunamadı veya artık mevcut değil.
+                    </Alert>
+                </Center>
             </Container>
         );
     }
@@ -175,45 +185,53 @@ export default function CampaignPage() {
 
     return (
         <Container size="sm" py="xl">
-            {/* Kampanya Başlığı ve Durum */}
-            <Paper withBorder radius="lg" p="xl" mb="lg">
-                <Stack gap="lg" align="center">
-                    <ThemeIcon size={60} radius="xl" color="#e64980" variant="light">
-                        <IconGift size={30} />
-                    </ThemeIcon>
-                    
-                    <Stack gap="xs" align="center">
-                        <Title order={1} ta="center" c="#e64980">
+            {/* Header */}
+            <Paper
+                p="md"
+                radius="md"
+                withBorder
+                style={{
+                    background: '#fff',
+                    marginBottom: 24,
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 16,
+                    flexDirection: 'row',
+                }}
+            >
+                <ThemeIcon 
+                    color="#e64980" 
+                    size={36} 
+                    radius="md" 
+                    variant="light"
+                >
+                    <IconGift size={20} />
+                </ThemeIcon>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <Group gap="xs" align="center" wrap="nowrap">
+                        <Text size="md" fw={600} c="#e64980" style={{ wordBreak: 'break-word' }}>
                             {campaign.title}
-                        </Title>
-                        <Badge size="lg" color={status.color}>
+                        </Text>
+                        <Badge color={status.color} size="sm">
                             {status.status}
                         </Badge>
-                    </Stack>
-
-                    <Text size="lg" ta="center" c="dimmed" style={{ lineHeight: 1.6 }}>
+                    </Group>
+                    <Text size="sm" c="#e64980" style={{ wordBreak: 'break-word', lineHeight: 1.5 }}>
                         {campaign.description}
                     </Text>
-
-                    <Group gap="lg" c="dimmed">
-                        <Group gap="xs">
-                            <IconCalendar size={16} />
-                            <Text size="sm">
-                                {new Date(campaign.start_date).toLocaleDateString('tr-TR')} - {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
-                            </Text>
-                        </Group>
+                    <Group gap="xs" mt="xs">
+                        <IconCalendar size={14} color="var(--mantine-color-dimmed)" />
+                        <Text size="xs" c="dimmed">
+                            {new Date(campaign.start_date).toLocaleDateString('tr-TR')} - {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
+                        </Text>
                     </Group>
-                </Stack>
+                </div>
             </Paper>
 
-            {/* Katılım Formu */}
-            {canParticipate() && !formSubmitted ? (
-                <Paper withBorder radius="lg" p="xl">
-                    <Stack gap="lg">
-                        <Title order={2} ta="center" c="#e64980">
-                            Çekilişe Katıl
-                        </Title>
-                        
+            {/* Form Content */}
+            <Paper withBorder radius="md" p="xl">
+                <Stack gap="lg">
+                    {canParticipate() && !formSubmitted ? (
                         <form onSubmit={handleSubmit}>
                             <Stack gap="md">
                                 <TextInput
@@ -223,7 +241,6 @@ export default function CampaignPage() {
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required
                                     leftSection={<IconUser size={16} />}
-                                    size="md"
                                     radius="md"
                                 />
                                 
@@ -234,7 +251,6 @@ export default function CampaignPage() {
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required
                                     leftSection={<IconMail size={16} />}
-                                    size="md"
                                     radius="md"
                                     type="email"
                                 />
@@ -245,98 +261,111 @@ export default function CampaignPage() {
                                     value={formData.phone}
                                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     leftSection={<IconPhone size={16} />}
-                                    size="md"
                                     radius="md"
                                 />
                                 
                                 <Button
                                     type="submit"
-                                    size="lg"
                                     radius="md"
                                     color="#e64980"
                                     loading={submitting}
                                     fullWidth
-                                    leftSection={<IconGift size={20} />}
+                                    leftSection={<IconGift size={16} />}
                                 >
                                     {submitting ? 'Gönderiliyor...' : 'Çekilişe Katıl'}
                                 </Button>
                             </Stack>
                         </form>
-                    </Stack>
-                </Paper>
-            ) : canParticipate() && formSubmitted ? (
-                <Paper withBorder radius="lg" p="xl">
-                    <Stack gap="md" align="center">
-                        <ThemeIcon size={50} radius="xl" color="green" variant="light">
-                            <IconCheck size={25} />
-                        </ThemeIcon>
-                        
-                        <Title order={3} ta="center" c="green">
-                            Katılımınız Alındı!
-                        </Title>
-                        
-                        <Text ta="center" c="dimmed">
-                            Çekilişe başarıyla katıldınız. Kazananlar e-posta ile bilgilendirilecektir.
-                        </Text>
-                    </Stack>
-                </Paper>
-            ) : (
-                <Paper withBorder radius="lg" p="xl">
-                    <Stack gap="md" align="center">
-                        <ThemeIcon size={50} radius="xl" color={status.color} variant="light">
-                            <IconAlertCircle size={25} />
-                        </ThemeIcon>
-                        
-                        <Title order={3} ta="center" c={status.color}>
-                            {status.status === 'Yakında' ? 'Kampanya Henüz Başlamadı' : 
-                             status.status === 'Sona Erdi' ? 'Kampanya Sona Erdi' : 
-                             'Kampanya Şu Anda Aktif Değil'}
-                        </Title>
-                        
-                        <Text ta="center" c="dimmed">
-                            {status.status === 'Yakında' ? 
-                                `Kampanya ${new Date(campaign.start_date).toLocaleDateString('tr-TR')} tarihinde başlayacak.` :
-                             status.status === 'Sona Erdi' ? 
-                                `Kampanya ${new Date(campaign.end_date).toLocaleDateString('tr-TR')} tarihinde sona erdi.` :
-                                'Bu kampanya şu anda katılıma kapalı.'
-                            }
-                        </Text>
-                    </Stack>
-                </Paper>
-            )}
+                    ) : canParticipate() && formSubmitted ? (
+                        <Stack gap="md" align="center">
+                            <ThemeIcon 
+                                size={40} 
+                                radius="md" 
+                                color="green" 
+                                variant="light"
+                            >
+                                <IconCheck size={20} />
+                            </ThemeIcon>
+                            <Stack gap="xs" align="center">
+                                <Title order={3} ta="center" c="green" size="h5">
+                                    Katılımınız Alındı!
+                                </Title>
+                                <Text ta="center" c="dimmed" size="sm">
+                                    Çekilişe başarıyla katıldınız. Kazananlar e-posta ile bilgilendirilecektir.
+                                </Text>
+                            </Stack>
+                        </Stack>
+                    ) : (
+                        <Stack gap="md" align="center">
+                            <ThemeIcon 
+                                size={40} 
+                                radius="md" 
+                                color={status.color} 
+                                variant="light"
+                            >
+                                <IconAlertCircle size={20} />
+                            </ThemeIcon>
+                            <Stack gap="xs" align="center">
+                                <Title order={3} ta="center" c={status.color} size="h5">
+                                    {status.status === 'Yakında' ? 'Kampanya Henüz Başlamadı' : 
+                                     status.status === 'Sona Erdi' ? 'Kampanya Sona Erdi' : 
+                                     'Kampanya Şu Anda Aktif Değil'}
+                                </Title>
+                                <Text ta="center" c="dimmed" size="sm">
+                                    {status.status === 'Yakında' ? 
+                                        `Kampanya ${new Date(campaign.start_date).toLocaleDateString('tr-TR')} tarihinde başlayacak.` :
+                                     status.status === 'Sona Erdi' ? 
+                                        `Kampanya ${new Date(campaign.end_date).toLocaleDateString('tr-TR')} tarihinde sona erdi.` :
+                                        'Bu kampanya şu anda katılıma kapalı.'
+                                    }
+                                </Text>
+                            </Stack>
+                        </Stack>
+                    )}
+                </Stack>
+            </Paper>
 
-            {/* Başarı Modal */}
-            <Modal 
-                opened={successModalOpened} 
-                onClose={() => setSuccessModalOpened(false)} 
+            {/* Success Modal */}
+            <Modal
+                opened={successModalOpened}
+                onClose={() => setSuccessModalOpened(false)}
                 title={
-                    <Group gap="sm">
-                        <ThemeIcon color="green" size="sm" radius="xl">
-                            <IconCheck size={16} />
+                    <Group gap="xs">
+                        <ThemeIcon 
+                            color="green" 
+                            size="sm" 
+                            radius="md"
+                            variant="light"
+                        >
+                            <IconCheck size={14} />
                         </ThemeIcon>
-                        <Text fw={600}>Katılım Başarılı!</Text>
+                        <Text fw={600} size="sm">Katılım Başarılı!</Text>
                     </Group>
-                } 
-                centered 
-                size="md"
+                }
+                centered
+                size="sm"
+                radius="md"
             >
-                <Stack gap="lg">
+                <Stack gap="md">
                     <Text size="sm" c="dimmed">
                         {campaign.thank_you_message}
                     </Text>
                     
-                    <Box p="md" style={{ background: '#f8f9fa' }}>
-                        <Text size="xs" fw={600} c="dimmed" mb="xs">Kampanya Detayları:</Text>
-                        <Text size="sm" fw={500}>{campaign.title}</Text>
-                        <Text size="xs" c="dimmed">
-                            Bitiş: {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
-                        </Text>
-                    </Box>
+                    <Paper withBorder p="sm" radius="md" bg="gray.0">
+                        <Stack gap="xs">
+                            <Text size="xs" fw={500} c="dimmed">Kampanya Detayları:</Text>
+                            <Text size="sm" fw={500}>{campaign.title}</Text>
+                            <Text size="xs" c="dimmed">
+                                Bitiş: {new Date(campaign.end_date).toLocaleDateString('tr-TR')}
+                            </Text>
+                        </Stack>
+                    </Paper>
 
-                    <Button 
-                        onClick={() => setSuccessModalOpened(false)} 
+                    <Button
+                        onClick={() => setSuccessModalOpened(false)}
                         fullWidth
                         color="#e64980"
+                        radius="md"
                     >
                         Tamam
                     </Button>
@@ -344,15 +373,20 @@ export default function CampaignPage() {
             </Modal>
 
             {/* Footer */}
-            <Paper withBorder radius="lg" p="md" mt="xl">
+            <Paper withBorder radius="md" p="sm" mt="xl">
                 <Stack gap="xs" align="center">
-                    <Text size="sm" c="dimmed" ta="center">
+                    <Text size="xs" c="dimmed" ta="center">
                         Bu sayfa VunQR tarafından oluşturuldu
                     </Text>
-                    <Text size="sm" ta="center">
+                    <Text size="xs" ta="center">
                         <Text component="span" c="dimmed">Dijital iletişim çözümleri için </Text>
-                        <Text component="a" href="https://vunqr.com" target="_blank" rel="noopener noreferrer" 
-                              style={{ color: '#e64980', textDecoration: 'none', fontWeight: 600 }}>
+                        <Text 
+                            component="a" 
+                            href="https://vunqr.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            style={{ color: '#e64980', textDecoration: 'none', fontWeight: 600 }}
+                        >
                             vunqr.com
                         </Text>
                         <Text component="span" c="dimmed"> u ziyaret edin</Text>
@@ -363,73 +397,35 @@ export default function CampaignPage() {
             <style jsx global>{`
                 @media (max-width: 600px) {
                     .mantine-Container-root {
-                        padding: 0 16px !important;
+                        padding: 16px !important;
                     }
-                    
-                    .mantine-Paper-root {
-                        padding: 20px !important;
-                    }
-                    
-                    .mantine-Title-root {
-                        font-size: 24px !important;
-                    }
-                    
-                    .mantine-TextInput-root {
-                        margin-bottom: 12px !important;
-                    }
-                    
-                    .mantine-TextInput-label {
-                        font-size: 14px !important;
-                        margin-bottom: 4px !important;
-                    }
-                    
-                    .mantine-TextInput-input {
-                        font-size: 16px !important;
-                        padding: 12px !important;
-                        min-height: 48px !important;
-                        padding-left: 40px !important;
-                    }
-                    
-                    .mantine-TextInput-section {
-                        width: 40px !important;
-                        left: 0 !important;
-                    }
-                    
-                    .mantine-TextInput-section svg {
-                        width: 18px !important;
-                        height: 18px !important;
-                    }
-                    
-                    .mantine-Button-root {
-                        min-height: 48px !important;
-                        font-size: 16px !important;
-                    }
-                }
-                
-                @media (max-width: 480px) {
-                    .mantine-Container-root {
-                        padding: 0 12px !important;
-                    }
-                    
                     .mantine-Paper-root {
                         padding: 16px !important;
                     }
-                    
+                    .mantine-TextInput-root,
+                    .mantine-Textarea-root {
+                        margin-bottom: 0 !important;
+                    }
+                    .mantine-TextInput-label,
+                    .mantine-Textarea-label {
+                        font-size: 14px !important;
+                        margin-bottom: 4px !important;
+                    }
+                    .mantine-TextInput-input,
+                    .mantine-Textarea-input {
+                        font-size: 14px !important;
+                        padding: 8px 12px !important;
+                        min-height: 36px !important;
+                    }
+                    .mantine-Button-root {
+                        height: 36px !important;
+                        font-size: 14px !important;
+                    }
                     .mantine-Title-root {
-                        font-size: 20px !important;
+                        font-size: 16px !important;
                     }
-                    
-                    .mantine-TextInput-input {
-                        padding-left: 36px !important;
-                    }
-                    
-                    .mantine-TextInput-section {
-                        width: 36px !important;
-                    }
-                    
-                    .mantine-TextInput-section svg {
-                        width: 16px !important;
-                        height: 16px !important;
+                    .mantine-Text-root {
+                        font-size: 13px !important;
                     }
                 }
             `}</style>
