@@ -27,6 +27,7 @@ import {
   rem,
   Indicator,
   Avatar,
+  Center,
 } from "@mantine/core";
 import {
   IconEye,
@@ -90,6 +91,8 @@ export default function QuickRequestPage() {
   const [selectedDeleteForm, setSelectedDeleteForm] = useState<QuickRequestForm | null>(null);
   const router = useRouter();
   const [unreadCounts, setUnreadCounts] = useState<{ [slug: string]: number }>({});
+  const [userPlan, setUserPlan] = useState<string>('free');
+  const [planLoading, setPlanLoading] = useState(true);
 
   // Entry states
   const [entries, setEntries] = useState<QuickRequestEntry[]>([]);
@@ -349,6 +352,83 @@ export default function QuickRequestPage() {
   };
 
   const totalUnread = Object.values(unreadCounts).reduce((sum, count) => sum + count, 0);
+
+  // Kullanıcı planını getir
+  useEffect(() => {
+    const fetchUserPlan = async () => {
+      try {
+        const response = await fetch(`/api/auth/me`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserPlan(data.user.plan || 'free');
+        }
+      } catch (error) {
+        console.error('Error fetching user plan:', error);
+      } finally {
+        setPlanLoading(false);
+      }
+    };
+
+    fetchUserPlan();
+  }, []);
+
+  // Plan yüklenirken loading göster
+  if (planLoading) {
+    return (
+      <Container size="lg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <Center>
+          <Stack align="center" gap="md">
+            <Loader color="blue" size="lg" />
+            <Text c="dimmed">Yükleniyor...</Text>
+          </Stack>
+        </Center>
+      </Container>
+    );
+  }
+
+  // Free kullanıcılar için erişim engelleme
+  if (userPlan === 'free') {
+    return (
+      <Container size="lg" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <Paper withBorder radius="md" p="xl" style={{ width: "100%", maxWidth: 500, textAlign: "center" }}>
+          <Stack gap="lg" align="center">
+            <ThemeIcon size={80} radius="md" color="gray" variant="light">
+              <IconClipboardList size={40} />
+            </ThemeIcon>
+            
+            <Title order={2} c="gray">
+              PRO Özellik
+            </Title>
+            
+            <Text size="lg" c="dimmed" ta="center">
+              Hızlı talep formu özelliği sadece PRO kullanıcılar için mevcuttur.
+            </Text>
+            
+            <Text size="sm" c="dimmed" ta="center">
+              Müşterilerinizden hızlıca talep toplayabilir, gelen talepleri yönetebilir ve 
+              istatistiklerini görüntüleyebilirsiniz.
+            </Text>
+            
+            <Button 
+              size="lg" 
+              color="blue" 
+              radius="md"
+              onClick={() => router.push('/dashboard/settings')}
+            >
+              PRO'ya Yükselt
+            </Button>
+          </Stack>
+        </Paper>
+      </Container>
+    );
+  }
 
   return (
     <Container size="xl" py="xl">

@@ -175,26 +175,26 @@ export default function SettingsPage() {
 
   return (
     <Container size="sm">
-      <Stack gap="xl">
+      <Stack gap="md">
         <div>
-          <Title order={2} mb="md">Ayarlar</Title>
-          <Text c="dimmed">Hesap ayarlarınızı buradan yönetebilirsiniz.</Text>
+          <Title order={2} size="h3" mb="xs">Ayarlar</Title>
+          <Text c="dimmed" size="sm">Hesap ayarlarınızı buradan yönetebilirsiniz.</Text>
         </div>
 
         <Paper
-          p="xl"
-          radius="lg"
+          p="md"
+          radius="md"
           withBorder
           style={{
             background: 'white',
             transition: 'all 0.2s ease',
             '&:hover': {
-              boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+              boxShadow: '0 5px 10px rgba(0,0,0,0.1)',
             }
           }}
         >
-          <Stack gap="md">
-            <Title order={3} size="h4">Hesap Bilgileri</Title>
+          <Stack gap="sm">
+            <Title order={3} size="h5">Hesap Bilgileri</Title>
             <Group>
               <Text size="sm" fw={500}>E-posta:</Text>
               <Text size="sm" c="dimmed">
@@ -209,6 +209,7 @@ export default function SettingsPage() {
                 <Badge 
                   color={getPlanColor(userPlan)} 
                   variant="light"
+                  size="sm"
                   leftSection={getPlanIcon(userPlan)}
                 >
                   {userPlan === 'free' ? 'Ücretsiz Plan' : userPlan === 'basic' ? 'Basit Plan' : userPlan === 'pro' ? 'Pro Plan' : 'Kullanıcı'}
@@ -219,26 +220,26 @@ export default function SettingsPage() {
         </Paper>
 
         <Paper
-          p="xl"
-          radius="lg"
+          p="md"
+          radius="md"
           withBorder
           style={{
             background: 'white',
             transition: 'all 0.2s ease',
             '&:hover': {
-              boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+              boxShadow: '0 5px 10px rgba(0,0,0,0.1)',
             }
           }}
         >
           <form onSubmit={form.onSubmit(handlePasswordChange)}>
-            <Stack gap="md">
-              <Title order={3} size="h4">Şifre Değiştir</Title>
+            <Stack gap="sm">
+              <Title order={3} size="h5">Şifre Değiştir</Title>
               <PasswordInput
                 label="Mevcut Şifre"
                 placeholder="Mevcut şifrenizi girin"
                 required
                 radius="md"
-                size="md"
+                size="sm"
                 {...form.getInputProps('currentPassword')}
               />
               <PasswordInput
@@ -246,7 +247,7 @@ export default function SettingsPage() {
                 placeholder="Yeni şifrenizi girin"
                 required
                 radius="md"
-                size="md"
+                size="sm"
                 {...form.getInputProps('newPassword')}
               />
               <PasswordInput
@@ -254,15 +255,15 @@ export default function SettingsPage() {
                 placeholder="Yeni şifrenizi tekrar girin"
                 required
                 radius="md"
-                size="md"
+                size="sm"
                 {...form.getInputProps('confirmPassword')}
               />
               <Button
                 type="submit"
                 loading={loading}
                 radius="md"
-                size="md"
-                leftSection={<IconLock size={20} />}
+                size="sm"
+                leftSection={<IconLock size={16} />}
                 style={{
                   background: 'linear-gradient(45deg, #228be6 0%, #4dabf7 100%)',
                   transition: 'transform 0.2s',
@@ -278,28 +279,28 @@ export default function SettingsPage() {
         </Paper>
 
         <Paper
-          p="xl"
-          radius="lg"
+          p="md"
+          radius="md"
           withBorder
           style={{
             background: 'white',
             transition: 'all 0.2s ease',
             '&:hover': {
-              boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+              boxShadow: '0 5px 10px rgba(0,0,0,0.1)',
             }
           }}
         >
-          <Stack gap="md">
-            <Title order={3} size="h4">Hesabı Sil</Title>
+          <Stack gap="sm">
+            <Title order={3} size="h5">Hesabı Sil</Title>
             <Text c="dimmed" size="sm">
               Hesabınızı sildiğinizde tüm verileriniz kalıcı olarak silinecektir. Bu işlem geri alınamaz.
             </Text>
             <Button
               variant="light"
               color="red"
-              leftSection={<IconTrash size={20} />}
+              leftSection={<IconTrash size={16} />}
               radius="md"
-              size="md"
+              size="sm"
               onClick={open}
               style={{
                 transition: 'transform 0.2s',
@@ -314,10 +315,10 @@ export default function SettingsPage() {
         </Paper>
       </Stack>
 
-      <Modal opened={opened} onClose={close} title="Hesabı Sil" centered size="lg">
-        <Stack>
+      <Modal opened={opened} onClose={close} title="Hesabı Sil" centered size="md">
+        <Stack gap="sm">
           <Alert
-            icon={<IconAlertTriangle size={24} />}
+            icon={<IconAlertTriangle size={20} />}
             title="Dikkat!"
             color="red"
             variant="filled"
@@ -325,7 +326,7 @@ export default function SettingsPage() {
             Bu işlem geri alınamaz. Hesabınızı sildiğinizde:
           </Alert>
 
-          <Stack gap="xs" pl="md">
+          <Stack gap="xs" pl="sm">
             <Text size="sm">• Tüm QR kodlarınız kalıcı olarak silinecek</Text>
             <Text size="sm">• Tüm kişisel verileriniz silinecek</Text>
             <Text size="sm">• Hesabınıza ait tüm bilgiler silinecek</Text>
@@ -333,7 +334,7 @@ export default function SettingsPage() {
           </Stack>
 
           <Alert
-            icon={<IconAlertCircle size={24} />}
+            icon={<IconAlertCircle size={20} />}
             title="Onay"
             color="yellow"
             variant="light"
@@ -347,15 +348,17 @@ export default function SettingsPage() {
             value={confirmText}
             onChange={(event) => setConfirmText(event.currentTarget.value)}
             error={confirmText !== '' && confirmText !== 'HESABIMI SİL' ? 'Metni doğru yazın' : null}
+            size="sm"
           />
 
-          <Group justify="flex-end" mt="xl">
-            <Button variant="default" onClick={close}>İptal</Button>
+          <Group justify="flex-end" mt="md">
+            <Button variant="default" onClick={close} size="sm">İptal</Button>
             <Button
               color="red"
               loading={deleteLoading}
               onClick={handleDeleteAccount}
               disabled={confirmText !== 'HESABIMI SİL'}
+              size="sm"
             >
               Hesabı Sil
             </Button>

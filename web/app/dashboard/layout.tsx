@@ -57,15 +57,19 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode
 }) {
-    const [opened, setOpened] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
+    const isMobile = useMediaQuery('(max-width: 48em)');
+    const [opened, setOpened] = useState(!isMobile);
     const [userEmail, setUserEmail] = useState<string>('');
     const [userPlan, setUserPlan] = useState<string>('free');
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [isLoadingUser, setIsLoadingUser] = useState(true);
     const [selectedFont, setSelectedFont] = useState('outfit');
-    const pathname = usePathname();
-    const router = useRouter();
-    const isMobile = useMediaQuery('(max-width: 48em)');
+
+    useEffect(() => {
+        setOpened(!isMobile);
+    }, [isMobile]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -154,7 +158,7 @@ export default function DashboardLayout({
         {
             label: 'Yeni Modüller',
             items: [
-                { icon: IconClipboardList, label: 'Hızlı Talep', href: '/dashboard/quick-request', color: '#228be6' },
+                { icon: IconClipboardList, label: userPlan === 'free' ? 'Hızlı Talep (PRO)' : 'Hızlı Talep', href: '/dashboard/quick-request', color: '#228be6' },
                 { icon: IconList, label: 'Form QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
                 { icon: IconList, label: 'Rezervasyon QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
                 { icon: IconList, label: 'Etkinlik QR (yakında)', href: '#', color: '#adb5bd', disabled: true },
@@ -195,24 +199,24 @@ export default function DashboardLayout({
         <AuthProvider>
             <div className={`${inter.variable} ${outfit.variable} ${plusJakartaSans.variable} ${albertSans.variable} dashboard-container`}>
                 <AppShell
-                    header={{ height: 70 }}
+                    header={{ height: 60 }}
                     navbar={{
-                        width: 300,
+                        width: 280,
                         breakpoint: 'sm',
                         collapsed: { mobile: !opened, desktop: !opened },
                     }}
                     padding="md"
                 >
                 <AppShell.Header style={{ background: 'white', borderBottom: `1px solid #e9ecef` }}>
-                    <Group h="100%" px="md" justify="space-between">
+                    <Group h="100%" px="xs" justify="space-between">
                         <Group>
                             <Burger opened={opened} onClick={() => setOpened(!opened)} size="sm" />
                             <Link href="/dashboard" style={{ textDecoration: 'none' }}>
                                 <Group gap="xs" align="center" style={{ cursor: 'pointer' }}>
-                                    <ThemeIcon size={40} radius="md" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
-                                        <IconQrcode size={24} />
+                                    <ThemeIcon size={34} radius="md" variant="gradient" gradient={{ from: 'blue', to: 'cyan' }}>
+                                        <IconQrcode size={20} />
                                     </ThemeIcon>
-                                    <Text fw={800} size="xl" variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 45 }}>VunQR</Text>
+                                    <Text fw={800} size="lg" variant="gradient" gradient={{ from: 'blue', to: 'cyan', deg: 45 }}>VunQR</Text>
                                 </Group>
                             </Link>
                         </Group>
@@ -275,14 +279,14 @@ export default function DashboardLayout({
                                                     <NavLink
                                                         label={item.label}
                                                         leftSection={
-                                                            <ThemeIcon size={34} radius="md" color={item.color}>
-                                                                <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                            <ThemeIcon size={30} radius="md" color={item.color}>
+                                                                <item.icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
                                                             </ThemeIcon>
                                                         }
                                                         active={item.children.some((child: { href: string }) => pathname === child.href)}
                                                         style={{
                                                             borderRadius: 'md',
-                                                            marginBottom: '0.5rem',
+                                                            marginBottom: '0.3rem',
                                                             transition: 'all 0.2s ease',
                                                             backgroundColor: item.children.some((child: { href: string }) => pathname === child.href) ? `${item.color}15` : 'transparent',
                                                             color: item.children.some((child: { href: string }) => pathname === child.href) ? item.color : 'inherit',
@@ -290,6 +294,7 @@ export default function DashboardLayout({
                                                             whiteSpace: 'nowrap',
                                                             textOverflow: 'ellipsis',
                                                             maxWidth: '100%',
+                                                            padding: '4px 8px',
                                                             '&:hover': {
                                                                 backgroundColor: `${item.color}15`,
                                                                 color: item.color,
@@ -298,7 +303,7 @@ export default function DashboardLayout({
                                                         defaultOpened={item.children.some((child: { href: string }) => pathname === child.href)}
                                                     >
                                                         {/* Statik QR Kodlar */}
-                                                        <Text size="xs" fw={700} c="dimmed" mb={2} pl={12}>Statik QR Kodlar</Text>
+                                                        <Text size="xs" fw={700} c="dimmed" mb={2} pl={8}>Statik QR Kodlar</Text>
                                                         {item.children.filter(child => child.group === 'statik').map((child) => (
                                                             <NavLink
                                                                 key={child.href}
@@ -306,21 +311,22 @@ export default function DashboardLayout({
                                                                 href={child.href!}
                                                                 label={child.label}
                                                                 leftSection={
-                                                                    <ThemeIcon size={28} radius="md" color={child.color}>
-                                                                        <child.icon style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                                                                    <ThemeIcon size={24} radius="md" color={child.color}>
+                                                                        <child.icon style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
                                                                     </ThemeIcon>
                                                                 }
                                                                 active={pathname === child.href}
                                                                 style={{
                                                                     borderRadius: 'md',
-                                                                    marginBottom: '0.3rem',
-                                                                    marginLeft: '1.5rem',
+                                                                    marginBottom: '0.2rem',
+                                                                    marginLeft: '1rem',
                                                                     backgroundColor: pathname === child.href ? `${child.color}15` : 'transparent',
                                                                     color: pathname === child.href ? child.color : 'inherit',
                                                                     overflow: 'hidden',
                                                                     whiteSpace: 'nowrap',
                                                                     textOverflow: 'ellipsis',
                                                                     maxWidth: '90%',
+                                                                    padding: '2px 8px',
                                                                     '&:hover': {
                                                                         backgroundColor: `${child.color}15`,
                                                                         color: child.color,
@@ -330,7 +336,7 @@ export default function DashboardLayout({
                                                             />
                                                         ))}
                                                         {/* Dinamik QR Kodlar */}
-                                                        <Text size="xs" fw={700} c="dimmed" mb={2} pl={12} mt={8}>Dinamik QR Kodlar</Text>
+                                                        <Text size="xs" fw={700} c="dimmed" mb={2} pl={8} mt={6}>Dinamik QR Kodlar</Text>
                                                         {item.children.filter(child => child.group === 'dinamik').map((child) => (
                                                             <NavLink
                                                                 key={child.href}
@@ -338,21 +344,22 @@ export default function DashboardLayout({
                                                                 href={child.href!}
                                                                 label={child.label}
                                                                 leftSection={
-                                                                    <ThemeIcon size={28} radius="md" color={child.color}>
-                                                                        <child.icon style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                                                                    <ThemeIcon size={24} radius="md" color={child.color}>
+                                                                        <child.icon style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
                                                                     </ThemeIcon>
                                                                 }
                                                                 active={pathname === child.href}
                                                                 style={{
                                                                     borderRadius: 'md',
-                                                                    marginBottom: '0.3rem',
-                                                                    marginLeft: '1.5rem',
+                                                                    marginBottom: '0.2rem',
+                                                                    marginLeft: '1rem',
                                                                     backgroundColor: pathname === child.href ? `${child.color}15` : 'transparent',
                                                                     color: pathname === child.href ? child.color : 'inherit',
                                                                     overflow: 'hidden',
                                                                     whiteSpace: 'nowrap',
                                                                     textOverflow: 'ellipsis',
                                                                     maxWidth: '90%',
+                                                                    padding: '2px 8px',
                                                                     '&:hover': {
                                                                         backgroundColor: `${child.color}15`,
                                                                         color: child.color,
@@ -373,8 +380,8 @@ export default function DashboardLayout({
                                                         href={item.href!}
                                                         label={item.label}
                                                         leftSection={
-                                                            <ThemeIcon size={34} radius="md" color={item.color}>
-                                                                <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                            <ThemeIcon size={30} radius="md" color={item.color}>
+                                                                <item.icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
                                                             </ThemeIcon>
                                                         }
                                                         active={pathname === item.href}
@@ -388,6 +395,7 @@ export default function DashboardLayout({
                                                             whiteSpace: 'nowrap',
                                                             textOverflow: 'ellipsis',
                                                             maxWidth: '100%',
+                                                            padding: '4px 8px',
                                                             opacity: userPlan === 'free' && item.label.includes('(PRO)') ? 0.6 : 1,
                                                             cursor: 'pointer',
                                                             '&:hover': {
@@ -406,8 +414,8 @@ export default function DashboardLayout({
                                                         key={item.href + '-' + item.label}
                                                         label={item.label}
                                                         leftSection={
-                                                            <ThemeIcon size={34} radius="md" color={item.color}>
-                                                                <item.icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+                                                            <ThemeIcon size={30} radius="md" color={item.color}>
+                                                                <item.icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
                                                             </ThemeIcon>
                                                         }
                                                         style={{
@@ -422,6 +430,7 @@ export default function DashboardLayout({
                                                             maxWidth: '100%',
                                                             opacity: 0.5,
                                                             cursor: 'not-allowed',
+                                                            padding: '4px 8px',
                                                         }}
                                                         disabled
                                                     />
